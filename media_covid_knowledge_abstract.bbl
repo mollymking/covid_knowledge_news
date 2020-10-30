@@ -1,0 +1,23 @@
+\begin{thebibliography}{}
+\newcommand{\enquote}[1]{``#1''}
+
+\bibitem[\protect\citeauthoryear{Mannheim}{Mannheim}{1936}]{Mannheim}
+Mannheim, Karl. 1936.
+\newblock {\em {Ideology and Utopia}\/}.
+\newblock New York: Harcourt, Brace.
+
+\bibitem[\protect\citeauthoryear{Metaxa-Kakavouli and
+  Torres-Echeverry}{Metaxa-Kakavouli and
+  Torres-Echeverry}{2017}]{Metaxa-Kakavouli2017}
+Metaxa-Kakavouli, Dana{\"{e}} and Nicol{\'{a}}s Torres-Echeverry. 2017.
+\newblock \enquote{{Google's Role in Spreading Fake News and Misinformation}.}
+\newblock
+\newblock https://papers.ssrn.com/sol3/papers.cfm?abstract{\_}id=3062984.
+
+\bibitem[\protect\citeauthoryear{Swidler and Arditi}{Swidler and
+  Arditi}{1994}]{Swidler1994}
+Swidler, Ann and Jorge Arditi. 1994.
+\newblock \enquote{{The New Sociology of Knowledge}.}
+\newblock {\em Annual Review of Sociology\/} 20:305--29.
+
+\end{thebibliography}
