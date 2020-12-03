@@ -341,23 +341,29 @@ differentially shape access for different demographics?
 
 \subsection{Data}\label{sec:data}
 
-In this analysis, I investigate factual (mis)information and uncertainty using the Pew Pathways June 2020 American Trends Panel Wave 68 Survey (CITE). The survey features four questions of particular interest, which ask about factual knowledge about the COVID-19 pandemic and the economy during this time:
+In this analysis, I investigate factual (mis)information and uncertainty using
+the Pew Pathways June 2020 American Trends Panel Wave 68 Survey (CITE). The
+survey features four questions of particular interest, which ask about factual
+knowledge about the COVID-19 pandemic and the economy during this time:
 
 \begin{enumerate}
 \def\labelenumi{(\arabic{enumi})}
-  \item ``Is the national unemployment rate as reported by the government currently…'' (Correct answer is 15\%)
   \item ``As far as you know, are antibody tests for the coronavirus (also known as serology tests) intended to detect…'' (Correct answer is ``A previous infection'')
   \item ``Do you happen to know who Anthony Fauci is?'' (Correct answer is ``An infectious disease expert and government health adviser.q)'
   \item ``As far as you know, how did states in the U.S. respond during the coronavirus outbreak?''" (Correct answer is ``Some states in the U.S. have not had a statewide stay-at-home order.'')
+  \item ``Is the national unemployment rate as reported by the government currently…'' (Correct answer is 15\%)
 \end{enumerate}
 
-My analysis also includes basic demographic variables for respondents, including gender, race and ethnicity, income, age, and educational attainment. So that readers can see all analysis decisions for themselves, all annotated code is available at my Open Science Framework project page: (URL removed for blinded review).
+My analysis also includes basic demographic variables for respondents, including
+gender, race and ethnicity, income, age, and educational attainment. So that
+readers can see all analysis decisions for themselves, all annotated code is
+available at my Open Science Framework project page:
+(URL removed for blinded review).
 %\url{https://osf.io/qf624/}.
 
 
 %-------%
-\hypertarget{gender}{%
-\subsubsection{Gender}\label{sec:gender}}
+\subsubsection{Gender}\label{sec:gender}
 
 Gender and sex are not binary designations, but rather lie along a flexible
 spectrum or at least exist in multiple categories \citep{Connell2002b,
@@ -403,37 +409,48 @@ therefore are a better reflection of socioeconomic status.\footnote
   will agree, on average, within about 0.86. Compared to tax or Social Security
   Administration records, self-reported measures of income tend to be about 70
   to 78\% of official amounts \citep{Coder1996, Reardon2011a}.}
-A continuous measure of income is more intuitive to interpret than categorical
-income bins. Therefore, I use the Random Empirical Distribution Imputation
-(REDI) method to convert the Pew categorical family income data into continuous income
-estimations \citep{REDI2020}. For each category of family income, I randomly draw the
-same number of observations from within those same bounds in the Current
-Population Survey March Annual Social and Economic (CPS ASEC) supplement
-\citep{ASEC2018}. I then apply these exact family income values
-from the CPS ASEC to the corresponding set of categorical values within the
-original Pew survey. Thus, I get a distribution of numerical values in the
-original Pew survey that corresponds to their probability of occurrence in the
-CPS ASEC. Repeating this for all income categories provides continuous cold-deck
-imputed income values for every respondent. I used this method rather than
-assigning the midpoint value to preserve variance and keep information from the
-extreme income categories. For more details on the conversion of categorical to
-continuous family incomes, see \citet{REDI2020}.
+I transform categorical income into continuous income in order to make
+regression coefficients more interpretable. A continuous measure of income is
+more intuitive to interpret than categorical income bins. Therefore, I use the
+Random Empirical Distribution Imputation (REDI) method to convert the Pew
+categorical family income data into continuous income estimations
+\citep{KingREDI}. For each category of family income, I randomly draw the same
+number of observations from within those same bounds in the Current Population
+Survey March Annual Social and Economic (CPS ASEC) supplement \citep{ASEC2018}.
+I then apply these exact family income values from the CPS ASEC to the
+corresponding set of categorical values within the original Pew survey. Thus, I
+get a distribution of numerical values in the original Pew survey that
+corresponds to their probability of occurrence in the CPS ASEC. Repeating this
+for all income categories provides continuous cold-deck imputed income values
+for every respondent. I used this method rather than assigning the midpoint
+value to preserve variance and keep information from the extreme income
+categories. For more details on the conversion of categorical to continuous
+family incomes, see \citet{KingREDI}.
+
+%https://stats.stackexchange.com/questions/143110/when-to-use-log-in-regression
+To aid interpretation, I take the natural log of the family income. Thus, the
+control variable may be interpreted as the impact of a one percent increase in
+family income on the odds (or log odds) of knowing the correct answer.
 
 %-------%
 \subsubsection{Age}\label{sec:age}
 
-I restrict my analyses to adults ages 18 and over. Since Pew provides only categorical age, I also use the REDI method \citep{REDI2020} to convert age to a continuous variable.
-I calculate the number of respondents in each
-age category, and pull at random an equivalent number of observations within that
-age range from the CPS ASEC. I take the exact age value of that observation from
-the CPS ASEC and assign the age value as if it were the original respondent's
-exact age. Again, this preserves variance in the age distribution.
+I restrict my analyses to adults ages 18 and over.  Pew provides only
+categorical age, in predefined groups: 18-29; 30-49; 50-64; and 65 and over.
 
-There are of course different kinds of things people are expected to know a
+% Since Pew provides only categorical age, I also use the REDI method
+% \citep{KingREDI} to convert age to a continuous variable. I calculate the number
+% of respondents in each age category, and pull at random an equivalent number of
+% observations within that age range from the CPS ASEC. I take the exact age value
+% of that observation from the CPS ASEC and assign the age value as if it were the
+% original respondent's exact age. Again, this preserves variance in the age
+% distribution.
+
+There are of course different kinds of things people are expected to know at
 different life stages. However, there is no reason to expect that the rate of
-accumulation of knowledge should vary based on any of my other covariates. Therefore, I
-include age and age squared as regressors in my models, but I do not include any
-interaction variables or cohort analyses.
+accumulation of knowledge should vary based on any of my other covariates.
+Therefore, I include age as a regressor in my models, but I do not include any
+interaction variables.
 %But the kinds of things women and men expect to learn at different  of lifestages are likely to be different ...
 
 %-------%
@@ -448,8 +465,24 @@ surveys.
 
 
 
+\subsubsection{News}
+After initially analyzing the models with all news source categories separate
+(results available in online appendix), I grouped news sources together based on
+their structurally similar roles. This grouping was meant to facilitate the
+application of interaction terms and interpretation of results. The substantive
+interpretation of model results prior to the addition of interaction terms to
+the model remain unchanged between the separation of each unique news source and
+the combination of socially similar sources.
 
-
+The sources were combined in the following way: International and national news
+were combined into a single variable; local news remained separate for analysis;
+all political sources of COVID-19 information were combined, including Trump and
+his coronavirus task force, Joe Biden and his campaign, and State and local
+elected officials and their offices; and public health organizations and
+officials remained a separate variable. Finally, I created a single variable
+representing informal networks, including the original variables representing
+information received from friends, family and neighbors; community or
+neighborhood newsletters or listservs; and online forums or discussion groups.
 
 
  %-------%
