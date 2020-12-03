@@ -3,48 +3,50 @@
 %----------------------------------------------------------------------------------------
 %!TEX root = media_covid_knowledge.tex
 
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+%
 \documentclass[11pt]{article}
 \usepackage{appendix}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
 %-------%
+% Journal submission specifications - ASA format
+%\usepackage{mathptmx}
+%\usepackage[,bottom=1in,top=1in,left=1in,right=1in]{geometry}
+\usepackage{geometry}
+%\usepackage[doublespacing]{setspace} % alternate way to add double space
+%\usepackage[document]{ragged2e} % do not right-justify text
+%\usepackage{enotez}
+%  \let\footnote=\endnote
 
-%Journal submission specifications - ASA format
-  %\usepackage{mathptmx}
-  %\usepackage[,bottom=1in,top=1in,left=1in,right=1in]{geometry}
-  %\usepackage[doublespacing]{setspace} % alternate way to add double space
-  %\usepackage[document]{ragged2e} % do not right-justify text
-  %\usepackage{enotez}
-  %  \let\footnote=\endnote
+%Running header
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}% Clear header/footer
+\fancyhead[L]{Paying Attention to the Pandemic}
+\cfoot{\thepage} %page numbers bottom center
 
-
-% Running header
-  %\usepackage{fancyhdr}
-  %\pagestyle{fancy}
-  %\fancyhf{}% Clear header/footer
-  %\cfoot{\thepage} %page numbers bottom center
-
-%\fancyhead[L]{Taking Stock of Knowledge}
-
-
-%Where figures/tables placed in document
-  \usepackage[section]{placeins} %keeps floats in place, using command \FloatBarrier
-  %\usepackage[nolists,tablesfirst]{endfloat} % forces all floats to appear at end of document
-  %\usepackage[nolists, tabhead, fighead]{endfloat}
-  %\usepackage{flafter} %force floats to appear after they are defined
-
+% where figures/tables in document
+%\usepackage[nolists,tablesfirst]{endfloat} % forces all floats to appear at end of document
+\usepackage[section]{placeins} %keeps floats in place, using command \FloatBarrier
+%\usepackage[nolists, tabhead, fighead]{endfloat}
+%\usepackage{flafter} %force floats to appear after they are defined
 %-------%
 
-% Figures
+ % packages for figures
 \usepackage{array}  % tables
 \usepackage{wrapfig}  % wrap text around narrow tables or figures
 \usepackage{graphicx}  % for inserting graphics from file
 \usepackage{blindtext}
 \usepackage{asymptote}
 \usepackage{subcaption}
+\usepackage{rotating} %landscape tables
+\usepackage{geometry}
+\usepackage{pdflscape}
 
-%Figures in multiple parts
+% for figures in multiple parts
 \usepackage{caption}
 %\DeclareCaptionLabelFormat{cont}{#1~#2\alph{ContinuedFloat}}
 %\captionsetup[ContinuedFloat]{labelformat=cont}
@@ -53,30 +55,6 @@
 \usepackage{natbib}
 \setcitestyle{round,aysep={},yysep={,},notesep={:}}
 
-%URLs
-\usepackage[breaklinks]{hyperref}
-  \PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewher
-\PassOptionsToPackage{hyphens}{url}
-\urlstyle{same}  % don't use monospace font for urls
-
-\hypersetup{
-            pdftitle={Knowledge of COVID-19 and News Sources},
-            pdfborder={0 0 0},
-            breaklinks=true
-}
-
-%Graphics
-\usepackage{graphicx,grffile}
-  \makeatletter
-  \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-  \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-  \makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-  \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-
-%Text Formatting
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
@@ -85,42 +63,58 @@
   \usepackage{unicode-math}
   \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
 \fi
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{} % use upquote if available, for straight quotes in verbatim environments
-
-\IfFileExists{microtype.sty}{% % use microtype if available
-  \usepackage[]{microtype}
-  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
 \IfFileExists{parskip.sty}{%
-  \usepackage{parskip}
+\usepackage{parskip}
 }{% else
-  \setlength{\parindent}{0pt}
-  \setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
 }
-
+\usepackage{hyperref}
+\hypersetup{
+            pdftitle={Knowledge of COVID-19 and News Sources},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 \setlength{\emergencystretch}{3em}  % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{0}
 % Redefines (sub)paragraphs to behave more like sections
 \ifx\paragraph\undefined\else
-  \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
-  \fi
-  \ifx\subparagraph\undefined\else
-  \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
-  \fi
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
 
 % set default figure placement to htbp
-% \makeatletter
-% \def\fps@figure{htbp}
-% \makeatother
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
 
-\begin{document}
 %----------------------------------------------------------------------------------------
 %	DOCUMENT CONTENT
 %----------------------------------------------------------------------------------------
+
+\begin{document}
 
 \title{Tentative Title: Paying Attention to the Pandemic: Knowledge of COVID-19 by News Sources and Demographics
 \footnote{Corresponding Author: Molly M. King,
@@ -132,14 +126,11 @@
 \date{}
 
 \clearpage\maketitle
-\thispagestyle{empty}
 
-\newpage
 %----------------------------------------------------------------------------------------
-\hypertarget{abstract}{%
-\section{Abstract}\label{sec:abstract}}
+\section{Abstract}\label{sec:abstract}
 %----------------------------------------------------------------------------------------
-%\pagestyle{fancy} %Running header
+\pagestyle{fancy} %Running header
 \setcounter{page}{1} %resets page number to 1
 
 Never before has so much information been so immediately accessible to
@@ -626,14 +617,7 @@ earlier drafts of this paper.
 This work was supported by funding from Santa Clara University.
 
 
-%----------------------------------------------------------------------------------------
-%\newpage
-%\hypertarget{endnotes}{%
-%\label{endnotes}}
-%\printendnotes
-
-%----------------------------------------------------------------------------------------
-
+%------------------------------------------------------------------------------
 \newpage
 \hypertarget{references}{%
 \label{references}}
@@ -641,14 +625,6 @@ This work was supported by funding from Santa Clara University.
 
 \bibliographystyle{/Users/mollymking/Documents/SocResearch/LatexStyleFiles/asa} %tells to use asr style file instead of natbib
 \bibliography{/Users/mollymking/Documents/SocResearch/Mendeley/library}
-
-%----------------------------------------------------------------------------------------
-\clearpage % ensure all floats are processed
-%\processdelayedfloats
-%\clearpage
-
-%\appendix
-%  \input{/Users/mollymking/Documents/SocResearch/}
 
 %----------------------------------------------------------------------------------------
 
