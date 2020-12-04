@@ -1,0 +1,347 @@
+*! Creates:
+	*! attempted and correct variable: binary 1 = correct, given did not say `don't know'
+	*! correct/incorrect variable: binary 1 = correct, including all those who said `don't know' as incorrect
+	*! don't know variable: binary 1 = `don't know', 0 = attempted answer
+*! include file to create new_var from var_repl using info from var_type
+*! and produces a variable indicating number of choices available
+*! version 3.0 \ molly king 2020-10-08
+
+
+*quietly :
+	clonevar `new_var'_ac = `var_repl'
+	replace `new_var'_ac = .
+	
+	clonevar `new_var'_c = `var_repl'
+	replace `new_var'_c = .
+	
+	clonevar `new_var'_dk = `var_repl'
+	replace `new_var'_dk = .
+
+		
+// BINARY ORIGINAL VARIABLE
+
+*correct = 1; incorrect = 2
+if  "`var_type'" == "CI"   | "`var_type'" == "CI00" | "`var_type'" == "CI0"  | "`var_type'" == "CIA"  | ///
+	"`var_type'" == "CIO"  | "`var_type'" == "CIOR" | "`var_type'" == "CIOD" | "`var_type'" == "CIODR" | ///
+	"`var_type'" == "CI0D" | "`var_type'" == "CID"  | "`var_type'" == "CIDR" | "`var_type'" == "CIDRA" | "`var_type'" == "CIDA" | ///
+	"`var_type'" == "CIR" { 
+	replace `new_var'_ac = 1 if `var_repl' == 1 
+	replace `new_var'_ac = 0 if `var_repl' == 2
+	
+	replace `new_var'_c = 1 if `var_repl' == 2 
+	replace `new_var'_c = 0 if `var_repl' == 1
+}
+
+*correct = 2; incorrect = 1
+if  "`var_type'" == "IC"   | "`var_type'" == "IC00" | "`var_type'" == "IC0"  | "`var_type'" == "ICA"  |  ///
+	"`var_type'" == "ICO"  | "`var_type'" == "ICOR" | "`var_type'" == "ICOD" | "`var_type'" == "ICODR" | ///
+	"`var_type'" == "IC0D" | "`var_type'" == "ICD"  | "`var_type'" == "ICDR" | "`var_type'" == "ICDRA" | ///
+	"`var_type'" == "ICR" { 
+	replace `new_var'_ac = 1 if `var_repl' == 2 
+	replace `new_var'_ac = 0 if `var_repl' == 1
+
+	replace `new_var'_c = 1 if `var_repl' == 2 
+	replace `new_var'_c = 0 if `var_repl' == 1
+}
+
+*if don't know (or no opinion) = 3
+if  "`var_type'" == "CIA" | "`var_type'" == "CID" | "`var_type'" == "CIDA" |"`var_type'" == "CI0D" | "`var_type'" == "CIDR" | "`var_type'" == "CIDRA" | ///
+	"`var_type'" == "CIO" | "`var_type'" == "CIOR" | "`var_type'" == "CIOD" | "`var_type'" == "CIODR" | "`var_type'" == "CIR" | ///
+	"`var_type'" == "ICA" | "`var_type'" == "ICD" | "`var_type'" == "IC0D" | "`var_type'" == "ICDR" | "`var_type'" == "ICDRA" |	///
+	"`var_type'" == "ICO" | "`var_type'" == "ICOR" | "`var_type'" == "ICOD" | "`var_type'" == "ICODR" | "`var_type'" == "ICR" {
+	replace `new_var'_dk = 1 if `var_repl' == 3 
+	replace `new_var'_c = 0 if `var_repl' == 3 
+	
+	if  "`dk_code'" != "none" {
+		replace `new_var'_dk = 1 if `var_repl' == `dk_code'
+		replace `new_var'_c = 0 if `var_repl' == `dk_code'
+	}
+	if "`refused_code'" != "none" {
+		replace `new_var'_dk = 1 if `var_repl' == `refused_code'	
+		replace `new_var'_c = 0 if `var_repl' == `refused_code'	
+	}
+	if  "`notascer_code'" != "none" {
+		replace `new_var'_dk = 1 if `var_repl' == `notascer_code' 	
+		replace `new_var'_c = 0 if `var_repl' == `notascer_code' 	
+	}
+	replace `new_var'_dk = 0 if `var_repl' == 1 | `var_repl' == 2
+}
+
+
+// MULTIPLE CHOICE WITH 3 POSSIBLE ANSWERS
+
+*correct = 1; incorrect =2,3; (no opinion 4 / don't know 4)
+if  "`var_type'" == "CII0" | "`var_type'" == "CII"   | ///
+	"`var_type'" == "CIIO" | "`var_type'" == "CIIOD" | "`var_type'" == "CIIOR" | "`var_type'" == "CIIODR" |  ///
+	"`var_type'" == "CIID" | "`var_type'" == "CIIDR" | "`var_type'" == "CIIDRA"| ///
+	"`var_type'" == "CIIR" {
+	replace `new_var'_ac = 1 if `var_repl' == 1
+	replace `new_var'_ac = 0 if `var_repl' == 2 | `var_repl' == 3
+	
+	replace `new_var'_c = 1 if `var_repl' == 1
+	replace `new_var'_c = 0 if `var_repl' == 2 | `var_repl' == 3
+}
+
+*correct = 2; incorrect =1,3; (no opinion 4 / don't know 4)
+if  "`var_type'" == "ICI0" | "`var_type'" == "ICI" | ///
+	"`var_type'" == "ICIO" | "`var_type'" == "ICIOD" | "`var_type'" == "ICIOR" | "`var_type'" == "ICIODR" |  ///
+	"`var_type'" == "ICID" | "`var_type'" == "ICIDR" | "`var_type'" == "ICIDRA"| ///
+	"`var_type'" == "ICIR" {
+	replace `new_var'_ac = 1 if `var_repl' == 2
+	replace `new_var'_ac = 0 if `var_repl' == 1 | `var_repl' == 3
+	
+	replace `new_var'_c = 1 if `var_repl' == 2
+	replace `new_var'_c = 0 if `var_repl' == 1 | `var_repl' == 3
+}
+
+*correct = 3; incorrect =1,2; (no opinion 4 / don't know 4)
+if  "`var_type'" == "IIC0" | "`var_type'" == "IIC"   | ///
+	"`var_type'" == "IICO" | "`var_type'" == "IICOD" | "`var_type'" == "IICOR" | "`var_type'" == "IICODR" |  ///
+	"`var_type'" == "IICD" | "`var_type'" == "IICDR" | "`var_type'" == "IICDRA" | ///
+	"`var_type'" == "IICR" {
+	replace `new_var'_ac = 1 if `var_repl' == 3
+	replace `new_var'_ac = 0 if `var_repl' == 1 | `var_repl' == 2
+	
+	replace `new_var'_c = 1 if `var_repl' == 3
+	replace `new_var'_c = 0 if `var_repl' == 1 | `var_repl' == 2
+}
+
+*don't know (or no opinion)= 4
+if  "`var_type'" == "CIID"  | "`var_type'" == "CIIDR" | "`var_type'" == "CIIDRA" | "`var_type'" == "CIIO" | ///
+	"`var_type'" == "CIIOD" | "`var_type'" == "CIIOR" | "`var_type'" == "CIIODR" | "`var_type'" == "CIIR" | ///
+	"`var_type'" == "ICID"  | "`var_type'" == "ICIDR" | "`var_type'" == "ICIDRA" | "`var_type'" == "ICIO" | ///
+	"`var_type'" == "ICIOD" | "`var_type'" == "ICIOR" | "`var_type'" == "ICIODR" | "`var_type'" == "ICIR" | ///
+	"`var_type'" == "IICD"  | "`var_type'" == "IICDR" | "`var_type'" == "IICDRA" | "`var_type'" == "IICO" | ///
+	"`var_type'" == "IICOD" | "`var_type'" == "IICOR" | "`var_type'" == "IICODR" | "`var_type'" == "IICR" {
+	replace `new_var'_dk = 1 if `var_repl' == 4 
+	replace `new_var'_c = 0 if `var_repl' == 4 
+	
+	if  "`dk_code'" != "none" {
+		replace `new_var'_dk = 1 if `var_repl' == `dk_code'  		
+		replace `new_var'_c = 0 if `var_repl' == `dk_code'  		
+	}
+	if  "`refused_code'" != "none" {
+		replace `new_var'_dk = 1 if `var_repl' == `refused_code'	
+		replace `new_var'_c = 0 if `var_repl' == `refused_code'	
+	}
+	if  "`notascer_code'" != "none" {
+		replace `new_var'_dk = 1 if `var_repl' == `notascer_code' 	
+		replace `new_var'_c = 0 if `var_repl' == `notascer_code' 	
+	}
+	replace `new_var'_dk = 0 if `var_repl' == 1 | `var_repl' == 2 | `var_repl' == 3
+}
+
+
+// MULTIPLE CHOICE WITH 4 POSSIBLE ANSWERS
+
+*correct = 1; incorrect = 2,3,4
+if  "`var_type'" == "CIII"  | ///
+	"`var_type'" == "CIIIO" | "`var_type'" == "CIIIOD" | "`var_type'" == "CIIIODR" | ///
+	"`var_type'" == "CIIID" | "`var_type'" == "CIIIDR" | "`var_type'" == "CIIIDRA" | /// 
+	"`var_type'" == "CIIIR" { 
+	replace `new_var'_ac = 1 if `var_repl' == 1
+	replace `new_var'_ac = 0 if `var_repl' == 2 | `var_repl' == 3 | `var_repl' == 4
+	
+	replace `new_var'_c = 1 if `var_repl' == 1
+	replace `new_var'_c = 0 if `var_repl' == 2 | `var_repl' == 3 | `var_repl' == 4
+}
+
+*correct = 2; incorrect = 1,3,4
+if  "`var_type'" == "ICII"  | ///
+	"`var_type'" == "ICIIO" | "`var_type'" == "ICIIOD" | "`var_type'" == "ICIIODR" | ///
+	"`var_type'" == "ICIID" | "`var_type'" == "ICIIDR" | "`var_type'" == "ICIIDRA" | ///
+	"`var_type'" == "ICIIR" {
+	replace `new_var'_ac = 1 if `var_repl' == 2
+	replace `new_var'_ac = 0 if `var_repl' == 1 | `var_repl' == 3 | `var_repl' == 4
+	
+	replace `new_var'_c = 1 if `var_repl' == 2
+	replace `new_var'_c = 0 if `var_repl' == 1 | `var_repl' == 3 | `var_repl' == 4
+}
+
+*correct = 3; incorrect = 1,2,4
+if  "`var_type'" == "IICI"  | ///
+	"`var_type'" == "IICIO" | "`var_type'" == "IICIOD" | "`var_type'" == "IICIODR" | ///
+	"`var_type'" == "IICID" | "`var_type'" == "IICIDR" | "`var_type'" == "IICIDRA" | ///
+	"`var_type'" == "IICIR" {
+	replace `new_var'_ac = 1 if `var_repl' == 3
+	replace `new_var'_ac = 0 if `var_repl' == 1 | `var_repl' == 2 | `var_repl' == 4
+	
+	replace `new_var'_c = 1 if `var_repl' == 3
+	replace `new_var'_c = 0 if `var_repl' == 1 | `var_repl' == 2 | `var_repl' == 4
+}
+
+*correct = 4; incorrect = 1,2,3
+if  "`var_type'" == "IIIC"  | ///
+	"`var_type'" == "IIICO" | "`var_type'" == "IIICOD" | "`var_type'" == "IIICODR" | ///
+	"`var_type'" == "IIICD" | "`var_type'" == "IIICDR" | "`var_type'" == "IIICDRA" | ///
+	"`var_type'" == "IIICR" {
+	replace `new_var'_ac = 1 if `var_repl' == 4
+	replace `new_var'_ac = 0 if `var_repl' == 1 | `var_repl' == 2 | `var_repl' == 3
+	
+	replace `new_var'_c = 1 if `var_repl' == 4
+	replace `new_var'_c = 0 if `var_repl' == 1 | `var_repl' == 2 | `var_repl' == 3
+}
+
+*don't know (or no opinion) = 5
+if  "`var_type'" == "CIIID" | "`var_type'" == "CIIIDR" | "`var_type'" == "CIIIDRA" | ///
+	"`var_type'" == "CIIIO" | "`var_type'" == "CIIIOD" | "`var_type'" == "CIIIODR" | "`var_type'" == "CIIIR" | ///
+	"`var_type'" == "ICIID" | "`var_type'" == "ICIIDR" | "`var_type'" == "ICIIDRA" | ///
+	"`var_type'" == "ICIIO" | "`var_type'" == "ICIIOD" | "`var_type'" == "ICIIODR" | "`var_type'" == "ICIIR" | ///
+	"`var_type'" == "IICID" | "`var_type'" == "IICIDR" | "`var_type'" == "IICIDRA" | ///
+	"`var_type'" == "IICIO" | "`var_type'" == "IICIOD" | "`var_type'" == "IICIODR" | "`var_type'" == "IICIR" | ///
+	"`var_type'" == "IIICD" | "`var_type'" == "IIICDR" | "`var_type'" == "IIICDRA" | ///
+	"`var_type'" == "IIICO" | "`var_type'" == "IIICOD" | "`var_type'" == "IIICODR" | "`var_type'" == "IIICR" { ///  
+	replace `new_var'_dk = 1 if `var_repl' == 5 
+	replace `new_var'_c = 0 if `var_repl' == 5 
+	
+	if  "`dk_code'" != "none" {
+		replace `new_var'_dk = 1 if `var_repl' == `dk_code'  		
+		replace `new_var'_c = 0 if `var_repl' == `dk_code'  		
+	}
+	if  "`refused_code'" != "none" {
+		replace `new_var'_dk = 1 if `var_repl' == `refused_code'	
+		replace `new_var'_c = 0 if `var_repl' == `refused_code'	
+	}
+	if  "`notascer_code'" != "none" {
+		replace `new_var'_dk = 1 if `var_repl' == `notascer_code' 	
+		replace `new_var'_c = 0 if `var_repl' == `notascer_code' 	
+	}
+	replace `new_var'_dk = 0 if `var_repl' == 1 | `var_repl' == 2 | `var_repl' == 3 | `var_repl' == 4
+}
+
+
+// MULTIPLE CHOICE WITH 5 POSSIBLE ANSWERS
+
+*correct = 1; incorrect = 2,3,4,5
+if  "`var_type'" == "CIIII" | ///
+	"`var_type'" == "CIIIIO" | "`var_type'" == "CIIIIOD" | "`var_type'" == "CIIIIODR" | ///
+	"`var_type'" == "CIIIID" | "`var_type'" == "CIIIIDR" | "`var_type'" == "CIIIIDRA" {
+	replace `new_var'_ac = 1 if `var_repl' == 1
+	replace `new_var'_ac = 0 if `var_repl' == 2 | `var_repl' == 3 | `var_repl' == 4 | `var_repl' == 5
+	
+	replace `new_var'_c = 1 if `var_repl' == 1
+	replace `new_var'_c = 0 if `var_repl' == 2 | `var_repl' == 3 | `var_repl' == 4 | `var_repl' == 5
+}
+
+*correct = 2; incorrect = 1,3,4,5
+if  "`var_type'" == "ICIII" |   "`var_type'" == "ICIIIA" | ///
+	"`var_type'" == "ICIIIO" | "`var_type'" == "ICIIIOD" | "`var_type'" == "ICIIIODR" | ///
+	"`var_type'" == "ICIIID" | "`var_type'" == "ICIIIDR" | "`var_type'" == "ICIIIDRA" {
+	replace `new_var'_ac = 1 if `var_repl' == 2
+	replace `new_var'_ac = 0 if `var_repl' == 1 | `var_repl' == 3 | `var_repl' == 4 | `var_repl' == 5
+	
+	replace `new_var'_c = 1 if `var_repl' == 2
+	replace `new_var'_c = 0 if `var_repl' == 1 | `var_repl' == 3 | `var_repl' == 4 | `var_repl' == 5
+}
+
+*correct = 3; incorrect = 1,2,4,5
+if  "`var_type'" == "IICII" | ///
+	"`var_type'" == "IICIIO" | "`var_type'" == "IICIIOD" | "`var_type'" == "IICIIODR" | ///
+	"`var_type'" == "IICIID" | "`var_type'" == "IICIIDR" | "`var_type'" == "IICIIDRA" {
+	replace `new_var'_ac = 1 if `var_repl' == 3
+	replace `new_var'_ac = 0 if `var_repl' == 1 | `var_repl' == 2 | `var_repl' == 4 | `var_repl' == 5
+	
+	replace `new_var'_c = 1 if `var_repl' == 3
+	replace `new_var'_c = 0 if `var_repl' == 1 | `var_repl' == 2 | `var_repl' == 4 | `var_repl' == 5
+}
+
+*correct = 4; incorrect = 1,2,3,5
+if  "`var_type'" == "IIICI" | ///
+	"`var_type'" == "IIICIO" | "`var_type'" == "IIICIOD" | "`var_type'" == "IIICIODR" | ///  
+	"`var_type'" == "IIICID" | "`var_type'" == "IIICIDR" |  "`var_type'" == "IIICIDRA" {
+	replace `new_var'_ac = 1 if `var_repl' == 4
+	replace `new_var'_ac = 0 if `var_repl' == 1 | `var_repl' == 2 | `var_repl' == 3 | `var_repl' == 5
+	
+	replace `new_var'_c = 1 if `var_repl' == 4
+	replace `new_var'_c = 0 if `var_repl' == 1 | `var_repl' == 2 | `var_repl' == 3 | `var_repl' == 5
+}
+
+*correct = 5; incorrect = 1,2,3,4
+if  "`var_type'" == "IIIIC" | ///
+	"`var_type'" == "IIIICO" | "`var_type'" == "IIIICOD" | "`var_type'" == "IIIICODR" | ///  
+	"`var_type'" == "IIIICD" | "`var_type'" == "IIIICDR" | "`var_type'" == "IIIICDRA" {
+	replace `new_var'_ac = 1 if `var_repl' == 5
+	replace `new_var'_ac = 0 if `var_repl' == 1 | `var_repl' == 2 | `var_repl' == 3 | `var_repl' == 4
+	
+	replace `new_var'_c = 1 if `var_repl' == 5
+	replace `new_var'_c = 0 if `var_repl' == 1 | `var_repl' == 2 | `var_repl' == 3 | `var_repl' == 4	
+}
+
+*don't know (or no opinion) = 6
+if  "`var_type'" == "CIIIID" | "`var_type'" == "CIIIIDR" | "`var_type'" == "CIIIIDRA" | ///
+	"`var_type'" == "CIIIIO" | "`var_type'" == "CIIIIOD" | "`var_type'" == "CIIIIODR" | ///
+	"`var_type'" == "ICIIID" | "`var_type'" == "ICIIIDR" | "`var_type'" == "ICIIIDRA" | ///
+	"`var_type'" == "ICIIIO" | "`var_type'" == "ICIIIOD" | "`var_type'" == "ICIIIODR" | ///
+	"`var_type'" == "ICIIIA" | ///
+	"`var_type'" == "IICIID" | "`var_type'" == "IICIIDR" | "`var_type'" == "IICIIDRA" | ///
+	"`var_type'" == "IICIIO" | "`var_type'" == "IICIIOD" | "`var_type'" == "IICIIODR" | ///
+	"`var_type'" == "IIICID" | "`var_type'" == "IIICIDR" | "`var_type'" == "IIICIDRA" | ///
+	"`var_type'" == "IIICIO" | "`var_type'" == "IIICIOD" | "`var_type'" == "IIICIODR" | ///  
+	"`var_type'" == "IIIICD" | "`var_type'" == "IIIICDR" | "`var_type'" == "IIIICDRA" | ///
+	"`var_type'" == "IIIICO" | "`var_type'" == "IIIICOD" | "`var_type'" == "IIIICODR" {  
+	replace `new_var'_dk = 1 if `var_repl' == 6 
+	replace `new_var'_c = 0 if `var_repl' == 6 
+	
+	if  "`dk_code'" != "none" {
+		replace `new_var'_dk = 1 if `var_repl' == `dk_code'  	
+		replace `new_var'_c  = 0 if `var_repl' == `dk_code'  	
+	}
+	if  "`refused_code'" != "none" {
+		replace `new_var'_dk = 1 if `var_repl' == `refused_code'	
+		replace `new_var'_c = 0 if `var_repl' == `refused_code'	
+	}
+	if  "`notascer_code'" != "none" {
+		replace `new_var'_dk = 1 if `var_repl' == `notascer_code' 	
+		replace `new_var'_c  = 0 if `var_repl' == `notascer_code' 	
+	}
+	replace `new_var'_dk = 0 if `var_repl' == 1 | `var_repl' == 2 | `var_repl' == 3 | `var_repl' == 4 | `var_repl' == 5
+}
+
+
+// MULTIPLE CHOICE WITH 6 POSSIBLE ANSWERS
+*correct = 6; incorrect =1,2,3,4,5
+if  "`var_type'" == "IIIIIC" | ///
+	"`var_type'" == "IIIIICD" | "`var_type'" == "IIIIICDR" | "`var_type'" == "IIIIICDRA" {
+	replace `new_var'_ac = 1 if `var_repl' == 6
+	replace `new_var'_ac = 0 if `var_repl' == 1 | `var_repl' == 2 | `var_repl' == 3 | `var_repl' == 4 | `var_repl' == 5
+	
+	replace `new_var'_c = 1 if `var_repl' == 6
+	replace `new_var'_c = 0 if `var_repl' == 1 | `var_repl' == 2 | `var_repl' == 3 | `var_repl' == 4 | `var_repl' == 5
+}
+
+if  "`var_type'" == "IIIIIC" | ///
+	"`var_type'" == "IIIIICD" | "`var_type'" == "IIIIICDR" | "`var_type'" == "IIIIICDRA" {
+	replace `new_var'_dk = 1 if `var_repl' == 7
+	replace `new_var'_c = 0 if `var_repl' == 7
+	
+	if "`refused_code'" != "none" {
+		replace `new_var'_dk = 1 if `var_repl' == `refused_code'
+		replace `new_var'_c = 0 if `var_repl' == `refused_code'
+	}
+	if "`dk_code'" != "none" {
+		replace `new_var'_dk = 1 if `var_repl' == `dk_code'
+		replace `new_var'_c = 0 if `var_repl' == `dk_code'
+	}
+	if "`notascer_code'" != "none" {
+		replace `new_var'_dk = 1 if `var_repl' == `notascer_code'
+		replace `new_var'_c = 0 if `var_repl' == `notascer_code'
+	}
+	replace  `new_var'_dk = 0 if `var_repl' == 1 | `var_repl' == 2 | `var_repl' == 3 | `var_repl' == 4 | `var_repl' == 5 | `var_repl' == 6
+}
+
+
+
+*label for correct variables
+lab val `new_var'_c c
+notes `new_var'_c: Created from `var_repl' in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+noisily tab `var_repl' `new_var'_c, m
+
+*label for attempted variables
+lab val `new_var'_ac ac
+notes `new_var'_ac: Created from `var_repl' in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+noisily tab `var_repl' `new_var'_ac, m
+
+*label for don't know variables
+lab val `new_var'_dk dk
+notes `new_var'_dk: Created from `var_repl' in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+noisily tab `var_repl' `new_var'_dk, m

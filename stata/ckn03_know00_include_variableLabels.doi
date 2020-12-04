@@ -1,0 +1,12 @@
+*! include file to create general variable labels for Knowledge do files
+*! version 2.0 \ molly king 2017-01-18
+
+label define tFalse 1 "1_True" 2 "2_False *" 8 "8_Don't Know"  9 "Refused"
+label define fTrue 1 "1_True *" 2 "2_False" 8 "8_Don't Know" 9 "Refused"
+label define knows 1 "Correct" 2 "Incorrect" 8 "Don't know"  9 "Refused"
+
+label define ac 0 "0_NoAttemptAnswer" 1 "1_Attempted&Correct"
+label define c 0 "0_Incorrect" 1 "1_Correct"
+label define dk 0 "0_knows" 1 "1_dontKnow"
+* _c after a variable says it is a binary indicator variable where
+    * 0 means "incorrect" and 1 means "correct"
