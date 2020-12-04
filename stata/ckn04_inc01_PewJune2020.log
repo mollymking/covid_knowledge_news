@@ -1,0 +1,2077 @@
+--------------------------------------------------------------------------------
+      name:  ckn04_inc01_PewJune2020
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/stata/
+> ckn04_inc01_PewJune2020.log
+  log type:  text
+ opened on:  23 Nov 2020, 13:58:43
+
+. ***--------------------------***
+. 
+. //      project:        Knowledge of COVID & News Sources
+. //  task:       Income variables
+. //  data:       di "`dataset'"
+. 
+. //  github:     covid_knowledge_news
+. //  OSF:                https://osf.io/qf624/
+. 
+. //  author:     Molly King
+. 
+. display "$S_DATE  $S_TIME"
+23 Nov 2020  13:58:43
+
+. 
+. ***-----------------------------***
+. // #0 PROGRAM SETUP
+. ***-----------------------------***
+. 
+. version 16 // keeps program consistent for future replications
+
+. set linesize 80
+
+. clear all
+
+. set more off
+
+. 
+. use $deriv/ckn03_know`dataset'.dta, clear
+(01_PewJune2020 Knowledge variables)
+
+. save $deriv/ckn`category'`dataset'.dta, replace // data that results at end
+file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn04_inc01_Pew
+> June2020.dta saved
+
+. 
+. ***-----------------------------***
+. // #1 COMBINE INCOME CATEGORIES FOR ONE BIG CATEGORY VARIABLE
+. ***-----------------------------***
+. 
+. // USE OLD INCOME VARIABLE LABEL TO CREATE NEW VARIABLE LABEL
+. *label list
+. codebook f_income
+
+--------------------------------------------------------------------------------
+f_income                                                           Family income
+--------------------------------------------------------------------------------
+
+                  type:  numeric (byte)
+                 label:  labels82
+
+                 range:  [1,99]                       units:  1
+         unique values:  10                       missing .:  0/9,654
+
+              examples:  4     $30,000 to less than $40,000
+                         6     $50,000 to less than $75,000
+                         7     $75,000 to less than $100,000
+                         8     $100,000 to less than $150,000
+
+. *income uses value label X
+. uselabel labels82, clear // takes label and converts it into data table
+
+. // then can copy this and use it for creating new more robust data label for n
+> ew variables
+. 
+. use $deriv/ckn`category'`dataset'.dta, clear
+(01_PewJune2020 Knowledge variables)
+
+. 
+. label define inc_categories_`dataset' ///
+>         1       "Less than 10,000" ///
+>         2       "10,000 to less than 20,000" ///
+>         3       "20,000 to less than 30,000" ///
+>         4       "30,000 to less than 40,000" ///
+>         5       "40,000 to less than 50,000" ///
+>         6       "50,000 to less than 75,000" ///
+>         7       "75,000 to less than 100,000" ///
+>         8       "100,000 to less than 150,000" ///
+>         9       "150,000 or more" ///
+>         99      "Refused" 
+
+. 
+. ***-----------------------------***
+. 
+. // CREATE FAMILY INCOME VARIABLE
+. 
+. local family_income_variable f_income
+
+. 
+. tab `family_income_variable', m
+
+                 Family income |      Freq.     Percent        Cum.
+-------------------------------+-----------------------------------
+             Less than $10,000 |        384        3.98        3.98
+  $10,000 to less than $20,000 |        579        6.00        9.98
+  $20,000 to less than $30,000 |        708        7.33       17.31
+  $30,000 to less than $40,000 |        729        7.55       24.86
+  $40,000 to less than $50,000 |        795        8.23       33.10
+  $50,000 to less than $75,000 |      1,644       17.03       50.12
+ $75,000 to less than $100,000 |      1,393       14.43       64.55
+$100,000 to less than $150,000 |      1,610       16.68       81.23
+              $150,000 or more |      1,406       14.56       95.79
+                       Refused |        406        4.21      100.00
+-------------------------------+-----------------------------------
+                         Total |      9,654      100.00
+
+. tab `family_income_variable', m nolab
+
+     Family |
+     income |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |        384        3.98        3.98
+          2 |        579        6.00        9.98
+          3 |        708        7.33       17.31
+          4 |        729        7.55       24.86
+          5 |        795        8.23       33.10
+          6 |      1,644       17.03       50.12
+          7 |      1,393       14.43       64.55
+          8 |      1,610       16.68       81.23
+          9 |      1,406       14.56       95.79
+         99 |        406        4.21      100.00
+------------+-----------------------------------
+      Total |      9,654      100.00
+
+. 
+. clonevar dL_finc = `family_income_variable'
+
+. 
+. *check if coded correctly
+. tab dL_finc `family_income_variable', m
+
+                      |                Family income
+        Family income | Less than  $10,000 t  $20,000 t  $30,000 t |     Total
+----------------------+--------------------------------------------+----------
+    Less than $10,000 |       384          0          0          0 |       384 
+$10,000 to less than  |         0        579          0          0 |       579 
+$20,000 to less than  |         0          0        708          0 |       708 
+$30,000 to less than  |         0          0          0        729 |       729 
+$40,000 to less than  |         0          0          0          0 |       795 
+$50,000 to less than  |         0          0          0          0 |     1,644 
+$75,000 to less than  |         0          0          0          0 |     1,393 
+$100,000 to less than |         0          0          0          0 |     1,610 
+     $150,000 or more |         0          0          0          0 |     1,406 
+              Refused |         0          0          0          0 |       406 
+----------------------+--------------------------------------------+----------
+                Total |       384        579        708        729 |     9,654 
+
+
+                      |                Family income
+        Family income | $40,000 t  $50,000 t  $75,000 t  $100,000  |     Total
+----------------------+--------------------------------------------+----------
+    Less than $10,000 |         0          0          0          0 |       384 
+$10,000 to less than  |         0          0          0          0 |       579 
+$20,000 to less than  |         0          0          0          0 |       708 
+$30,000 to less than  |         0          0          0          0 |       729 
+$40,000 to less than  |       795          0          0          0 |       795 
+$50,000 to less than  |         0      1,644          0          0 |     1,644 
+$75,000 to less than  |         0          0      1,393          0 |     1,393 
+$100,000 to less than |         0          0          0      1,610 |     1,610 
+     $150,000 or more |         0          0          0          0 |     1,406 
+              Refused |         0          0          0          0 |       406 
+----------------------+--------------------------------------------+----------
+                Total |       795      1,644      1,393      1,610 |     9,654 
+
+
+                      |     Family income
+        Family income | $150,000     Refused |     Total
+----------------------+----------------------+----------
+    Less than $10,000 |         0          0 |       384 
+$10,000 to less than  |         0          0 |       579 
+$20,000 to less than  |         0          0 |       708 
+$30,000 to less than  |         0          0 |       729 
+$40,000 to less than  |         0          0 |       795 
+$50,000 to less than  |         0          0 |     1,644 
+$75,000 to less than  |         0          0 |     1,393 
+$100,000 to less than |         0          0 |     1,610 
+     $150,000 or more |     1,406          0 |     1,406 
+              Refused |         0        406 |       406 
+----------------------+----------------------+----------
+                Total |     1,406        406 |     9,654 
+
+. tab dL_finc `family_income_variable', m
+
+                      |                Family income
+        Family income | Less than  $10,000 t  $20,000 t  $30,000 t |     Total
+----------------------+--------------------------------------------+----------
+    Less than $10,000 |       384          0          0          0 |       384 
+$10,000 to less than  |         0        579          0          0 |       579 
+$20,000 to less than  |         0          0        708          0 |       708 
+$30,000 to less than  |         0          0          0        729 |       729 
+$40,000 to less than  |         0          0          0          0 |       795 
+$50,000 to less than  |         0          0          0          0 |     1,644 
+$75,000 to less than  |         0          0          0          0 |     1,393 
+$100,000 to less than |         0          0          0          0 |     1,610 
+     $150,000 or more |         0          0          0          0 |     1,406 
+              Refused |         0          0          0          0 |       406 
+----------------------+--------------------------------------------+----------
+                Total |       384        579        708        729 |     9,654 
+
+
+                      |                Family income
+        Family income | $40,000 t  $50,000 t  $75,000 t  $100,000  |     Total
+----------------------+--------------------------------------------+----------
+    Less than $10,000 |         0          0          0          0 |       384 
+$10,000 to less than  |         0          0          0          0 |       579 
+$20,000 to less than  |         0          0          0          0 |       708 
+$30,000 to less than  |         0          0          0          0 |       729 
+$40,000 to less than  |       795          0          0          0 |       795 
+$50,000 to less than  |         0      1,644          0          0 |     1,644 
+$75,000 to less than  |         0          0      1,393          0 |     1,393 
+$100,000 to less than |         0          0          0      1,610 |     1,610 
+     $150,000 or more |         0          0          0          0 |     1,406 
+              Refused |         0          0          0          0 |       406 
+----------------------+--------------------------------------------+----------
+                Total |       795      1,644      1,393      1,610 |     9,654 
+
+
+                      |     Family income
+        Family income | $150,000     Refused |     Total
+----------------------+----------------------+----------
+    Less than $10,000 |         0          0 |       384 
+$10,000 to less than  |         0          0 |       579 
+$20,000 to less than  |         0          0 |       708 
+$30,000 to less than  |         0          0 |       729 
+$40,000 to less than  |         0          0 |       795 
+$50,000 to less than  |         0          0 |     1,644 
+$75,000 to less than  |         0          0 |     1,393 
+$100,000 to less than |         0          0 |     1,610 
+     $150,000 or more |     1,406          0 |     1,406 
+              Refused |         0        406 |       406 
+----------------------+----------------------+----------
+                Total |     1,406        406 |     9,654 
+
+. 
+. recode dL_finc 99 = .n //       Don't Know/refused
+(dL_finc: 406 changes made)
+
+. 
+. label var dL_finc "family Income"
+
+. lab val dL_finc inc_categories_`dataset'
+
+. notes dL_finc:`dataset' Family Income Categories from `family_income_variable'
+>  \ ckn`category'`dataset'.do mmk $S_DATE
+
+. 
+. 
+. // SAVE
+. save $deriv/ckn`category'`dataset'.dta, replace 
+file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn04_inc01_Pew
+> June2020.dta saved
+
+. 
+. ***-----------------------------***
+. // #2 FAMILY INCOME 
+. ***-----------------------------***
+. 
+. local inc_var `"dL_finc"' //Specify which variable using as income variable
+
+. local inc_type "family" 
+
+. local year "year"
+
+. 
+. // A) ASEC CONTINUOUS INCOME CONVERSIONS
+. 
+. *! Convert categorical to continuous income values, independent of values of c
+> ategories
+. *! creates numeric variables indicating edges of income categories,
+. *! and draws random continuous income from CPS-ASEC from between those edges
+. *! several locals must be specified before running this:
+. 
+.         // `inc_type' specifies either family, family, or personal as income t
+> ypes
+.         // `inc_var' is the name of the categorical income variable in the ori
+> ginal dataset
+.         // `year' is the name of the year variable (any form of time is fine, 
+> as long as it's numeric)
+. 
+. 
+. // #1 SETUP
+.         noisily
+
+.         set seed 1
+
+.         compress
+  (0 bytes saved)
+
+.         version 13
+
+.         
+.         //Create local for levels of income = e.g., levelsof year, local(years
+> )
+.         levelsof `inc_var', local(`"`inc_var'_levels"')
+1 2 3 4 5 6 7 8 9
+
+. 
+.         //Create variable will need to store income level
+.         gen `inc_var'_cat = " "
+
+. 
+.         // sort for later join & create variable recording the original observ
+> ation order within the identifier
+.         bysort `year' `inc_var': gen year_inc_id = _n
+
+. 
+. // #2 create numeric variables indicating edges of income categories //
+.         // Note: for more detail on if-command and Stata regular expressions u
+> sed to create this, see:
+.                 *http://www.stata.com/statalist/archive/2013-03/msg00654.html
+.                 *http://www.stata.com/support/faqs/programming/if-command-vers
+> us-if-qualifier/
+.                 *http://stats.idre.ucla.edu/stata/faq/how-can-i-extract-a-port
+> ion-of-a-string-variable-using-regular-expressions/
+. 
+.         // List income levels
+.         di "The income levels are: " "``inc_var'_levels'"
+The income levels are: 1 2 3 4 5 6 7 8 9
+
+. 
+.         * DECODE to CONVERT LABELS TO STRING VARIABLES
+.         decode `inc_var', gen(inc_decoded)
+
+.         *describe inc_decoded
+. 
+.         tempfile working_regex
+
+.         save `working_regex', replace
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000001 not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000001 saved
+
+. 
+.         // loop through all values of income categories (`inc_level') in `data
+> set'
+.         foreach inc_level of local `inc_var'_levels {
+  2. 
+.                 use `working_regex', clear
+  3. 
+.                 // Keep the data if the income variable is equal to the curren
+> t income level (of the loop)
+.                 keep if `inc_var' == `inc_level'  // do this to make sure not 
+> replacing things with wrong inc_var_cat later
+  4.                         di "The current inc_level is: " `inc_level'
+  5. 
+.                         // Make sure working with proper income label text in 
+> `inc_var'_cat
+.                         replace `inc_var'_cat = inc_decoded
+  6. 
+.                         // text at beginning of the string:
+.                                 if regexm(`inc_var'_cat, "^[a-z/A-Z]+") == 1 {
+  7.                                         di "The inc_level " `inc_level' " i
+> s at the lowest end of the income range"
+  8.                                         // for lower-bound values, will mat
+> ch if text at beginning of line
+.                                         destring `inc_var'_cat, ignore("Less t
+> han LESS THAN Under,$ ") generate(`inc_var'_ub) // parses out these words
+  9.                                         gen `inc_var'_lb = 0
+ 10.                                 }
+ 11. 
+.                         // text at end of the string:
+.                                 else if regexm(`inc_var'_cat, "[a-z/A-Z]+$") =
+> = 1 {
+ 12.                                         di "The inc_level " `inc_level' " i
+> s at the highest end of the income range"
+ 13.                                         // for upper-bound values, will mat
+> ch if text at end of line
+.                                         destring `inc_var'_cat, ignore("and ov
+> er or over,$ or more OR MORE") generate(`inc_var'_lb) // parses out these word
+> s
+ 14.                                         gen `inc_var'_ub = 999999  // my to
+> pcode for asec purposes
+ 15.                                 }
+ 16. 
+.                         // if `inc_var'_cat is missing, keep it missing for lo
+> wer_bound and upper_bound
+.                                 else if regexm(`inc_var'_cat, "[.][a-z]") == 1
+>  {
+ 17.                                         di "The inc_level " `inc_level' " i
+> s all missing"
+ 18.                                  // for missing values (a bit excessive, si
+> nce already missing, but good to be sure)
+.                                         gen `inc_var'_lb = .
+ 19.                                         gen `inc_var'_ub = .
+ 20.                                 }
+ 21. 
+.                         // for labels with 2 numbers in them
+.                                 else if regexm(`inc_var'_cat, "[0-9]+$") == 1 
+> {
+ 22.                                 // regex "[0-9]+$" will match anything of f
+> orm $0000 or 0000 at end of line -
+.                                 // since those at lowest and highest ranges ha
+> ve already been matched (using text), this leaves those with ranges
+.                                                 di "The inc_level " `inc_level
+> ' " has a lower and an upper level"
+ 23.                                                 split `inc_var'_cat, ///
+>                                                         parse("-" "to" "-" "to
+>  under" "to less than" "UP TO" "but less than") ///
+>                                                         ignore(" "$,) destring
+ 24.                                                 gen `inc_var'_lb = `inc_var
+> '_cat1
+ 25.                                                 gen `inc_var'_ub = `inc_var
+> '_cat2
+ 26.                                 }
+ 27. 
+.                         // error - in case doesn't fit any existing category
+.                                 else {
+ 28.                                         di "The inc_level " `inc_level' " d
+> oes not fit any of the existing regular expressions designs."
+ 29.                                 }
+ 30. 
+.                         // Save these new data - include numerical income uppe
+> r and lower bounds in tempfile for later for merging, etc.
+.                                 tempfile temp_`inc_level'
+ 31.                                 save `temp_`inc_level'', replace
+ 32. 
+.                         // create locals to use later for selecting appropriat
+> e ASEC bounds
+.                                 local upper_bound = `inc_var'_ub
+ 33.                                 local lower_bound = `inc_var'_lb
+ 34. 
+. 
+.                         // #3 Now, still within the single-income-level loop i
+> n original dataset, loop through each year in the dataset:
+. 
+.                                 //Levels of year variable to loop through year
+> s in dataset
+.                                         levelsof `year', local(years)
+ 35.                                         di "Create local variable years to 
+> loop through within that income bracket - values:" `years'
+ 36. 
+.                                 foreach y of local years { // loop through all
+>  years in `dataset'
+ 37. 
+.                                         use `temp_`inc_level'', clear
+ 38. 
+.                                         // summarize so can get count of how m
+> any individuals in that income level during year (in dataset)
+.                                         quietly summarize if `year' == `y' & `
+> inc_var' == `inc_level'
+ 39.                                         local sample_size = r(N) // count h
+> ow many rows there are in survey dataset
+ 40. 
+.                                         // create temporary file of just this 
+> income level and year can merge ASEC incomes back into later
+.                                         keep if `year' == `y' & `inc_var' == `
+> inc_level'
+ 41.                                         tempfile premerge_`inc_level'_`y'
+ 42.                                         save `premerge_`inc_level'_`y'', re
+> place
+ 43. 
+.                                         // #3A) Selects appropriate ASEC datas
+> et (of a certain type, either fam, hh, or pers) //
+. 
+.                                         if "`inc_type'" == "family" {
+ 44.                                                 use $deriv/ckn01_impe03_ase
+> c.dta, clear // use ASEC family dataset
+ 45.                                                 local asec_inc_var "ftotval
+> " // name in ASEC dataset
+ 46.                                                 local final_inc_var "dV_fin
+> c"
+ 47.                                                 di "Calculating family inco
+> me using ftotval ASEC variable."
+ 48.                                         }
+ 49.                                         else if "`inc_type'" == "family" {
+ 50.                                                 use $deriv/ckn01_impe03_ase
+> c.dta, clear // use ASEC family dataset
+ 51.                                                 local asec_inc_var "hhincom
+> e" // name in ASEC dataset
+ 52.                                                 local final_inc_var "dV_hin
+> c"
+ 53.                                                 di "Calculating family inco
+> me using hhincome ASEC variable."
+ 54.                                         }
+ 55.                                         else if "`inc_type'" == "personal" 
+> {
+ 56.                                                 use $deriv/ckn01_impe03_ase
+> c.dta, clear // use ASEC individual-weighted dataset
+ 57.                                                 local asec_inc_var "inctot"
+>  // name in ASEC dataset
+ 58.                                                 local final_inc_var "dV_rin
+> c"
+ 59.                                                 di "Calculating personal in
+> come using inctot ASEC variable."
+ 60.                                         }
+ 61.                                         else {
+ 62.                                                 display as error "Income ty
+> pes allowed: family, family, or personal."
+ 63.                                         }
+ 64. 
+.                                         // #3B) Takes a random draw of number 
+> of incomes w/in that income boundary and year from the CPS-ASEC
+. 
+.                                                 // Keep ASEC data if within in
+> come bounds and for given year
+. 
+.                                                 keep if `year' == `y' & ///
+>                                                         `asec_inc_var' >= `low
+> er_bound' & ///
+>                                                         `asec_inc_var' <= `upp
+> er_bound'
+ 65.                                                 di "Calculating income betw
+> een $`lower_bound' and $`upper_bound' for `y' year."
+ 66. 
+.                                                 sample `sample_size', count
+ 67.                                                         // keeps sample_siz
+> e (N) of ASEC sample
+.                                                         // Note: svy: NOT SUPP
+> ORTED FOR SAMPLE
+.                                                 di "Sampling N=`sample_size' i
+> ncomes from ASEC `asec_inc_var' dataset at `inc_level' ($`lower_bound'-`upper_
+> bound') level and year `y'."
+ 68. 
+.                                                 // Add new columns for lower_b
+> ound and upper_bound using locals created from values above
+.                                                 // these will be used to merge
+>  ASEC data back into original dataset
+.                                                 gen `inc_var'_lb = `lower_boun
+> d'
+ 69.                                                 gen `inc_var'_ub = `upper_b
+> ound'
+ 70. 
+.                                                 // Also save case id for mergi
+> ng later
+.                                                 gen year_inc_id = _n
+ 71. 
+.                                                 // Income values are assigned 
+> to rows within the income category in the temp survey dataset
+.                                                 quietly merge 1:1 `year' `inc_
+> var'_lb `inc_var'_ub year_inc_id using `premerge_`inc_level'_`y''
+ 72.                                                 di "Merged ASEC values with
+>  original dataset for inc_level " `inc_level' " ($`lower_bound'-`upper_bound')
+>  and year `y'."
+ 73. 
+. 
+.                                                 // Save these new data with ye
+> arly ASEC continuous data in a tempfile we can use later for merging, etc.
+.                                                 tempfile `inc_level'_`y'
+ 74.                                                 save ``inc_level'_`y'', rep
+> lace
+ 75.                                                 di "Saved ASEC continuous d
+> ata for inc_level " `inc_level' " ($`lower_bound'-`upper_bound') and year `y' 
+> in file "
+ 76. 
+.                                 }       // end of loop through all years of `d
+> ataset' dataset
+ 77. 
+.                         di "Moved outside loop of years for income bracket" `i
+> nc_level' " ($`lower_bound'-`upper_bound')."
+ 78. 
+.                 // append all years within one income bracket
+.                         tokenize `years'
+ 79.                         local first `1'
+ 80.                         use ``inc_level'_`1'', clear
+ 81.                         macro shift
+ 82.                         local rest `*'
+ 83. 
+.                 // now loop through and append each yearly temp file created e
+> arlier
+.                         foreach data in `*' {
+ 84.                                 append using ``inc_level'_`data''
+ 85.                         }
+ 86.                         di "Appended all years within income bracket " `inc
+> _level' " ($`lower_bound'-`upper_bound')."
+ 87. 
+.                 // create new tempfile to save all years data for a given inco
+> me level
+.                         tempfile temp_`inc_level'_allyrs
+ 88.                         save `temp_`inc_level'_allyrs', replace
+ 89.                         di "Saved new tempfile temp_`inc_level'_allyrs with
+>  all years for income bracket" `inc_level' " ($`lower_bound'-`upper_bound')."
+ 90. 
+. 
+.         } //  end of loop through all income brackets of `dataset' dataset
+(01_PewJune2020 Knowledge variables)
+(9,270 observations deleted)
+The current inc_level is: 1
+variable dL_finc_cat was str1 now str16
+(384 real changes made)
+The inc_level 1 is at the lowest end of the income range
+dL_finc_cat: bytes L e s space t h a n , removed; dL_finc_ub generated as int
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000002 not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000002 saved
+2019
+Create local variable years to loop through within that income bracket - values:
+> 2019
+(01_PewJune2020 Knowledge variables)
+(0 observations deleted)
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000003 not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000003 saved
+(Imported original CPS ASEC data from IPUMS)
+Calculating family income using ftotval ASEC variable.
+(63,586 observations deleted)
+Calculating income between $0 and $10000 for 2019 year.
+(4,375 observations deleted)
+Sampling N=384 incomes from ASEC ftotval dataset at 1 ($0-10000) level and year 
+> 2019.
+Merged ASEC values with original dataset for inc_level 1 ($0-10000) and year 201
+> 9.
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000004 not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000004 saved
+Saved ASEC continuous data for inc_level 1 ($0-10000) and year 2019 in file 
+Moved outside loop of years for income bracket1 ($0-10000).
+(Imported original CPS ASEC data from IPUMS)
+Appended all years within income bracket 1 ($0-10000).
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000005 not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000005 saved
+Saved new tempfile temp_1_allyrs with all years for income bracket1 ($0-10000).
+(01_PewJune2020 Knowledge variables)
+(9,075 observations deleted)
+The current inc_level is: 2
+variable dL_finc_cat was str1 now str26
+(579 real changes made)
+The inc_level 2 has a lower and an upper level
+variables born as string: 
+dL_finc_cat1  dL_finc_cat2
+dL_finc_cat1: bytes space , removed; replaced as int
+dL_finc_cat2: bytes space , removed; replaced as int
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000006 not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000006 saved
+2019
+Create local variable years to loop through within that income bracket - values:
+> 2019
+(01_PewJune2020 Knowledge variables)
+(0 observations deleted)
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000007 not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000007 saved
+(Imported original CPS ASEC data from IPUMS)
+Calculating family income using ftotval ASEC variable.
+(61,559 observations deleted)
+Calculating income between $10000 and $20000 for 2019 year.
+(6,207 observations deleted)
+Sampling N=579 incomes from ASEC ftotval dataset at 2 ($10000-20000) level and y
+> ear 2019.
+Merged ASEC values with original dataset for inc_level 2 ($10000-20000) and year
+>  2019.
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000008 not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000008 saved
+Saved ASEC continuous data for inc_level 2 ($10000-20000) and year 2019 in file 
+Moved outside loop of years for income bracket2 ($10000-20000).
+(Imported original CPS ASEC data from IPUMS)
+Appended all years within income bracket 2 ($10000-20000).
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000009 not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000009 saved
+Saved new tempfile temp_2_allyrs with all years for income bracket2 ($10000-2000
+> 0).
+(01_PewJune2020 Knowledge variables)
+(8,946 observations deleted)
+The current inc_level is: 3
+variable dL_finc_cat was str1 now str26
+(708 real changes made)
+The inc_level 3 has a lower and an upper level
+variables born as string: 
+dL_finc_cat1  dL_finc_cat2
+dL_finc_cat1: bytes space , removed; replaced as int
+dL_finc_cat2: bytes space , removed; replaced as int
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000a not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000a saved
+2019
+Create local variable years to loop through within that income bracket - values:
+> 2019
+(01_PewJune2020 Knowledge variables)
+(0 observations deleted)
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000b not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000b saved
+(Imported original CPS ASEC data from IPUMS)
+Calculating family income using ftotval ASEC variable.
+(61,553 observations deleted)
+Calculating income between $20000 and $30000 for 2019 year.
+(6,084 observations deleted)
+Sampling N=708 incomes from ASEC ftotval dataset at 3 ($20000-30000) level and y
+> ear 2019.
+Merged ASEC values with original dataset for inc_level 3 ($20000-30000) and year
+>  2019.
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000c not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000c saved
+Saved ASEC continuous data for inc_level 3 ($20000-30000) and year 2019 in file 
+Moved outside loop of years for income bracket3 ($20000-30000).
+(Imported original CPS ASEC data from IPUMS)
+Appended all years within income bracket 3 ($20000-30000).
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000d not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000d saved
+Saved new tempfile temp_3_allyrs with all years for income bracket3 ($20000-3000
+> 0).
+(01_PewJune2020 Knowledge variables)
+(8,925 observations deleted)
+The current inc_level is: 4
+variable dL_finc_cat was str1 now str26
+(729 real changes made)
+The inc_level 4 has a lower and an upper level
+variables born as string: 
+dL_finc_cat1  dL_finc_cat2
+dL_finc_cat1: bytes space , removed; replaced as int
+dL_finc_cat2: bytes space , removed; replaced as long
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000e not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000e saved
+2019
+Create local variable years to loop through within that income bracket - values:
+> 2019
+(01_PewJune2020 Knowledge variables)
+(0 observations deleted)
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000f not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000f saved
+(Imported original CPS ASEC data from IPUMS)
+Calculating family income using ftotval ASEC variable.
+(61,732 observations deleted)
+Calculating income between $30000 and $40000 for 2019 year.
+(5,884 observations deleted)
+Sampling N=729 incomes from ASEC ftotval dataset at 4 ($30000-40000) level and y
+> ear 2019.
+Merged ASEC values with original dataset for inc_level 4 ($30000-40000) and year
+>  2019.
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000g not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000g saved
+Saved ASEC continuous data for inc_level 4 ($30000-40000) and year 2019 in file 
+Moved outside loop of years for income bracket4 ($30000-40000).
+(Imported original CPS ASEC data from IPUMS)
+Appended all years within income bracket 4 ($30000-40000).
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000h not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000h saved
+Saved new tempfile temp_4_allyrs with all years for income bracket4 ($30000-4000
+> 0).
+(01_PewJune2020 Knowledge variables)
+(8,859 observations deleted)
+The current inc_level is: 5
+variable dL_finc_cat was str1 now str26
+(795 real changes made)
+The inc_level 5 has a lower and an upper level
+variables born as string: 
+dL_finc_cat1  dL_finc_cat2
+dL_finc_cat1: bytes space , removed; replaced as long
+dL_finc_cat2: bytes space , removed; replaced as long
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000i not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000i saved
+2019
+Create local variable years to loop through within that income bracket - values:
+> 2019
+(01_PewJune2020 Knowledge variables)
+(0 observations deleted)
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000j not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000j saved
+(Imported original CPS ASEC data from IPUMS)
+Calculating family income using ftotval ASEC variable.
+(62,608 observations deleted)
+Calculating income between $40000 and $50000 for 2019 year.
+(4,942 observations deleted)
+Sampling N=795 incomes from ASEC ftotval dataset at 5 ($40000-50000) level and y
+> ear 2019.
+Merged ASEC values with original dataset for inc_level 5 ($40000-50000) and year
+>  2019.
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000k not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000k saved
+Saved ASEC continuous data for inc_level 5 ($40000-50000) and year 2019 in file 
+Moved outside loop of years for income bracket5 ($40000-50000).
+(Imported original CPS ASEC data from IPUMS)
+Appended all years within income bracket 5 ($40000-50000).
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000l not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000l saved
+Saved new tempfile temp_5_allyrs with all years for income bracket5 ($40000-5000
+> 0).
+(01_PewJune2020 Knowledge variables)
+(8,010 observations deleted)
+The current inc_level is: 6
+variable dL_finc_cat was str1 now str26
+(1,644 real changes made)
+The inc_level 6 has a lower and an upper level
+variables born as string: 
+dL_finc_cat1  dL_finc_cat2
+dL_finc_cat1: bytes space , removed; replaced as long
+dL_finc_cat2: bytes space , removed; replaced as long
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000m not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000m saved
+2019
+Create local variable years to loop through within that income bracket - values:
+> 2019
+(01_PewJune2020 Knowledge variables)
+(0 observations deleted)
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000n not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000n saved
+(Imported original CPS ASEC data from IPUMS)
+Calculating family income using ftotval ASEC variable.
+(56,753 observations deleted)
+Calculating income between $50000 and $75000 for 2019 year.
+(9,948 observations deleted)
+Sampling N=1644 incomes from ASEC ftotval dataset at 6 ($50000-75000) level and 
+> year 2019.
+Merged ASEC values with original dataset for inc_level 6 ($50000-75000) and year
+>  2019.
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000o not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000o saved
+Saved ASEC continuous data for inc_level 6 ($50000-75000) and year 2019 in file 
+Moved outside loop of years for income bracket6 ($50000-75000).
+(Imported original CPS ASEC data from IPUMS)
+Appended all years within income bracket 6 ($50000-75000).
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000p not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000p saved
+Saved new tempfile temp_6_allyrs with all years for income bracket6 ($50000-7500
+> 0).
+(01_PewJune2020 Knowledge variables)
+(8,261 observations deleted)
+The current inc_level is: 7
+variable dL_finc_cat was str1 now str27
+(1,393 real changes made)
+The inc_level 7 has a lower and an upper level
+variables born as string: 
+dL_finc_cat1  dL_finc_cat2
+dL_finc_cat1: bytes space , removed; replaced as long
+dL_finc_cat2: bytes space , removed; replaced as long
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000q not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000q saved
+2019
+Create local variable years to loop through within that income bracket - values:
+> 2019
+(01_PewJune2020 Knowledge variables)
+(0 observations deleted)
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000r not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000r saved
+(Imported original CPS ASEC data from IPUMS)
+Calculating family income using ftotval ASEC variable.
+(60,083 observations deleted)
+Calculating income between $75000 and $100000 for 2019 year.
+(6,869 observations deleted)
+Sampling N=1393 incomes from ASEC ftotval dataset at 7 ($75000-100000) level and
+>  year 2019.
+Merged ASEC values with original dataset for inc_level 7 ($75000-100000) and yea
+> r 2019.
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000s not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000s saved
+Saved ASEC continuous data for inc_level 7 ($75000-100000) and year 2019 in file
+>  
+Moved outside loop of years for income bracket7 ($75000-100000).
+(Imported original CPS ASEC data from IPUMS)
+Appended all years within income bracket 7 ($75000-100000).
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000t not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000t saved
+Saved new tempfile temp_7_allyrs with all years for income bracket7 ($75000-1000
+> 00).
+(01_PewJune2020 Knowledge variables)
+(8,044 observations deleted)
+The current inc_level is: 8
+variable dL_finc_cat was str1 now str28
+(1,610 real changes made)
+The inc_level 8 has a lower and an upper level
+variables born as string: 
+dL_finc_cat1  dL_finc_cat2
+dL_finc_cat1: bytes space , removed; replaced as long
+dL_finc_cat2: bytes space , removed; replaced as long
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000u not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000u saved
+2019
+Create local variable years to loop through within that income bracket - values:
+> 2019
+(01_PewJune2020 Knowledge variables)
+(0 observations deleted)
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000v not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000v saved
+(Imported original CPS ASEC data from IPUMS)
+Calculating family income using ftotval ASEC variable.
+(58,524 observations deleted)
+Calculating income between $100000 and $150000 for 2019 year.
+(8,211 observations deleted)
+Sampling N=1610 incomes from ASEC ftotval dataset at 8 ($100000-150000) level an
+> d year 2019.
+Merged ASEC values with original dataset for inc_level 8 ($100000-150000) and ye
+> ar 2019.
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000w not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000w saved
+Saved ASEC continuous data for inc_level 8 ($100000-150000) and year 2019 in fil
+> e 
+Moved outside loop of years for income bracket8 ($100000-150000).
+(Imported original CPS ASEC data from IPUMS)
+Appended all years within income bracket 8 ($100000-150000).
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000x not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.00000x saved
+Saved new tempfile temp_8_allyrs with all years for income bracket8 ($100000-150
+> 000).
+(01_PewJune2020 Knowledge variables)
+(8,248 observations deleted)
+The current inc_level is: 9
+variable dL_finc_cat was str1 now str15
+(1,406 real changes made)
+The inc_level 9 is at the highest end of the income range
+dL_finc_cat: bytes space o e r , m removed; dL_finc_lb generated as long
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000010 not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000010 saved
+2019
+Create local variable years to loop through within that income bracket - values:
+> 2019
+(01_PewJune2020 Knowledge variables)
+(0 observations deleted)
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000011 not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000011 saved
+(Imported original CPS ASEC data from IPUMS)
+Calculating family income using ftotval ASEC variable.
+(58,703 observations deleted)
+Calculating income between $150000 and $999999 for 2019 year.
+(8,236 observations deleted)
+Sampling N=1406 incomes from ASEC ftotval dataset at 9 ($150000-999999) level an
+> d year 2019.
+Merged ASEC values with original dataset for inc_level 9 ($150000-999999) and ye
+> ar 2019.
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000012 not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000012 saved
+Saved ASEC continuous data for inc_level 9 ($150000-999999) and year 2019 in fil
+> e 
+Moved outside loop of years for income bracket9 ($150000-999999).
+(Imported original CPS ASEC data from IPUMS)
+Appended all years within income bracket 9 ($150000-999999).
+(note: file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000013 not
+>  found)
+file /var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//S_23675.000013 saved
+Saved new tempfile temp_9_allyrs with all years for income bracket9 ($150000-999
+> 999).
+
+. 
+. // append all continuous incomes
+. // now bring together all files created in above loop as tempfiles
+.         tokenize ``inc_var'_levels'
+
+.         local first `1'
+
+.         use `temp_`1'_allyrs', clear
+(Imported original CPS ASEC data from IPUMS)
+
+.         macro shift
+
+.         local rest `*'
+
+. 
+. // now loop through and append each temp file created within income bracket lo
+> op
+.         foreach data in `*' {
+  2.                 append using `temp_`data'_allyrs'
+  3.         }
+(note: variable dL_finc_cat was str16, now str26 to accommodate using data's
+       values)
+(label month_lbl already defined)
+(label asecflag_lbl already defined)
+(label mish_lbl already defined)
+(label age_lbl already defined)
+(label lfproxy_lbl already defined)
+(label dB_age_65p already defined)
+(label dB_age_50_64 already defined)
+(label dB_age_30_49 already defined)
+(label dB_age_18_29 already defined)
+(label age_4categ already defined)
+(label dB_edu_colp already defined)
+(label dB_edu_grad already defined)
+(label dB_edu_col already defined)
+(label dB_edu_sCol already defined)
+(label dB_edu_HS already defined)
+(label dB_edu_lHS already defined)
+(label edu_5categ already defined)
+(label dB_bipoc already defined)
+(label race_5categ already defined)
+(label dB_rother already defined)
+(label dB_rhisp already defined)
+(label dB_rasian already defined)
+(label dB_rblack already defined)
+(label dB_rwhite already defined)
+(label dB_fem already defined)
+(label labels0 already defined)
+(label labels1 already defined)
+(label labels2 already defined)
+(label labels3 already defined)
+(label labels4 already defined)
+(label labels5 already defined)
+(label labels6 already defined)
+(label labels7 already defined)
+(label labels8 already defined)
+(label labels9 already defined)
+(label labels10 already defined)
+(label labels11 already defined)
+(label labels12 already defined)
+(label labels13 already defined)
+(label labels14 already defined)
+(label labels15 already defined)
+(label labels16 already defined)
+(label labels17 already defined)
+(label labels18 already defined)
+(label labels19 already defined)
+(label labels20 already defined)
+(label labels21 already defined)
+(label labels22 already defined)
+(label labels23 already defined)
+(label labels24 already defined)
+(label labels25 already defined)
+(label labels26 already defined)
+(label labels27 already defined)
+(label labels28 already defined)
+(label labels29 already defined)
+(label labels30 already defined)
+(label labels31 already defined)
+(label labels32 already defined)
+(label labels33 already defined)
+(label labels34 already defined)
+(label labels35 already defined)
+(label labels36 already defined)
+(label labels37 already defined)
+(label labels38 already defined)
+(label labels39 already defined)
+(label labels40 already defined)
+(label labels41 already defined)
+(label labels42 already defined)
+(label labels43 already defined)
+(label labels44 already defined)
+(label labels45 already defined)
+(label labels46 already defined)
+(label labels47 already defined)
+(label labels48 already defined)
+(label labels49 already defined)
+(label labels50 already defined)
+(label labels51 already defined)
+(label labels52 already defined)
+(label labels53 already defined)
+(label labels54 already defined)
+(label labels55 already defined)
+(label labels56 already defined)
+(label labels57 already defined)
+(label labels58 already defined)
+(label labels59 already defined)
+(label labels60 already defined)
+(label labels61 already defined)
+(label labels62 already defined)
+(label labels63 already defined)
+(label labels64 already defined)
+(label labels65 already defined)
+(label labels66 already defined)
+(label labels67 already defined)
+(label labels68 already defined)
+(label labels69 already defined)
+(label labels70 already defined)
+(label labels71 already defined)
+(label labels72 already defined)
+(label labels73 already defined)
+(label labels74 already defined)
+(label labels75 already defined)
+(label labels76 already defined)
+(label labels77 already defined)
+(label labels78 already defined)
+(label labels79 already defined)
+(label labels80 already defined)
+(label labels81 already defined)
+(label labels82 already defined)
+(label labels83 already defined)
+(label labels84 already defined)
+(label labels85 already defined)
+(label labels86 already defined)
+(label labels87 already defined)
+(label labels88 already defined)
+(label labels89 already defined)
+(label labels90 already defined)
+(label labels91 already defined)
+(label labels92 already defined)
+(label ac already defined)
+(label c already defined)
+(label dk already defined)
+(label inc_categories_01_PewJune2020 already defined)
+(label _merge already defined)
+(label month_lbl already defined)
+(label asecflag_lbl already defined)
+(label mish_lbl already defined)
+(label age_lbl already defined)
+(label lfproxy_lbl already defined)
+(label dB_age_65p already defined)
+(label dB_age_50_64 already defined)
+(label dB_age_30_49 already defined)
+(label dB_age_18_29 already defined)
+(label age_4categ already defined)
+(label dB_edu_colp already defined)
+(label dB_edu_grad already defined)
+(label dB_edu_col already defined)
+(label dB_edu_sCol already defined)
+(label dB_edu_HS already defined)
+(label dB_edu_lHS already defined)
+(label edu_5categ already defined)
+(label dB_bipoc already defined)
+(label race_5categ already defined)
+(label dB_rother already defined)
+(label dB_rhisp already defined)
+(label dB_rasian already defined)
+(label dB_rblack already defined)
+(label dB_rwhite already defined)
+(label dB_fem already defined)
+(label labels0 already defined)
+(label labels1 already defined)
+(label labels2 already defined)
+(label labels3 already defined)
+(label labels4 already defined)
+(label labels5 already defined)
+(label labels6 already defined)
+(label labels7 already defined)
+(label labels8 already defined)
+(label labels9 already defined)
+(label labels10 already defined)
+(label labels11 already defined)
+(label labels12 already defined)
+(label labels13 already defined)
+(label labels14 already defined)
+(label labels15 already defined)
+(label labels16 already defined)
+(label labels17 already defined)
+(label labels18 already defined)
+(label labels19 already defined)
+(label labels20 already defined)
+(label labels21 already defined)
+(label labels22 already defined)
+(label labels23 already defined)
+(label labels24 already defined)
+(label labels25 already defined)
+(label labels26 already defined)
+(label labels27 already defined)
+(label labels28 already defined)
+(label labels29 already defined)
+(label labels30 already defined)
+(label labels31 already defined)
+(label labels32 already defined)
+(label labels33 already defined)
+(label labels34 already defined)
+(label labels35 already defined)
+(label labels36 already defined)
+(label labels37 already defined)
+(label labels38 already defined)
+(label labels39 already defined)
+(label labels40 already defined)
+(label labels41 already defined)
+(label labels42 already defined)
+(label labels43 already defined)
+(label labels44 already defined)
+(label labels45 already defined)
+(label labels46 already defined)
+(label labels47 already defined)
+(label labels48 already defined)
+(label labels49 already defined)
+(label labels50 already defined)
+(label labels51 already defined)
+(label labels52 already defined)
+(label labels53 already defined)
+(label labels54 already defined)
+(label labels55 already defined)
+(label labels56 already defined)
+(label labels57 already defined)
+(label labels58 already defined)
+(label labels59 already defined)
+(label labels60 already defined)
+(label labels61 already defined)
+(label labels62 already defined)
+(label labels63 already defined)
+(label labels64 already defined)
+(label labels65 already defined)
+(label labels66 already defined)
+(label labels67 already defined)
+(label labels68 already defined)
+(label labels69 already defined)
+(label labels70 already defined)
+(label labels71 already defined)
+(label labels72 already defined)
+(label labels73 already defined)
+(label labels74 already defined)
+(label labels75 already defined)
+(label labels76 already defined)
+(label labels77 already defined)
+(label labels78 already defined)
+(label labels79 already defined)
+(label labels80 already defined)
+(label labels81 already defined)
+(label labels82 already defined)
+(label labels83 already defined)
+(label labels84 already defined)
+(label labels85 already defined)
+(label labels86 already defined)
+(label labels87 already defined)
+(label labels88 already defined)
+(label labels89 already defined)
+(label labels90 already defined)
+(label labels91 already defined)
+(label labels92 already defined)
+(label ac already defined)
+(label c already defined)
+(label dk already defined)
+(label inc_categories_01_PewJune2020 already defined)
+(label _merge already defined)
+(note: variable dL_finc_cat2 was int, now long to accommodate using data's
+       values)
+(label month_lbl already defined)
+(label asecflag_lbl already defined)
+(label mish_lbl already defined)
+(label age_lbl already defined)
+(label lfproxy_lbl already defined)
+(label dB_age_65p already defined)
+(label dB_age_50_64 already defined)
+(label dB_age_30_49 already defined)
+(label dB_age_18_29 already defined)
+(label age_4categ already defined)
+(label dB_edu_colp already defined)
+(label dB_edu_grad already defined)
+(label dB_edu_col already defined)
+(label dB_edu_sCol already defined)
+(label dB_edu_HS already defined)
+(label dB_edu_lHS already defined)
+(label edu_5categ already defined)
+(label dB_bipoc already defined)
+(label race_5categ already defined)
+(label dB_rother already defined)
+(label dB_rhisp already defined)
+(label dB_rasian already defined)
+(label dB_rblack already defined)
+(label dB_rwhite already defined)
+(label dB_fem already defined)
+(label labels0 already defined)
+(label labels1 already defined)
+(label labels2 already defined)
+(label labels3 already defined)
+(label labels4 already defined)
+(label labels5 already defined)
+(label labels6 already defined)
+(label labels7 already defined)
+(label labels8 already defined)
+(label labels9 already defined)
+(label labels10 already defined)
+(label labels11 already defined)
+(label labels12 already defined)
+(label labels13 already defined)
+(label labels14 already defined)
+(label labels15 already defined)
+(label labels16 already defined)
+(label labels17 already defined)
+(label labels18 already defined)
+(label labels19 already defined)
+(label labels20 already defined)
+(label labels21 already defined)
+(label labels22 already defined)
+(label labels23 already defined)
+(label labels24 already defined)
+(label labels25 already defined)
+(label labels26 already defined)
+(label labels27 already defined)
+(label labels28 already defined)
+(label labels29 already defined)
+(label labels30 already defined)
+(label labels31 already defined)
+(label labels32 already defined)
+(label labels33 already defined)
+(label labels34 already defined)
+(label labels35 already defined)
+(label labels36 already defined)
+(label labels37 already defined)
+(label labels38 already defined)
+(label labels39 already defined)
+(label labels40 already defined)
+(label labels41 already defined)
+(label labels42 already defined)
+(label labels43 already defined)
+(label labels44 already defined)
+(label labels45 already defined)
+(label labels46 already defined)
+(label labels47 already defined)
+(label labels48 already defined)
+(label labels49 already defined)
+(label labels50 already defined)
+(label labels51 already defined)
+(label labels52 already defined)
+(label labels53 already defined)
+(label labels54 already defined)
+(label labels55 already defined)
+(label labels56 already defined)
+(label labels57 already defined)
+(label labels58 already defined)
+(label labels59 already defined)
+(label labels60 already defined)
+(label labels61 already defined)
+(label labels62 already defined)
+(label labels63 already defined)
+(label labels64 already defined)
+(label labels65 already defined)
+(label labels66 already defined)
+(label labels67 already defined)
+(label labels68 already defined)
+(label labels69 already defined)
+(label labels70 already defined)
+(label labels71 already defined)
+(label labels72 already defined)
+(label labels73 already defined)
+(label labels74 already defined)
+(label labels75 already defined)
+(label labels76 already defined)
+(label labels77 already defined)
+(label labels78 already defined)
+(label labels79 already defined)
+(label labels80 already defined)
+(label labels81 already defined)
+(label labels82 already defined)
+(label labels83 already defined)
+(label labels84 already defined)
+(label labels85 already defined)
+(label labels86 already defined)
+(label labels87 already defined)
+(label labels88 already defined)
+(label labels89 already defined)
+(label labels90 already defined)
+(label labels91 already defined)
+(label labels92 already defined)
+(label ac already defined)
+(label c already defined)
+(label dk already defined)
+(label inc_categories_01_PewJune2020 already defined)
+(label _merge already defined)
+(note: variable dL_finc_cat1 was int, now long to accommodate using data's
+       values)
+(label month_lbl already defined)
+(label asecflag_lbl already defined)
+(label mish_lbl already defined)
+(label age_lbl already defined)
+(label lfproxy_lbl already defined)
+(label dB_age_65p already defined)
+(label dB_age_50_64 already defined)
+(label dB_age_30_49 already defined)
+(label dB_age_18_29 already defined)
+(label age_4categ already defined)
+(label dB_edu_colp already defined)
+(label dB_edu_grad already defined)
+(label dB_edu_col already defined)
+(label dB_edu_sCol already defined)
+(label dB_edu_HS already defined)
+(label dB_edu_lHS already defined)
+(label edu_5categ already defined)
+(label dB_bipoc already defined)
+(label race_5categ already defined)
+(label dB_rother already defined)
+(label dB_rhisp already defined)
+(label dB_rasian already defined)
+(label dB_rblack already defined)
+(label dB_rwhite already defined)
+(label dB_fem already defined)
+(label labels0 already defined)
+(label labels1 already defined)
+(label labels2 already defined)
+(label labels3 already defined)
+(label labels4 already defined)
+(label labels5 already defined)
+(label labels6 already defined)
+(label labels7 already defined)
+(label labels8 already defined)
+(label labels9 already defined)
+(label labels10 already defined)
+(label labels11 already defined)
+(label labels12 already defined)
+(label labels13 already defined)
+(label labels14 already defined)
+(label labels15 already defined)
+(label labels16 already defined)
+(label labels17 already defined)
+(label labels18 already defined)
+(label labels19 already defined)
+(label labels20 already defined)
+(label labels21 already defined)
+(label labels22 already defined)
+(label labels23 already defined)
+(label labels24 already defined)
+(label labels25 already defined)
+(label labels26 already defined)
+(label labels27 already defined)
+(label labels28 already defined)
+(label labels29 already defined)
+(label labels30 already defined)
+(label labels31 already defined)
+(label labels32 already defined)
+(label labels33 already defined)
+(label labels34 already defined)
+(label labels35 already defined)
+(label labels36 already defined)
+(label labels37 already defined)
+(label labels38 already defined)
+(label labels39 already defined)
+(label labels40 already defined)
+(label labels41 already defined)
+(label labels42 already defined)
+(label labels43 already defined)
+(label labels44 already defined)
+(label labels45 already defined)
+(label labels46 already defined)
+(label labels47 already defined)
+(label labels48 already defined)
+(label labels49 already defined)
+(label labels50 already defined)
+(label labels51 already defined)
+(label labels52 already defined)
+(label labels53 already defined)
+(label labels54 already defined)
+(label labels55 already defined)
+(label labels56 already defined)
+(label labels57 already defined)
+(label labels58 already defined)
+(label labels59 already defined)
+(label labels60 already defined)
+(label labels61 already defined)
+(label labels62 already defined)
+(label labels63 already defined)
+(label labels64 already defined)
+(label labels65 already defined)
+(label labels66 already defined)
+(label labels67 already defined)
+(label labels68 already defined)
+(label labels69 already defined)
+(label labels70 already defined)
+(label labels71 already defined)
+(label labels72 already defined)
+(label labels73 already defined)
+(label labels74 already defined)
+(label labels75 already defined)
+(label labels76 already defined)
+(label labels77 already defined)
+(label labels78 already defined)
+(label labels79 already defined)
+(label labels80 already defined)
+(label labels81 already defined)
+(label labels82 already defined)
+(label labels83 already defined)
+(label labels84 already defined)
+(label labels85 already defined)
+(label labels86 already defined)
+(label labels87 already defined)
+(label labels88 already defined)
+(label labels89 already defined)
+(label labels90 already defined)
+(label labels91 already defined)
+(label labels92 already defined)
+(label ac already defined)
+(label c already defined)
+(label dk already defined)
+(label inc_categories_01_PewJune2020 already defined)
+(label _merge already defined)
+(label month_lbl already defined)
+(label asecflag_lbl already defined)
+(label mish_lbl already defined)
+(label age_lbl already defined)
+(label lfproxy_lbl already defined)
+(label dB_age_65p already defined)
+(label dB_age_50_64 already defined)
+(label dB_age_30_49 already defined)
+(label dB_age_18_29 already defined)
+(label age_4categ already defined)
+(label dB_edu_colp already defined)
+(label dB_edu_grad already defined)
+(label dB_edu_col already defined)
+(label dB_edu_sCol already defined)
+(label dB_edu_HS already defined)
+(label dB_edu_lHS already defined)
+(label edu_5categ already defined)
+(label dB_bipoc already defined)
+(label race_5categ already defined)
+(label dB_rother already defined)
+(label dB_rhisp already defined)
+(label dB_rasian already defined)
+(label dB_rblack already defined)
+(label dB_rwhite already defined)
+(label dB_fem already defined)
+(label labels0 already defined)
+(label labels1 already defined)
+(label labels2 already defined)
+(label labels3 already defined)
+(label labels4 already defined)
+(label labels5 already defined)
+(label labels6 already defined)
+(label labels7 already defined)
+(label labels8 already defined)
+(label labels9 already defined)
+(label labels10 already defined)
+(label labels11 already defined)
+(label labels12 already defined)
+(label labels13 already defined)
+(label labels14 already defined)
+(label labels15 already defined)
+(label labels16 already defined)
+(label labels17 already defined)
+(label labels18 already defined)
+(label labels19 already defined)
+(label labels20 already defined)
+(label labels21 already defined)
+(label labels22 already defined)
+(label labels23 already defined)
+(label labels24 already defined)
+(label labels25 already defined)
+(label labels26 already defined)
+(label labels27 already defined)
+(label labels28 already defined)
+(label labels29 already defined)
+(label labels30 already defined)
+(label labels31 already defined)
+(label labels32 already defined)
+(label labels33 already defined)
+(label labels34 already defined)
+(label labels35 already defined)
+(label labels36 already defined)
+(label labels37 already defined)
+(label labels38 already defined)
+(label labels39 already defined)
+(label labels40 already defined)
+(label labels41 already defined)
+(label labels42 already defined)
+(label labels43 already defined)
+(label labels44 already defined)
+(label labels45 already defined)
+(label labels46 already defined)
+(label labels47 already defined)
+(label labels48 already defined)
+(label labels49 already defined)
+(label labels50 already defined)
+(label labels51 already defined)
+(label labels52 already defined)
+(label labels53 already defined)
+(label labels54 already defined)
+(label labels55 already defined)
+(label labels56 already defined)
+(label labels57 already defined)
+(label labels58 already defined)
+(label labels59 already defined)
+(label labels60 already defined)
+(label labels61 already defined)
+(label labels62 already defined)
+(label labels63 already defined)
+(label labels64 already defined)
+(label labels65 already defined)
+(label labels66 already defined)
+(label labels67 already defined)
+(label labels68 already defined)
+(label labels69 already defined)
+(label labels70 already defined)
+(label labels71 already defined)
+(label labels72 already defined)
+(label labels73 already defined)
+(label labels74 already defined)
+(label labels75 already defined)
+(label labels76 already defined)
+(label labels77 already defined)
+(label labels78 already defined)
+(label labels79 already defined)
+(label labels80 already defined)
+(label labels81 already defined)
+(label labels82 already defined)
+(label labels83 already defined)
+(label labels84 already defined)
+(label labels85 already defined)
+(label labels86 already defined)
+(label labels87 already defined)
+(label labels88 already defined)
+(label labels89 already defined)
+(label labels90 already defined)
+(label labels91 already defined)
+(label labels92 already defined)
+(label ac already defined)
+(label c already defined)
+(label dk already defined)
+(label inc_categories_01_PewJune2020 already defined)
+(label _merge already defined)
+(note: variable dL_finc_cat was str26, now str27 to accommodate using data's
+       values)
+(label month_lbl already defined)
+(label asecflag_lbl already defined)
+(label mish_lbl already defined)
+(label age_lbl already defined)
+(label lfproxy_lbl already defined)
+(label dB_age_65p already defined)
+(label dB_age_50_64 already defined)
+(label dB_age_30_49 already defined)
+(label dB_age_18_29 already defined)
+(label age_4categ already defined)
+(label dB_edu_colp already defined)
+(label dB_edu_grad already defined)
+(label dB_edu_col already defined)
+(label dB_edu_sCol already defined)
+(label dB_edu_HS already defined)
+(label dB_edu_lHS already defined)
+(label edu_5categ already defined)
+(label dB_bipoc already defined)
+(label race_5categ already defined)
+(label dB_rother already defined)
+(label dB_rhisp already defined)
+(label dB_rasian already defined)
+(label dB_rblack already defined)
+(label dB_rwhite already defined)
+(label dB_fem already defined)
+(label labels0 already defined)
+(label labels1 already defined)
+(label labels2 already defined)
+(label labels3 already defined)
+(label labels4 already defined)
+(label labels5 already defined)
+(label labels6 already defined)
+(label labels7 already defined)
+(label labels8 already defined)
+(label labels9 already defined)
+(label labels10 already defined)
+(label labels11 already defined)
+(label labels12 already defined)
+(label labels13 already defined)
+(label labels14 already defined)
+(label labels15 already defined)
+(label labels16 already defined)
+(label labels17 already defined)
+(label labels18 already defined)
+(label labels19 already defined)
+(label labels20 already defined)
+(label labels21 already defined)
+(label labels22 already defined)
+(label labels23 already defined)
+(label labels24 already defined)
+(label labels25 already defined)
+(label labels26 already defined)
+(label labels27 already defined)
+(label labels28 already defined)
+(label labels29 already defined)
+(label labels30 already defined)
+(label labels31 already defined)
+(label labels32 already defined)
+(label labels33 already defined)
+(label labels34 already defined)
+(label labels35 already defined)
+(label labels36 already defined)
+(label labels37 already defined)
+(label labels38 already defined)
+(label labels39 already defined)
+(label labels40 already defined)
+(label labels41 already defined)
+(label labels42 already defined)
+(label labels43 already defined)
+(label labels44 already defined)
+(label labels45 already defined)
+(label labels46 already defined)
+(label labels47 already defined)
+(label labels48 already defined)
+(label labels49 already defined)
+(label labels50 already defined)
+(label labels51 already defined)
+(label labels52 already defined)
+(label labels53 already defined)
+(label labels54 already defined)
+(label labels55 already defined)
+(label labels56 already defined)
+(label labels57 already defined)
+(label labels58 already defined)
+(label labels59 already defined)
+(label labels60 already defined)
+(label labels61 already defined)
+(label labels62 already defined)
+(label labels63 already defined)
+(label labels64 already defined)
+(label labels65 already defined)
+(label labels66 already defined)
+(label labels67 already defined)
+(label labels68 already defined)
+(label labels69 already defined)
+(label labels70 already defined)
+(label labels71 already defined)
+(label labels72 already defined)
+(label labels73 already defined)
+(label labels74 already defined)
+(label labels75 already defined)
+(label labels76 already defined)
+(label labels77 already defined)
+(label labels78 already defined)
+(label labels79 already defined)
+(label labels80 already defined)
+(label labels81 already defined)
+(label labels82 already defined)
+(label labels83 already defined)
+(label labels84 already defined)
+(label labels85 already defined)
+(label labels86 already defined)
+(label labels87 already defined)
+(label labels88 already defined)
+(label labels89 already defined)
+(label labels90 already defined)
+(label labels91 already defined)
+(label labels92 already defined)
+(label ac already defined)
+(label c already defined)
+(label dk already defined)
+(label inc_categories_01_PewJune2020 already defined)
+(label _merge already defined)
+(note: variable dL_finc_cat was str27, now str28 to accommodate using data's
+       values)
+(label month_lbl already defined)
+(label asecflag_lbl already defined)
+(label mish_lbl already defined)
+(label age_lbl already defined)
+(label lfproxy_lbl already defined)
+(label dB_age_65p already defined)
+(label dB_age_50_64 already defined)
+(label dB_age_30_49 already defined)
+(label dB_age_18_29 already defined)
+(label age_4categ already defined)
+(label dB_edu_colp already defined)
+(label dB_edu_grad already defined)
+(label dB_edu_col already defined)
+(label dB_edu_sCol already defined)
+(label dB_edu_HS already defined)
+(label dB_edu_lHS already defined)
+(label edu_5categ already defined)
+(label dB_bipoc already defined)
+(label race_5categ already defined)
+(label dB_rother already defined)
+(label dB_rhisp already defined)
+(label dB_rasian already defined)
+(label dB_rblack already defined)
+(label dB_rwhite already defined)
+(label dB_fem already defined)
+(label labels0 already defined)
+(label labels1 already defined)
+(label labels2 already defined)
+(label labels3 already defined)
+(label labels4 already defined)
+(label labels5 already defined)
+(label labels6 already defined)
+(label labels7 already defined)
+(label labels8 already defined)
+(label labels9 already defined)
+(label labels10 already defined)
+(label labels11 already defined)
+(label labels12 already defined)
+(label labels13 already defined)
+(label labels14 already defined)
+(label labels15 already defined)
+(label labels16 already defined)
+(label labels17 already defined)
+(label labels18 already defined)
+(label labels19 already defined)
+(label labels20 already defined)
+(label labels21 already defined)
+(label labels22 already defined)
+(label labels23 already defined)
+(label labels24 already defined)
+(label labels25 already defined)
+(label labels26 already defined)
+(label labels27 already defined)
+(label labels28 already defined)
+(label labels29 already defined)
+(label labels30 already defined)
+(label labels31 already defined)
+(label labels32 already defined)
+(label labels33 already defined)
+(label labels34 already defined)
+(label labels35 already defined)
+(label labels36 already defined)
+(label labels37 already defined)
+(label labels38 already defined)
+(label labels39 already defined)
+(label labels40 already defined)
+(label labels41 already defined)
+(label labels42 already defined)
+(label labels43 already defined)
+(label labels44 already defined)
+(label labels45 already defined)
+(label labels46 already defined)
+(label labels47 already defined)
+(label labels48 already defined)
+(label labels49 already defined)
+(label labels50 already defined)
+(label labels51 already defined)
+(label labels52 already defined)
+(label labels53 already defined)
+(label labels54 already defined)
+(label labels55 already defined)
+(label labels56 already defined)
+(label labels57 already defined)
+(label labels58 already defined)
+(label labels59 already defined)
+(label labels60 already defined)
+(label labels61 already defined)
+(label labels62 already defined)
+(label labels63 already defined)
+(label labels64 already defined)
+(label labels65 already defined)
+(label labels66 already defined)
+(label labels67 already defined)
+(label labels68 already defined)
+(label labels69 already defined)
+(label labels70 already defined)
+(label labels71 already defined)
+(label labels72 already defined)
+(label labels73 already defined)
+(label labels74 already defined)
+(label labels75 already defined)
+(label labels76 already defined)
+(label labels77 already defined)
+(label labels78 already defined)
+(label labels79 already defined)
+(label labels80 already defined)
+(label labels81 already defined)
+(label labels82 already defined)
+(label labels83 already defined)
+(label labels84 already defined)
+(label labels85 already defined)
+(label labels86 already defined)
+(label labels87 already defined)
+(label labels88 already defined)
+(label labels89 already defined)
+(label labels90 already defined)
+(label labels91 already defined)
+(label labels92 already defined)
+(label ac already defined)
+(label c already defined)
+(label dk already defined)
+(label inc_categories_01_PewJune2020 already defined)
+(label _merge already defined)
+(note: variable dL_finc_lb was float, now double to accommodate using data's
+       values)
+(label month_lbl already defined)
+(label asecflag_lbl already defined)
+(label mish_lbl already defined)
+(label age_lbl already defined)
+(label lfproxy_lbl already defined)
+(label dB_age_65p already defined)
+(label dB_age_50_64 already defined)
+(label dB_age_30_49 already defined)
+(label dB_age_18_29 already defined)
+(label age_4categ already defined)
+(label dB_edu_colp already defined)
+(label dB_edu_grad already defined)
+(label dB_edu_col already defined)
+(label dB_edu_sCol already defined)
+(label dB_edu_HS already defined)
+(label dB_edu_lHS already defined)
+(label edu_5categ already defined)
+(label dB_bipoc already defined)
+(label race_5categ already defined)
+(label dB_rother already defined)
+(label dB_rhisp already defined)
+(label dB_rasian already defined)
+(label dB_rblack already defined)
+(label dB_rwhite already defined)
+(label dB_fem already defined)
+(label labels0 already defined)
+(label labels1 already defined)
+(label labels2 already defined)
+(label labels3 already defined)
+(label labels4 already defined)
+(label labels5 already defined)
+(label labels6 already defined)
+(label labels7 already defined)
+(label labels8 already defined)
+(label labels9 already defined)
+(label labels10 already defined)
+(label labels11 already defined)
+(label labels12 already defined)
+(label labels13 already defined)
+(label labels14 already defined)
+(label labels15 already defined)
+(label labels16 already defined)
+(label labels17 already defined)
+(label labels18 already defined)
+(label labels19 already defined)
+(label labels20 already defined)
+(label labels21 already defined)
+(label labels22 already defined)
+(label labels23 already defined)
+(label labels24 already defined)
+(label labels25 already defined)
+(label labels26 already defined)
+(label labels27 already defined)
+(label labels28 already defined)
+(label labels29 already defined)
+(label labels30 already defined)
+(label labels31 already defined)
+(label labels32 already defined)
+(label labels33 already defined)
+(label labels34 already defined)
+(label labels35 already defined)
+(label labels36 already defined)
+(label labels37 already defined)
+(label labels38 already defined)
+(label labels39 already defined)
+(label labels40 already defined)
+(label labels41 already defined)
+(label labels42 already defined)
+(label labels43 already defined)
+(label labels44 already defined)
+(label labels45 already defined)
+(label labels46 already defined)
+(label labels47 already defined)
+(label labels48 already defined)
+(label labels49 already defined)
+(label labels50 already defined)
+(label labels51 already defined)
+(label labels52 already defined)
+(label labels53 already defined)
+(label labels54 already defined)
+(label labels55 already defined)
+(label labels56 already defined)
+(label labels57 already defined)
+(label labels58 already defined)
+(label labels59 already defined)
+(label labels60 already defined)
+(label labels61 already defined)
+(label labels62 already defined)
+(label labels63 already defined)
+(label labels64 already defined)
+(label labels65 already defined)
+(label labels66 already defined)
+(label labels67 already defined)
+(label labels68 already defined)
+(label labels69 already defined)
+(label labels70 already defined)
+(label labels71 already defined)
+(label labels72 already defined)
+(label labels73 already defined)
+(label labels74 already defined)
+(label labels75 already defined)
+(label labels76 already defined)
+(label labels77 already defined)
+(label labels78 already defined)
+(label labels79 already defined)
+(label labels80 already defined)
+(label labels81 already defined)
+(label labels82 already defined)
+(label labels83 already defined)
+(label labels84 already defined)
+(label labels85 already defined)
+(label labels86 already defined)
+(label labels87 already defined)
+(label labels88 already defined)
+(label labels89 already defined)
+(label labels90 already defined)
+(label labels91 already defined)
+(label labels92 already defined)
+(label ac already defined)
+(label c already defined)
+(label dk already defined)
+(label inc_categories_01_PewJune2020 already defined)
+(label _merge already defined)
+
+. 
+. 
+. // CLEAN UP
+. 
+. // drop variables used in creating lower and upper bounds - no longer necessar
+> y, possibly confusing
+.         drop `inc_var'_cat1
+
+.         drop `inc_var'_cat2
+
+.         drop  inc_decoded
+
+. 
+. // Label new upper and lower income bound variables
+.         label variable `inc_var'_lb "`inc_var' Lower Bound"
+
+.         label variable `inc_var'_ub "`inc_var' Upper Bound"
+
+. 
+. // Label new continuous income variable
+.         rename `asec_inc_var' `final_inc_var'
+
+.                 label var `final_inc_var' "`dataset' continuous `inc_type' inc
+> ome"
+
+. 
+. sort `year' `inc_var' year_inc_id
+
+. drop  year_inc_id
+
+. 
+. drop _merge
+
+. 
+. ***-----------***
+. 
+. // C) CREATE NATURAL LOG INCOME VARIABLES
+. 
+. gen dV_finc_1k = dV_finc / 1000
+
+. 
+. gen dV_finc_ln = ln(dV_finc)
+(106 missing values generated)
+
+. gen dV_finc_ln_1k = ln(dV_finc_1k)
+(106 missing values generated)
+
+. 
+. replace dV_finc_ln = 0 if dV_finc == 0
+(106 real changes made)
+
+. replace dV_finc_ln_1k = 0 if dV_finc == 0
+(106 real changes made)
+
+. 
+. 
+. ***-----------------------------***
+. //  CLEANUP
+. ***-----------------------------***
+. 
+. * Drop any years not in dataset, so get rid of extra years merged in
+. drop if year != 2019
+(0 observations deleted)
+
+. 
+. *Drop ASEC variables
+. drop serial month cpsid asecflag mish hhincome hrhhid hrhhid2 pernum cpsidp as
+> ecwt age lfproxy inctot 
+
+. 
+. order f_income dL_finc dV_finc dV_finc_1k dV_finc_ln dV_finc_ln_1k
+
+. 
+. ***-----------------------------***
+. //  SAVE OVERALL DATASET
+. ***-----------------------------***
+. 
+. label data "`dataset' data with continuous family income measures"
+
+. notes: ckn`category'`dataset' \ `dataset' with continuous family incomes  \ ck
+> n`category'`dataset'.do mmk $S_DATE
+
+. compress
+  variable dL_finc_lb was double now long
+  (36,992 bytes saved)
+
+. datasignature set, reset
+  9248:140(33126):516912048:2506672447       (data signature reset)
+
+. 
+. save $deriv/ckn`category'`dataset', replace
+file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn04_inc01_Pew
+> June2020.dta saved
+
+. 
+. ***-----------------------------***
+. 
+. log close ckn`category'`dataset'
+      name:  ckn04_inc01_PewJune2020
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/stata/
+> ckn04_inc01_PewJune2020.log
+  log type:  text
+ closed on:  23 Nov 2020, 13:58:45
+--------------------------------------------------------------------------------
