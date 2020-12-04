@@ -1,0 +1,93 @@
+--------------------------------------------------------------------------------
+      name:  ckn01_impe02_PewSept2020
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/stata/
+> ckn01_impe02_PewSept2020.log
+  log type:  text
+ opened on:   7 Oct 2020, 10:36:25
+
+. 
+. 
+. //      project:        Knowledge of COVID & News Sources
+. //  task:       Import "Pathways Sep 2020 (ATP W73).sav" and save to Derived f
+> older
+. /*  data:    */ di "`dataset'"
+02_PewSept2020
+
+. 
+. //  github:     covid_knowledge_news
+. //  OSF:                
+. 
+. //  author:     Molly King
+. 
+. display "$S_DATE  $S_TIME"
+ 7 Oct 2020  10:36:25
+
+. 
+. ***--------------------------***
+. // # PROGRAM SETUP
+. 
+. version 16 // keeps program consistent for future replications
+
+. set linesize 80
+
+. clear all
+
+. set more off
+
+. 
+. ***-----------------------------***
+. // # IMPORT
+. cd $source/
+/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/data/data_sorc
+
+. import spss using "Pathways Sep 2020 (ATP W73).sav", case(lower)
+(104 vars, 9,220 obs)
+
+. 
+. 
+. ***--------------------------***
+. // # WEIGHTING
+. 
+. // Pew uses probability sampling: http://www.pewresearch.org/methodology/u-s-s
+> urvey-research/sampling/
+. svyset _n [pweight=weight]
+
+      pweight: weight_w73
+          VCE: linearized
+  Single unit: missing
+     Strata 1: <one>
+         SU 1: <observations>
+        FPC 1: <zero>
+
+. 
+. ***--------------------------***
+. // # SAVE DATA
+. 
+. label data "`dataset' data with weights: Pathways Sep 2020 (ATP W73)"
+
+. notes: ckn`category'`dataset'.dta \ Pathways Sep 2020 (ATP W73) with probabili
+> ty weights\ ckn`category'`dataset'.do mmk $S_DATE
+
+. compress
+  (0 bytes saved)
+
+. datasignature set
+  9220:104(92239):2280421537:2400119399       (data signature set)
+
+. 
+. save $deriv/ki`category'`dataset'.dta, replace
+(note: file /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/data/da
+> ta_derv/ki01_impe02_PewSept2020.dta not found)
+file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ki01_impe02_Pew
+> Sept2020.dta saved
+
+. 
+. ***--------------------------***
+. 
+. log close ckn`category'`dataset'
+      name:  ckn01_impe02_PewSept2020
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/stata/
+> ckn01_impe02_PewSept2020.log
+  log type:  text
+ closed on:   7 Oct 2020, 10:36:26
+--------------------------------------------------------------------------------
