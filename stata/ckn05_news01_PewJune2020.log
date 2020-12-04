@@ -1,0 +1,801 @@
+--------------------------------------------------------------------------------
+      name:  ckn05_news01_PewJune2020
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/stata/
+> ckn05_news01_PewJune2020.log
+  log type:  text
+ opened on:  23 Nov 2020, 14:09:30
+
+. ***-----------------------------***
+. 
+. //      project:        Knowledge of COVID & News Sources
+. //  task:       Create News Variables - June Knowledge Questions
+. /*  data:    */ di "`dataset'"
+01_PewJune2020
+
+. 
+. //  github:     covid_knowledge_news
+. //  OSF:                https://osf.io/qf624/
+. 
+. //  author:     Molly King
+. 
+. display "$S_DATE  $S_TIME"
+23 Nov 2020  14:09:30
+
+. 
+. ***--------------------------***
+. // # PROGRAM SETUP
+. ***-----------------------------***
+. 
+. version 16 // keeps program consistent for future replications
+
+. set linesize 80
+
+. clear all
+
+. set more off
+
+. 
+. use $deriv/ckn04_inc`dataset'.dta, clear
+(01_PewJune2020 data with continuous family income measures)
+
+. save $deriv/ki`category'`dataset'.dta, replace // data that results at end
+file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ki05_news01_Pew
+> June2020.dta saved
+
+. 
+. 
+. ***-----------------------------***
+. // COVIDNEWSRELY_w66
+. ***-----------------------------***
+. *And which of these sources do you RELY ON MOST for news about the coronavirus
+>  outbreak??
+.         *1 International news outlets
+.         *2 National news outlets
+.         *3 Local news outlets
+.         *4 Donald Trump and his coronavirus task force
+.         *5 Joe Biden and his campaign
+.         *6 State and local elected officials and their offices
+.         *7 Public health organizations and officials
+.         *8 Friends, family and neighbors
+.         *9 Community or neighborhood newsletter or Listserv
+.         *10 Online forums or discussion groups
+. 
+. tab covidnewsrely_w66, m
+
+  COVIDNEWSRELY_W66. And which of these |
+   sources do you RELY ON MOST for news |
+                                  about |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+             International news outlets |        369        3.99        3.99
+                  National news outlets |      2,801       30.29       34.28
+                     Local news outlets |      1,263       13.66       47.93
+Donald Trump and his coronavirus task f |      1,293       13.98       61.92
+             Joe Biden and his campaign |         16        0.17       62.09
+State and local elected officials and t |        849        9.18       71.27
+Public health organizations and officia |      1,842       19.92       91.19
+          Friends, family and neighbors |        204        2.21       93.39
+Community or neighborhood newsletter or |         30        0.32       93.72
+     Online forums or discussion groups |        218        2.36       96.07
+               Did not receive question |         14        0.15       96.23
+                                Refused |         36        0.39       96.62
+                                      . |        313        3.38      100.00
+----------------------------------------+-----------------------------------
+                                  Total |      9,248      100.00
+
+. tab covidnewsrely_w66, m nolabel
+
+COVIDNEWSRE |
+LY_W66. And |
+   which of |
+      these |
+ sources do |
+you RELY ON |
+   MOST for |
+ news about |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       1.00 |        369        3.99        3.99
+       2.00 |      2,801       30.29       34.28
+       3.00 |      1,263       13.66       47.93
+       4.00 |      1,293       13.98       61.92
+       5.00 |         16        0.17       62.09
+       6.00 |        849        9.18       71.27
+       7.00 |      1,842       19.92       91.19
+       8.00 |        204        2.21       93.39
+       9.00 |         30        0.32       93.72
+      10.00 |        218        2.36       96.07
+      98.00 |         14        0.15       96.23
+      99.00 |         36        0.39       96.62
+          . |        313        3.38      100.00
+------------+-----------------------------------
+      Total |      9,248      100.00
+
+. 
+. label define dB_source 0 "0_Not source" 1 "1_Main source"
+
+. 
+. // International news
+. local source "international"
+
+. local source_code = 1
+
+. local source_long "International News Outlets"
+
+. include $stata/ckn05_news00_crely.doi
+
+. *! include file to create crely_ variables based on covidnewsrely_w66
+. *! version 1.0 \ molly king 2020-11-23
+. 
+. *Original file must specify the following locals:
+.         *local source: a short name for the variable
+.         *local source_code: a number indicating the original indicator for tha
+> t source in covidnewsrely_w66
+.         *local source_long: a phrase to describe the source in a label 
+. 
+. 
+. ***--------------------------***
+. 
+. 
+. gen dB_crely_`source' = 0
+
+. replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
+(369 real changes made)
+
+. replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
+>  question
+>         covidnewsrely_w66 == 99 | /// Refused
+>         covidnewsrely_w66 == . // Missing
+(363 real changes made, 363 to missing)
+
+. label var dB_crely_`source' "`source_long' - Source relies most on for news ab
+> out coronavirus outbreak"
+note: label truncated to 80 characters
+
+. 
+. label val dB_crely_`source' dB_source
+
+. 
+. 
+. // National news
+. local source "national"
+
+. local source_code = 2
+
+. local source_long "National News Outlets"
+
+. include $stata/ckn05_news00_crely.doi
+
+. *! include file to create crely_ variables based on covidnewsrely_w66
+. *! version 1.0 \ molly king 2020-11-23
+. 
+. *Original file must specify the following locals:
+.         *local source: a short name for the variable
+.         *local source_code: a number indicating the original indicator for tha
+> t source in covidnewsrely_w66
+.         *local source_long: a phrase to describe the source in a label 
+. 
+. 
+. ***--------------------------***
+. 
+. 
+. gen dB_crely_`source' = 0
+
+. replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
+(2,801 real changes made)
+
+. replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
+>  question
+>         covidnewsrely_w66 == 99 | /// Refused
+>         covidnewsrely_w66 == . // Missing
+(363 real changes made, 363 to missing)
+
+. label var dB_crely_`source' "`source_long' - Source relies most on for news ab
+> out coronavirus outbreak"
+note: label truncated to 80 characters
+
+. 
+. label val dB_crely_`source' dB_source
+
+. 
+. 
+. // Local news
+. local source "local"
+
+. local source_code = 3
+
+. local source_long "Local News Outlets"
+
+. include $stata/ckn05_news00_crely.doi
+
+. *! include file to create crely_ variables based on covidnewsrely_w66
+. *! version 1.0 \ molly king 2020-11-23
+. 
+. *Original file must specify the following locals:
+.         *local source: a short name for the variable
+.         *local source_code: a number indicating the original indicator for tha
+> t source in covidnewsrely_w66
+.         *local source_long: a phrase to describe the source in a label 
+. 
+. 
+. ***--------------------------***
+. 
+. 
+. gen dB_crely_`source' = 0
+
+. replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
+(1,263 real changes made)
+
+. replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
+>  question
+>         covidnewsrely_w66 == 99 | /// Refused
+>         covidnewsrely_w66 == . // Missing
+(363 real changes made, 363 to missing)
+
+. label var dB_crely_`source' "`source_long' - Source relies most on for news ab
+> out coronavirus outbreak"
+
+. 
+. label val dB_crely_`source' dB_source
+
+. 
+. 
+. // Donald Trump and his coronavirus task force
+. local source "trump"
+
+. local source_code = 4
+
+. local source_long "Trump / COVID task force"
+
+. include $stata/ckn05_news00_crely.doi
+
+. *! include file to create crely_ variables based on covidnewsrely_w66
+. *! version 1.0 \ molly king 2020-11-23
+. 
+. *Original file must specify the following locals:
+.         *local source: a short name for the variable
+.         *local source_code: a number indicating the original indicator for tha
+> t source in covidnewsrely_w66
+.         *local source_long: a phrase to describe the source in a label 
+. 
+. 
+. ***--------------------------***
+. 
+. 
+. gen dB_crely_`source' = 0
+
+. replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
+(1,293 real changes made)
+
+. replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
+>  question
+>         covidnewsrely_w66 == 99 | /// Refused
+>         covidnewsrely_w66 == . // Missing
+(363 real changes made, 363 to missing)
+
+. label var dB_crely_`source' "`source_long' - Source relies most on for news ab
+> out coronavirus outbreak"
+note: label truncated to 80 characters
+
+. 
+. label val dB_crely_`source' dB_source
+
+. 
+. 
+. // Joe Biden and his campaign
+. local source "biden"
+
+. local source_code = 5
+
+. local source_long "Biden and his campaign"
+
+. include $stata/ckn05_news00_crely.doi
+
+. *! include file to create crely_ variables based on covidnewsrely_w66
+. *! version 1.0 \ molly king 2020-11-23
+. 
+. *Original file must specify the following locals:
+.         *local source: a short name for the variable
+.         *local source_code: a number indicating the original indicator for tha
+> t source in covidnewsrely_w66
+.         *local source_long: a phrase to describe the source in a label 
+. 
+. 
+. ***--------------------------***
+. 
+. 
+. gen dB_crely_`source' = 0
+
+. replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
+(16 real changes made)
+
+. replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
+>  question
+>         covidnewsrely_w66 == 99 | /// Refused
+>         covidnewsrely_w66 == . // Missing
+(363 real changes made, 363 to missing)
+
+. label var dB_crely_`source' "`source_long' - Source relies most on for news ab
+> out coronavirus outbreak"
+note: label truncated to 80 characters
+
+. 
+. label val dB_crely_`source' dB_source
+
+. 
+. 
+. // State and local elected officials and their offices
+. local source "politicians"
+
+. local source_code = 6
+
+. local source_long "State and local elected officials"
+
+. include $stata/ckn05_news00_crely.doi
+
+. *! include file to create crely_ variables based on covidnewsrely_w66
+. *! version 1.0 \ molly king 2020-11-23
+. 
+. *Original file must specify the following locals:
+.         *local source: a short name for the variable
+.         *local source_code: a number indicating the original indicator for tha
+> t source in covidnewsrely_w66
+.         *local source_long: a phrase to describe the source in a label 
+. 
+. 
+. ***--------------------------***
+. 
+. 
+. gen dB_crely_`source' = 0
+
+. replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
+(849 real changes made)
+
+. replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
+>  question
+>         covidnewsrely_w66 == 99 | /// Refused
+>         covidnewsrely_w66 == . // Missing
+(363 real changes made, 363 to missing)
+
+. label var dB_crely_`source' "`source_long' - Source relies most on for news ab
+> out coronavirus outbreak"
+note: label truncated to 80 characters
+
+. 
+. label val dB_crely_`source' dB_source
+
+. 
+. 
+. // Public health organizations and officials
+. local source "ph"
+
+. local source_code = 7
+
+. local source_long "Public health organizations and officials"
+
+. include $stata/ckn05_news00_crely.doi
+
+. *! include file to create crely_ variables based on covidnewsrely_w66
+. *! version 1.0 \ molly king 2020-11-23
+. 
+. *Original file must specify the following locals:
+.         *local source: a short name for the variable
+.         *local source_code: a number indicating the original indicator for tha
+> t source in covidnewsrely_w66
+.         *local source_long: a phrase to describe the source in a label 
+. 
+. 
+. ***--------------------------***
+. 
+. 
+. gen dB_crely_`source' = 0
+
+. replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
+(1,842 real changes made)
+
+. replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
+>  question
+>         covidnewsrely_w66 == 99 | /// Refused
+>         covidnewsrely_w66 == . // Missing
+(363 real changes made, 363 to missing)
+
+. label var dB_crely_`source' "`source_long' - Source relies most on for news ab
+> out coronavirus outbreak"
+note: label truncated to 80 characters
+
+. 
+. label val dB_crely_`source' dB_source
+
+. 
+. 
+. // Friends, family and neighbors
+. local source "friends"
+
+. local source_code = 8
+
+. local source_long "Friends, family and neighbors"
+
+. include $stata/ckn05_news00_crely.doi
+
+. *! include file to create crely_ variables based on covidnewsrely_w66
+. *! version 1.0 \ molly king 2020-11-23
+. 
+. *Original file must specify the following locals:
+.         *local source: a short name for the variable
+.         *local source_code: a number indicating the original indicator for tha
+> t source in covidnewsrely_w66
+.         *local source_long: a phrase to describe the source in a label 
+. 
+. 
+. ***--------------------------***
+. 
+. 
+. gen dB_crely_`source' = 0
+
+. replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
+(204 real changes made)
+
+. replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
+>  question
+>         covidnewsrely_w66 == 99 | /// Refused
+>         covidnewsrely_w66 == . // Missing
+(363 real changes made, 363 to missing)
+
+. label var dB_crely_`source' "`source_long' - Source relies most on for news ab
+> out coronavirus outbreak"
+note: label truncated to 80 characters
+
+. 
+. label val dB_crely_`source' dB_source
+
+. 
+. 
+. // Community or neighborhood newsletter or Listserv
+. local source "neighbor"
+
+. local source_code = 9
+
+. local source_long "Community or neighborhood newsletter or Listserv"
+
+. include $stata/ckn05_news00_crely.doi
+
+. *! include file to create crely_ variables based on covidnewsrely_w66
+. *! version 1.0 \ molly king 2020-11-23
+. 
+. *Original file must specify the following locals:
+.         *local source: a short name for the variable
+.         *local source_code: a number indicating the original indicator for tha
+> t source in covidnewsrely_w66
+.         *local source_long: a phrase to describe the source in a label 
+. 
+. 
+. ***--------------------------***
+. 
+. 
+. gen dB_crely_`source' = 0
+
+. replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
+(30 real changes made)
+
+. replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
+>  question
+>         covidnewsrely_w66 == 99 | /// Refused
+>         covidnewsrely_w66 == . // Missing
+(363 real changes made, 363 to missing)
+
+. label var dB_crely_`source' "`source_long' - Source relies most on for news ab
+> out coronavirus outbreak"
+note: label truncated to 80 characters
+
+. 
+. label val dB_crely_`source' dB_source
+
+. 
+. 
+. // Online forums or discussion groups
+. local source "online"
+
+. local source_code = 10
+
+. local source_long "Online forums or discussion groups"
+
+. include $stata/ckn05_news00_crely.doi
+
+. *! include file to create crely_ variables based on covidnewsrely_w66
+. *! version 1.0 \ molly king 2020-11-23
+. 
+. *Original file must specify the following locals:
+.         *local source: a short name for the variable
+.         *local source_code: a number indicating the original indicator for tha
+> t source in covidnewsrely_w66
+.         *local source_long: a phrase to describe the source in a label 
+. 
+. 
+. ***--------------------------***
+. 
+. 
+. gen dB_crely_`source' = 0
+
+. replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
+(218 real changes made)
+
+. replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
+>  question
+>         covidnewsrely_w66 == 99 | /// Refused
+>         covidnewsrely_w66 == . // Missing
+(363 real changes made, 363 to missing)
+
+. label var dB_crely_`source' "`source_long' - Source relies most on for news ab
+> out coronavirus outbreak"
+note: label truncated to 80 characters
+
+. 
+. label val dB_crely_`source' dB_source
+
+. 
+.         
+. ***-----------------------------***
+. // SOURCES LUMPED TOGETHER
+. ***-----------------------------***
+. 
+. *News 
+.         *1 International news outlets
+.         *2 National news outlets
+. *Local
+.         *3 Local news outlets
+. *Politicians
+.         *4 Donald Trump and his coronavirus task force
+.         *5 Joe Biden and his campaign
+.         *6 State and local elected officials and their offices
+. *Public Health
+.         *7 Public health organizations and officials
+. *Informal Networks
+.         *8 Friends, family and neighbors
+.         *9 Community or neighborhood newsletter or Listserv
+.         *10 Online forums or discussion groups
+. 
+. local short "news"
+
+. gen dB_cnews_`short' = 0
+
+. replace dB_cnews_`short' = 1 if covidnewsrely_w66 == 1 |  covidnewsrely_w66 ==
+>  2
+(3,170 real changes made)
+
+. replace dB_cnews_`short' = . if covidnewsrely_w66 == 98 | /// Did not receive 
+> question
+>         covidnewsrely_w66 == 99 | /// Refused
+>         covidnewsrely_w66 == . // Missing
+(363 real changes made, 363 to missing)
+
+. label var dB_cnews_`short' "International / national news- Source relies most 
+> on for news about coronavirus outbreak"
+note: label truncated to 80 characters
+
+. 
+. local short "local"
+
+. gen dB_cnews_`short' = 0
+
+. replace dB_cnews_`short' = 1 if covidnewsrely_w66 == 3
+(1,263 real changes made)
+
+. replace dB_cnews_`short' = . if covidnewsrely_w66 == 98 | /// Did not receive 
+> question
+>         covidnewsrely_w66 == 99 | /// Refused
+>         covidnewsrely_w66 == . // Missing
+(363 real changes made, 363 to missing)
+
+. label var dB_cnews_`short' "`short' - Source relies most on for news about cor
+> onavirus outbreak"
+
+. 
+. local short "politicians"
+
+. gen dB_cnews_`short' = 0
+
+. replace dB_cnews_`short' = 1 if covidnewsrely_w66 == 4 |  covidnewsrely_w66 ==
+>  5 |  covidnewsrely_w66 == 6
+(2,158 real changes made)
+
+. replace dB_cnews_`short' = . if covidnewsrely_w66 == 98 | /// Did not receive 
+> question
+>         covidnewsrely_w66 == 99 | /// Refused
+>         covidnewsrely_w66 == . // Missing
+(363 real changes made, 363 to missing)
+
+. label var dB_cnews_`short' "`short' - Source relies most on for news about cor
+> onavirus outbreak"
+
+. 
+. local short "pubhealth"
+
+. gen dB_cnews_`short' = 0
+
+. replace dB_cnews_`short' = 1 if covidnewsrely_w66 == 7
+(1,842 real changes made)
+
+. replace dB_cnews_`short' = . if covidnewsrely_w66 == 98 | /// Did not receive 
+> question
+>         covidnewsrely_w66 == 99 | /// Refused
+>         covidnewsrely_w66 == . // Missing
+(363 real changes made, 363 to missing)
+
+. label var dB_cnews_`short' "`short' - Source relies most on for news about cor
+> onavirus outbreak"
+
+. 
+. local short "informal"
+
+. gen dB_cnews_`short' = 0
+
+. replace dB_cnews_`short' = 1 if covidnewsrely_w66 == 8 |  covidnewsrely_w66 ==
+>  9 |  covidnewsrely_w66 == 10
+(452 real changes made)
+
+. replace dB_cnews_`short' = . if covidnewsrely_w66 == 98 | /// Did not receive 
+> question
+>         covidnewsrely_w66 == 99 | /// Refused
+>         covidnewsrely_w66 == . // Missing
+(363 real changes made, 363 to missing)
+
+. label var dB_cnews_`short' "`short' - Source relies most on for news about cor
+> onavirus outbreak"
+
+. 
+. gen dG_cnews = 0
+
+. replace dG_cnews = . if covidnewsrely_w66 == 98 | /// Did not receive question
+>         covidnewsrely_w66 == 99 | /// Refused
+>         covidnewsrely_w66 == . // Missing
+(363 real changes made, 363 to missing)
+
+. replace dG_cnews = 1 if dB_cnews_news == 1 // International or national
+(3,170 real changes made)
+
+. replace dG_cnews = 2 if dB_cnews_local == 1 // Local news
+(1,263 real changes made)
+
+. replace dG_cnews = 3 if dB_cnews_politicians == 1 // politicians
+(2,158 real changes made)
+
+. replace dG_cnews = 4 if dB_cnews_pubhealth == 1 // public heatlh
+(1,842 real changes made)
+
+. replace dG_cnews = 5 if dB_cnews_informal == 1 // informal
+(452 real changes made)
+
+. label var dG_cnews "categorical-Source relies most on for news about coronavir
+> us outbreak"
+
+. 
+. label define dG_cnews ///
+>         1 "1_Intl/Natl" ///
+>         2 "2_Local news" ///
+>         3 "3_Politicians" ///
+>         4 "4_Pub Health" ///
+>         5 "5_Informal"
+
+.                 
+. label val dG_cnews dG_cnews
+
+. 
+. 
+. ***-----------------------------***
+. // COVIDNEWSCHNG
+. ***-----------------------------***
+. 
+. *local covidnewschng_c_w68
+.         *1Finding it HARDER to understand what is happening with the outbreak
+.         *2 Finding it EASIER to understand what is happening with the outbreak
+.         *3 No change
+. 
+. *local covidnewschng_d_w68
+.         *1 Seeing MORE partisan viewpoints in the news about the outbreak
+.         *2 Seeing FEWER partisan viewpoints in the news about the outbreak
+.         *3 No change
+. 
+. *local covidnewschng_e_w68
+.         *1 Finding it HARDER to identify what is true and what is false about 
+> the outbreak
+.         *2 Finding it EASIER to identify what is true and what is false about 
+> the outbreak
+.         *3 No change
+. 
+. ***-----------------------------***
+. // COVIDINFODIFF
+. ***-----------------------------***
+. 
+. *When you get news and information about the coronavirus outbreak, do you gene
+> rally find it… [RANDOMIZE]
+.         *1 Difficult to determine what is true and what is not
+.         *2 Easy to determine what is true and what is not
+. 
+. tab covidinfodiff, m
+
+   COVIDINFODIFF_W68. When you get news |
+  and information about the coronavirus |
+                                  outbr |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+Difficult to determine what is true and |      4,606       49.81       49.81
+Easy to determine what is true and what |      4,508       48.75       98.55
+                                Refused |        134        1.45      100.00
+----------------------------------------+-----------------------------------
+                                  Total |      9,248      100.00
+
+. tab covidinfodiff, m nolabel
+
+COVIDINFODI |
+    FF_W68. |
+   When you |
+   get news |
+        and |
+information |
+  about the |
+coronavirus |
+      outbr |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      4,606       49.81       49.81
+          2 |      4,508       48.75       98.55
+         99 |        134        1.45      100.00
+------------+-----------------------------------
+      Total |      9,248      100.00
+
+. 
+. gen dB_cinfodiff = .
+(9,248 missing values generated)
+
+. replace dB_cinfodiff = 1 if covidinfodiff == 2
+(4,508 real changes made)
+
+. replace dB_cinfodiff = 0 if covidinfodiff == 1
+(4,606 real changes made)
+
+. label var dB_cinfodiff "When get news about COVID, difficult to determine what
+>  is true"
+
+. 
+. ***-----------------------------***
+. // SAVE DATA    
+. ***-----------------------------***
+. 
+. label data "`dataset' Knowledge variables"
+
+. notes: ckn`category'`dataset'.dta \ `dataset' with recoded knowledge variables
+>  \ ckn`category'`dataset'.do mmk $$_DATE
+
+. compress
+  variable dB_crely_international was float now byte
+  variable dB_crely_national was float now byte
+  variable dB_crely_local was float now byte
+  variable dB_crely_trump was float now byte
+  variable dB_crely_biden was float now byte
+  variable dB_crely_politicians was float now byte
+  variable dB_crely_ph was float now byte
+  variable dB_crely_friends was float now byte
+  variable dB_crely_neighbor was float now byte
+  variable dB_crely_online was float now byte
+  variable dB_cnews_news was float now byte
+  variable dB_cnews_local was float now byte
+  variable dB_cnews_politicians was float now byte
+  variable dB_cnews_pubhealth was float now byte
+  variable dB_cnews_informal was float now byte
+  variable dG_cnews was float now byte
+  variable dB_cinfodiff was float now byte
+  (471,648 bytes saved)
+
+. datasignature set, reset
+  9248:157(19220):249926464:273332089       (data signature reset)
+
+. save $deriv/ckn`category'`dataset'.dta, replace
+file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn05_news01_Pe
+> wJune2020.dta saved
+
+. 
+. ***--------------------------***
+. 
+. log close ckn`category'`dataset'
+      name:  ckn05_news01_PewJune2020
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/stata/
+> ckn05_news01_PewJune2020.log
+  log type:  text
+ closed on:  23 Nov 2020, 14:09:30
+--------------------------------------------------------------------------------
