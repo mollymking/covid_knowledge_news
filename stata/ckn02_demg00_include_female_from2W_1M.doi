@@ -1,0 +1,13 @@
+*! include file to convert gender variable
+*! Produces gender dummy bariable from woman=2-->fem=1; man=1-->man=0
+*! version 1.1 \ molly king 2017-03-29
+
+gen dB_fem = . 
+	replace dB_fem = 1 if `gender_var' == 2
+	replace dB_fem = 0 if `gender_var' == 1
+
+label var dB_fem "Respondent's sex (=1 if female)" 
+label define dB_fem 0 "0_Male" 1 "1_Female"
+	label val dB_fem dB_fem
+
+notes dB_fem: Created from `gender_var' in `data_using' \ `do_file'.do mmk $S_DATE

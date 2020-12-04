@@ -1,0 +1,158 @@
+*! include file to label education variables
+*! version 1.0 \ molly king 2017-01-24
+
+  *compilation of originally individual include files that programmed each education variable separate
+***--------------------------***
+
+// #1 GENERATE ALL VARIABLES, AND LABEL, ADD NOTES
+
+
+// Categorical Education Variable
+	gen dG_edu = .
+	label var dG_edu "Categorical education variable"
+	label define edu_5categ 1 "< HS" 2 "HS" 3 "some college" 4 "college" 5 "grad school"
+		label val dG_edu edu_5categ
+	notes dG_edu: Education categorical variable, created from `edu_var' variable in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+
+	
+// Less than HS
+	if "`lHS_condition'" != "none" {
+		gen dB_edu_lHS = 0
+		// Replace each with . for missing edu. if there is a edu. missing condition: 
+			if "`edu_missing_condition'" != "none" {
+				replace dB_edu_lHS = . if `edu_missing_condition'
+			}
+		label var dB_edu_lHS "<HS"
+		label define dB_edu_lHS 0 "0_>HS" 1 "1_<HS"
+			label val dB_edu_lHS dB_edu_lHS
+		notes dB_edu_lHS: Less than HS edu. created from `edu_var' variable in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+		
+		replace dB_edu_lHS = 1 if `lHS_condition'
+		replace dG_edu 	   = 1 if `lHS_condition'
+	}
+	
+
+// High School
+	if "`HS_condition'" != "none" {
+		gen dB_edu_HS = 0
+		// Replace each with . for missing edu. if there is a edu. missing condition: 
+			if "`edu_missing_condition'" != "none" {
+				replace dB_edu_HS = . if `edu_missing_condition'
+			}
+		label var dB_edu_HS "HS"
+		label define dB_edu_HS 0 "0_notHS" 1 "1_HS"
+			label val dB_edu_HS dB_edu_HS
+		notes dB_edu_HS: HS edu. created from `edu_var' variable in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+		
+		replace dB_edu_HS = 1 if `HS_condition'
+		replace dG_edu 	  = 2 if `HS_condition'
+	}
+	
+	
+// Some college
+	if "`sCol_condition'" != "none" {
+		gen dB_edu_sCol = 0
+		// Replace each with . for missing edu. if there is a edu. missing condition: 
+			if "`edu_missing_condition'" != "none" {
+				replace dB_edu_sCol = . if `edu_missing_condition'
+			}
+		label var dB_edu_sCol "Some College / Voc. Training"
+		label define dB_edu_sCol 0 "0_notSomeCol" 1 "1_SomeCol"
+			label val dB_edu_sCol dB_edu_sCol
+		notes dB_edu_sCol: Some College edu. created from `edu_var' variable in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+
+		replace dB_edu_sCol = 1 if `sCol_condition'
+		replace dG_edu 	    = 3 if `sCol_condition'
+	}
+
+	
+// College Degree
+	if "`col_condition'" != "none" {
+		gen dB_edu_col = 0
+		// Replace each with . for missing edu. if there is a edu. missing condition: 
+			if "`edu_missing_condition'" != "none" {
+				replace dB_edu_col = . if `edu_missing_condition'
+			}
+		label var dB_edu_col "College degree"
+		label define dB_edu_col 0 "0_notCol" 1 "1_College"
+			label val dB_edu_col dB_edu_col
+		notes dB_edu_col: College degree, created from `edu_var' variable in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+	
+		replace dB_edu_col = 1 if `col_condition'
+		replace dG_edu 	   = 4 if `col_condition'
+	}
+	
+	
+// Post-graduate degree
+	if "`grad_condition'" != "none" {
+		gen dB_edu_grad = 0
+		// Replace each with . for missing edu. if there is a edu. missing condition: 
+			if "`edu_missing_condition'" != "none" {
+				replace dB_edu_grad = . if `edu_missing_condition'
+			}
+		label var dB_edu_grad "Graduate degree"
+		label define dB_edu_grad 0 "0_<GradDeg" 1 "1_GradDegree"
+			label val dB_edu_grad dB_edu_grad
+		notes dB_edu_grad: Graduate degree, created from `edu_var' variable in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+		
+		replace dB_edu_grad = 1 if `grad_condition'
+		replace dG_edu 	    = 5 if `grad_condition'
+	}
+	
+
+// College + post-graduate
+	if "`grad_condition'" != "none" & "`col_condition'" != "none" {
+		gen dB_edu_colp = 0
+		// Replace each with . for missing edu. if there is a edu. missing condition: 
+			if "`edu_missing_condition'" != "none" {
+				replace dB_edu_colp = . if `edu_missing_condition'
+			}
+		label var dB_edu_colp "College or Graduate Degree"
+		label define dB_edu_colp 0 "0_NoBA" 1 "1_BA+"
+			label val dB_edu_colp dB_edu_colp	
+		notes dB_edu_colp: College plus grad, created from `edu_var' variable in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+
+		replace dB_edu_colp = 1	 if `col_condition' | `grad_condition'
+	}
+
+// College + post-graduate, where can't disentangle the two
+	if "`grad_condition'" == "none" & "`col_condition'" != "none" {
+		gen dB_edu_colp = 0
+		// Replace each with . for missing edu. if there is a edu. missing condition: 
+			if "`edu_missing_condition'" != "none" {
+				replace dB_edu_colp = . if `edu_missing_condition'
+			}
+		label var dB_edu_colp "College or Graduate Degree"
+		label define dB_edu_colp 0 "0_NoBA" 1 "1_BA+"
+			label val dB_edu_colp dB_edu_colp	
+		notes dB_edu_colp: College plus grad, created from `edu_var' variable in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+
+		replace dB_edu_colp = 1	 if `col_condition' 
+		// here, the college condition covers both those who have a bachelors and more
+		drop dB_edu_col
+	}
+	
+
+
+// # CHECK TO ENSURE CORRECT
+if "`lHS_condition'" != "none" {
+	tab `edu_var' dB_edu_lHS, m
+}
+if "`HS_condition'" != "none" {
+	tab `edu_var' dB_edu_HS, m
+}
+if "`sCol_condition'" != "none" {
+	tab `edu_var' dB_edu_sCol, m
+}
+if "`col_condition'" != "none" & "`grad_condition'" != "none" {
+	tab `edu_var' dB_edu_col, m
+}
+if "`col_condition'" != "none" {
+	tab `edu_var' dB_edu_colp, m
+}
+if "`grad_condition'" != "none" {
+	tab `edu_var' dB_edu_grad, m
+	tab `edu_var' dB_edu_grad, m nolabel
+}
+tab `edu_var' dG_edu, m
+	

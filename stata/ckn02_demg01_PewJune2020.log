@@ -1,0 +1,1268 @@
+--------------------------------------------------------------------------------
+      name:  ckn02_demg01_PewJune2020
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/stata/
+> ckn02_demg01_PewJune2020.log
+  log type:  text
+ opened on:  23 Nov 2020, 13:58:10
+
+. ***-----------------------------***
+. 
+. //      project:        Knowledge of COVID & News Sources
+. //  task:       Create Demographic Variables
+. /*  data:    */ di "`dataset'"
+01_PewJune2020
+
+. 
+. //  github:     covid_knowledge_news
+. //  OSF:                https://osf.io/qf624/
+. 
+. //  author:     Molly King
+. 
+. display "$S_DATE  $S_TIME"
+23 Nov 2020  13:58:10
+
+. 
+. ***--------------------------***
+. // # PROGRAM SETUP
+. ***-----------------------------***
+. 
+. version 16 // keeps program consistent for future replications
+
+. set linesize 80
+
+. clear all
+
+. set more off
+
+. 
+. use $deriv/ckn01_impe01_PewJune2020.dta, clear
+(01_PewJune2020 data with weights: Pathways June 2020 (ATP W68))
+
+. 
+. *Details on demographic variables from:
+. * https://www.pewresearch.org/wp-content/uploads/2018/05/Codebook-and-instruct
+> ions-for-working-with-ATP-data.pdf
+. 
+. ***-----------------------------***
+. // # YEAR
+. ***-----------------------------***
+. 
+. *All interviews carried out in June 2020
+. /*
+>         "Last year, that is in [FILL LAST YEAR], 
+>         what was your total family income from all sources,
+>         before taxes?  (READ)"
+> */
+. 
+. gen year = 2019
+
+. local year "year"
+
+. label var year "Year for income was 2019"
+
+. 
+. gen survey_year = 2020
+
+. 
+. ***-----------------------------***
+. // # GENDER
+. ***-----------------------------***
+. 
+. local gender_var f_sex
+
+. 
+. tab `gender_var', m
+
+        Sex |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       Male |      4,373       45.30       45.30
+     Female |      5,262       54.51       99.80
+    Refused |         19        0.20      100.00
+------------+-----------------------------------
+      Total |      9,654      100.00
+
+. tab `gender_var', nolab m
+
+        Sex |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      4,373       45.30       45.30
+          2 |      5,262       54.51       99.80
+         99 |         19        0.20      100.00
+------------+-----------------------------------
+      Total |      9,654      100.00
+
+. 
+. include $stata/ckn02_demg00_include_female_from2W_1M.doi 
+
+. *! include file to convert gender variable
+. *! Produces gender dummy bariable from woman=2-->fem=1; man=1-->man=0
+. *! version 1.1 \ molly king 2017-03-29
+. 
+. gen dB_fem = . 
+(9,654 missing values generated)
+
+.         replace dB_fem = 1 if `gender_var' == 2
+(5,262 real changes made)
+
+.         replace dB_fem = 0 if `gender_var' == 1
+(4,373 real changes made)
+
+. 
+. label var dB_fem "Respondent's sex (=1 if female)" 
+
+. label define dB_fem 0 "0_Male" 1 "1_Female"
+
+.         label val dB_fem dB_fem
+
+. 
+. notes dB_fem: Created from `gender_var' in `data_using' \ `do_file'.do mmk $S_
+> DATE
+
+. 
+. 
+. 
+. ***--------------------------***
+. // # RACE / ETHNICITY
+. ***-----------------------------***
+. 
+. local race_var f_racecmb
+
+. tab `race_var'
+
+           Combining race |      Freq.     Percent        Cum.
+--------------------------+-----------------------------------
+                    White |      7,694       79.70       79.70
+Black or African American |        774        8.02       87.71
+  Asian or Asian-American |        285        2.95       90.67
+               Mixed Race |        374        3.87       94.54
+       Or some other race |        316        3.27       97.81
+                  Refused |        211        2.19      100.00
+--------------------------+-----------------------------------
+                    Total |      9,654      100.00
+
+. tab `race_var', m nolab
+
+  Combining |
+       race |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      7,694       79.70       79.70
+          2 |        774        8.02       87.71
+          3 |        285        2.95       90.67
+          4 |        374        3.87       94.54
+          5 |        316        3.27       97.81
+         99 |        211        2.19      100.00
+------------+-----------------------------------
+      Total |      9,654      100.00
+
+. 
+. local hisp_var f_hisp
+
+. if "`hisp_var'" != "none" {
+.         tab `hisp_var', m
+
+   HISP.Are |
+     you of |
+  Hispanic, |
+ Latino, or |
+    Spanish |
+    origin, |
+    such as |
+   Mexican, |
+ Puerto Ric |      Freq.     Percent        Cum.
+------------+-----------------------------------
+        Yes |      1,645       17.04       17.04
+         No |      7,971       82.57       99.61
+    Refused |         38        0.39      100.00
+------------+-----------------------------------
+      Total |      9,654      100.00
+.         tab `hisp_var', m nolab
+
+   HISP.Are |
+     you of |
+  Hispanic, |
+ Latino, or |
+    Spanish |
+    origin, |
+    such as |
+   Mexican, |
+ Puerto Ric |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      1,645       17.04       17.04
+          2 |      7,971       82.57       99.61
+         99 |         38        0.39      100.00
+------------+-----------------------------------
+      Total |      9,654      100.00
+.         tab `race_var' `hisp_var'
+
+                      |    HISP.Are you of Hispanic,
+                      | Latino, or Spanish origin, such
+                      |      as Mexican, Puerto Ric
+       Combining race |       Yes         No    Refused |     Total
+----------------------+---------------------------------+----------
+                White |     1,092      6,598          4 |     7,694 
+Black or African Amer |        37        737          0 |       774 
+Asian or Asian-Americ |         7        278          0 |       285 
+           Mixed Race |       164        208          2 |       374 
+   Or some other race |       261         55          0 |       316 
+              Refused |        84         95         32 |       211 
+----------------------+---------------------------------+----------
+                Total |     1,645      7,971         38 |     9,654 
+. }
+
+. 
+. *don't know/refused code(s) for `race_var'
+. local race_missing_condition `"`race_var' == 9"'
+
+. 
+. local white_race_value =        1
+
+. local black_race_value =        2
+
+. local asian_race_value =        3
+
+. local other_race_value =        5
+
+. local mult_race_value =         4
+
+. local amerInd_race_value        none
+
+. local hisp_value =                      1
+
+. 
+. include $stata/ckn02_demg00_racethnicity.doi
+
+. *! include file to label race/ethnicity variables
+. *! version 1.0 \ molly king 2017-01-20
+. 
+.   *compilation of originally individual include files that programmed each rac
+> e/ethnicity separate
+. ***--------------------------***
+. 
+. // #1 GENERATE ALL VARIABLES, AND LABEL, ADD NOTES
+. 
+. // White
+.                 gen dB_rwhite = 0
+
+.                 // Replace each with . for missing race if there is a race mis
+> sing condition: 
+.                         if "`race_missing_condition'" != "none" {
+.                                 replace dB_rwhite = . if `race_var' == `race_m
+> issing_condition' // don't know/refused
+(0 real changes made)
+.                         }
+
+.                 label var dB_rwhite "Non-Hispanic White race = 1"
+
+.                         label define dB_rwhite 0 "0_NotWhite" 1 "1_White"
+
+.                 label val dB_rwhite dB_rwhite
+
+.                 notes dB_rwhite: White respondent race created from `race_var'
+>  & `hisp_var' in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+
+. 
+. // Black
+.                 gen dB_rblack = 0
+
+.                 // Replace each with . for missing race if there is a race mis
+> sing condition: 
+.                         if "`race_missing_condition'" != "none" {
+.                                 replace dB_rblack = . if  `race_var' == `race_
+> missing_condition' // don't know/refused
+(0 real changes made)
+.                         }
+
+.                 label var dB_rblack "Non-Hispanic Black/AfAmer race = 1"
+
+.                 label define dB_rblack 0 "0_NotBlack" 1 "1_Black"
+
+.                         label val dB_rblack dB_rblack
+
+.                 notes dB_rblack: Black/AfAmer race created from `race_var' & `
+> hisp_var' in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+
+. 
+. // Asian
+.         if "`asian_race_value'" != "none" {
+.                 gen dB_rasian = 0
+.                 // Replace each with . for missing race if there is a race mis
+> sing condition: 
+.                         if "`race_missing_condition'" != "none" {
+.                                 replace dB_rasian = . if `race_var' == `race_m
+> issing_condition' 
+(0 real changes made)
+.                         }
+.                 label var dB_rasian "Non-Hispanic Asian race = 1"
+.                 label define dB_rasian 0 "0_NotAsian" 1 "1_Asian"
+.                         label val dB_rasian dB_rasian
+.                 notes dB_rasian: Asian race created from `race_var' & `hisp_va
+> r' in `dataset' \ ki`category'`dataset'.do mmk $S_DATE    
+.         }
+
+. 
+. // Hispanic
+.         if "`hisp_value'" != "none" {
+.                 gen dB_rhisp = 0
+.                 // Replace each with . for missing race if there is a race mis
+> sing condition: 
+.                         if "`race_missing_condition'" != "none" {
+.                                 replace dB_rhisp  = . if `race_var' == `race_m
+> issing_condition' 
+(0 real changes made)
+.                         }
+.                 label var dB_rhisp  "Hispanic ethnicity = 1"
+.                 label define dB_rhisp  0 "0_NotHispanic" 1 "1_Hispanic"
+.                         label val dB_rhisp dB_rhisp     
+.                 notes dB_rhisp: Hispanic ethnicity only created from `race_var
+> ' & `hisp_var' in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+.         }
+
+. 
+. // Other
+.         if "`mult_race_value'" != "none" |  "`other_race_value'" != "none" |  
+> "`amerInd_race_value'" != "none" {
+.                 gen dB_rother = 0
+.                 // Replace each with . for missing race if there is a race mis
+> sing condition: 
+.                         if "`race_missing_condition'" != "none" {
+.                                 replace dB_rother = . if `race_var' == `race_m
+> issing_condition' // don't know/refused
+(0 real changes made)
+.                         }
+.                 label var dB_rother "Non-Hispanic Other, mixed race = 1"
+.                 label define dB_rother 0 "0_NotOther" 1 "1_Mixed/OtherRace"
+.                         label val dB_rother dB_rother   
+.                 notes dB_rother: Other, unknown, or mixed race created from `r
+> ace_var' & `hisp_var' in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+.         }
+
+.         
+.         
+. // All Categories
+.         gen dG_race = .
+(9,654 missing values generated)
+
+.         label var dG_race "Categorical race variable"
+
+.         label define race_5categ 1 "White" 2 "Black" 3 "Asian" 4 "Hispanic" 5 
+> "Other/mixed"
+
+.                 label val dG_race race_5categ
+
+.         notes dG_race: Race/ethnicity categorical variable, created from `race
+> _var' & `hisp_var'  variable in `dataset' \ ki`category'`dataset'.do mmk $S_DA
+> TE
+
+.         
+. 
+. ***--------------------------***
+. 
+. // #2 SEPARATE RACE AND HISPANIC VARIABLES
+. 
+. if "`hisp_var'" != "none" {
+. 
+. *White: dB_rwhite
+.         if "`white_race_value'" != "none" {
+.                 replace dB_rwhite = 1   if `race_var' == `white_race_value' & 
+> `hisp_var' != `hisp_value'
+(6,602 real changes made)
+.                 replace dG_race = 1     if `race_var' == `white_race_value' & 
+> `hisp_var' != `hisp_value'
+(6,602 real changes made)
+.         }
+.         
+. *Black: dB_rblack
+.         if "`black_race_value'" != "none" {
+.                 replace dB_rblack = 1   if `race_var' == `black_race_value' & 
+> `hisp_var' != `hisp_value'
+(737 real changes made)
+.                 replace dG_race = 2     if `race_var' == `black_race_value' & 
+> `hisp_var' != `hisp_value'
+(737 real changes made)
+.         }
+.         
+. *Asian: dB_rasian
+.         if "`asian_race_value'" != "none" {
+.                 replace dB_rasian = 1   if `race_var' == `asian_race_value' & 
+> `hisp_var' != `hisp_value' 
+(278 real changes made)
+.                 replace dG_race = 3     if `race_var' == `asian_race_value' & 
+> `hisp_var' != `hisp_value' 
+(278 real changes made)
+.         }
+.                 
+. *Other/mixed: dB_rother
+.         if "`other_race_value'" != "none" {
+.                 replace dB_rother = 1   if `race_var' == `other_race_value' & 
+> `hisp_var' != `hisp_value' 
+(55 real changes made)
+.                 replace dG_race = 5     if `race_var' == `other_race_value' & 
+> `hisp_var' != `hisp_value' 
+(55 real changes made)
+.         }
+.         if "`mult_race_value'" != "none" {
+.                 replace dB_rother = 1   if `race_var' == `mult_race_value' & `
+> hisp_var' != `hisp_value' 
+(210 real changes made)
+.                 replace dG_race = 5     if `race_var' == `mult_race_value' & `
+> hisp_var' != `hisp_value' 
+(210 real changes made)
+.         }
+.         if "`amerInd_race_value'" != "none" {
+.                  replace dB_rother = 1  if `race_var' == `amerInd_race_value' 
+> & `hisp_var' != `hisp_value' 
+.                  replace dG_race = 5    if `race_var' == `amerInd_race_value' 
+> & `hisp_var' != `hisp_value' 
+.         }
+.         
+. *Hispanic: dB_rhisp
+.                 replace dB_rhisp = 1    if `hisp_var' == `hisp_value'
+(1,645 real changes made)
+.                 replace dG_race = 4     if `hisp_var' == `hisp_value'
+(1,645 real changes made)
+. }
+
+. 
+. 
+. ***--------------------------***
+. 
+. // #3 with RACE variable only
+. 
+. if "`hisp_var'" == "none" {
+. 
+. *White: dB_rwhite
+.         if "`white_race_value'" != "none" {
+.                 replace dB_rwhite = 1   if `race_var' == `white_race_value'
+.                 replace dG_race = 1     if `race_var' == `white_race_value'
+.         }
+.         
+. *Black: dB_rblack
+.         if "`black_race_value'" != "none" {
+.                 replace dB_rblack = 1   if `race_var' == `black_race_value'
+.                 replace dG_race = 2     if `race_var' == `black_race_value'
+.         }
+.         
+. *Asian: dB_rasian
+.         if "`asian_race_value'" != "none" {
+.                 replace dB_rasian = 1   if `race_var' == `asian_race_value'
+.                 replace dG_race = 3     if `race_var' == `asian_race_value'
+.         }
+.         
+. *Other/mixed: dB_rother
+.         if "`other_race_value'" != "none" {
+.                 replace dB_rother = 1   if `race_var' == `other_race_value'
+.                 replace dG_race = 5     if `race_var' == `other_race_value'
+.         }
+.         if "`mult_race_value'" != "none" {
+.                 replace dB_rother = 1   if `race_var' == `mult_race_value'
+.                 replace dG_race = 5     if `race_var' == `mult_race_value'
+.         }
+.         if "`amerInd_race_value'" != "none" {
+.                 replace dB_rother = 1   if `race_var' == `amerInd_race_value'
+.                 replace dG_race = 5     if `race_var' == `amerInd_race_value'
+.         }
+.         
+. *Hispanic: dB_rhisp
+.         if "`hisp_value'" != "none" {
+.                 replace dB_rhisp = 1    if `race_var' == `hisp_value'
+.                 replace dG_race = 4     if `race_var' == `hisp_value'
+.         }
+. }
+
+.         
+. ***--------------------------***
+. 
+. //else {
+. //      display as err /*
+. //      */ "Need to enter either name of Hispanic variable or none after local
+>  hisp_var"
+. //      exit 198
+. //}
+.         
+. ***--------------------------***
+.         
+. // #4 CHECK ALL RESULTING VARIABLES     
+. ***check all to ensure correct***
+. 
+. 
+. *Check White
+. capture confirm variable dB_rwhite
+
+. if !_rc {
+.         tab `race_var' dB_rwhite, m
+
+                      |  Non-Hispanic White
+                      |       race = 1
+       Combining race | 0_NotWhit    1_White |     Total
+----------------------+----------------------+----------
+                White |     1,092      6,602 |     7,694 
+Black or African Amer |       774          0 |       774 
+Asian or Asian-Americ |       285          0 |       285 
+           Mixed Race |       374          0 |       374 
+   Or some other race |       316          0 |       316 
+              Refused |       211          0 |       211 
+----------------------+----------------------+----------
+                Total |     3,052      6,602 |     9,654 
+. }
+
+. 
+. *Check Black
+. capture confirm variable dB_rblack
+
+. if !_rc {
+.         tab `race_var' dB_rblack, m
+
+                      |     Non-Hispanic
+                      | Black/AfAmer race = 1
+       Combining race | 0_NotBlac    1_Black |     Total
+----------------------+----------------------+----------
+                White |     7,694          0 |     7,694 
+Black or African Amer |        37        737 |       774 
+Asian or Asian-Americ |       285          0 |       285 
+           Mixed Race |       374          0 |       374 
+   Or some other race |       316          0 |       316 
+              Refused |       211          0 |       211 
+----------------------+----------------------+----------
+                Total |     8,917        737 |     9,654 
+. }
+
+. 
+. *Check Asian
+. capture confirm variable dB_rasian
+
+. if !_rc {
+.         tab `race_var' dB_rasian, m
+
+                      |  Non-Hispanic Asian
+                      |       race = 1
+       Combining race | 0_NotAsia    1_Asian |     Total
+----------------------+----------------------+----------
+                White |     7,694          0 |     7,694 
+Black or African Amer |       774          0 |       774 
+Asian or Asian-Americ |         7        278 |       285 
+           Mixed Race |       374          0 |       374 
+   Or some other race |       316          0 |       316 
+              Refused |       211          0 |       211 
+----------------------+----------------------+----------
+                Total |     9,376        278 |     9,654 
+. } 
+
+. 
+. *Check Other
+. capture confirm variable dB_rother
+
+. if !_rc {
+.         tab `race_var' dB_rother, m
+
+                      |  Non-Hispanic Other,
+                      |    mixed race = 1
+       Combining race | 0_NotOthe  1_Mixed/O |     Total
+----------------------+----------------------+----------
+                White |     7,694          0 |     7,694 
+Black or African Amer |       774          0 |       774 
+Asian or Asian-Americ |       285          0 |       285 
+           Mixed Race |       164        210 |       374 
+   Or some other race |       261         55 |       316 
+              Refused |       211          0 |       211 
+----------------------+----------------------+----------
+                Total |     9,389        265 |     9,654 
+. }
+
+. 
+. *Check Hispanic
+. capture confirm variable dB_rhisp
+
+. if !_rc {
+.         tab `race_var' dB_rhisp, m
+
+                      | Hispanic ethnicity =
+                      |           1
+       Combining race | 0_NotHisp  1_Hispani |     Total
+----------------------+----------------------+----------
+                White |     6,602      1,092 |     7,694 
+Black or African Amer |       737         37 |       774 
+Asian or Asian-Americ |       278          7 |       285 
+           Mixed Race |       210        164 |       374 
+   Or some other race |        55        261 |       316 
+              Refused |       127         84 |       211 
+----------------------+----------------------+----------
+                Total |     8,009      1,645 |     9,654 
+. }
+
+. 
+. *Check Categorical Race Variable
+. tab `race_var' dG_race, m
+
+                      |          Categorical race variable
+       Combining race |     White      Black      Asian   Hispanic |     Total
+----------------------+--------------------------------------------+----------
+                White |     6,602          0          0      1,092 |     7,694 
+Black or African Amer |         0        737          0         37 |       774 
+Asian or Asian-Americ |         0          0        278          7 |       285 
+           Mixed Race |         0          0          0        164 |       374 
+   Or some other race |         0          0          0        261 |       316 
+              Refused |         0          0          0         84 |       211 
+----------------------+--------------------------------------------+----------
+                Total |     6,602        737        278      1,645 |     9,654 
+
+
+                      |   Categorical race
+                      |       variable
+       Combining race | Other/mix          . |     Total
+----------------------+----------------------+----------
+                White |         0          0 |     7,694 
+Black or African Amer |         0          0 |       774 
+Asian or Asian-Americ |         0          0 |       285 
+           Mixed Race |       210          0 |       374 
+   Or some other race |        55          0 |       316 
+              Refused |         0        127 |       211 
+----------------------+----------------------+----------
+                Total |       265        127 |     9,654 
+
+. tab dG_race `race_var', m
+
+Categorical |
+       race |                     Combining race
+   variable |     White  Black or   Asian or   Mixed Rac  Or some o |     Total
+------------+-------------------------------------------------------+----------
+      White |     6,602          0          0          0          0 |     6,602 
+      Black |         0        737          0          0          0 |       737 
+      Asian |         0          0        278          0          0 |       278 
+   Hispanic |     1,092         37          7        164        261 |     1,645 
+Other/mixed |         0          0          0        210         55 |       265 
+          . |         0          0          0          0          0 |       127 
+------------+-------------------------------------------------------+----------
+      Total |     7,694        774        285        374        316 |     9,654 
+
+
+Categorical | Combining
+       race |    race
+   variable |   Refused |     Total
+------------+-----------+----------
+      White |         0 |     6,602 
+      Black |         0 |       737 
+      Asian |         0 |       278 
+   Hispanic |        84 |     1,645 
+Other/mixed |         0 |       265 
+          . |       127 |       127 
+------------+-----------+----------
+      Total |       211 |     9,654 
+
+. if "`hisp_var'" != "none" {
+.         tab dG_race `hisp_var', m
+
+            |    HISP.Are you of Hispanic,
+Categorical | Latino, or Spanish origin, such
+       race |      as Mexican, Puerto Ric
+   variable |       Yes         No    Refused |     Total
+------------+---------------------------------+----------
+      White |         0      6,598          4 |     6,602 
+      Black |         0        737          0 |       737 
+      Asian |         0        278          0 |       278 
+   Hispanic |     1,645          0          0 |     1,645 
+Other/mixed |         0        263          2 |       265 
+          . |         0         95         32 |       127 
+------------+---------------------------------+----------
+      Total |     1,645      7,971         38 |     9,654 
+. }
+
+. 
+. 
+. 
+. * Create white/nonwhite variables
+. gen dB_bipoc = .
+(9,654 missing values generated)
+
+. 
+. replace dB_bipoc = 1 if `race_var' == `black_race_value'
+(774 real changes made)
+
+. replace dB_bipoc = 1 if `race_var' == `asian_race_value' 
+(285 real changes made)
+
+. replace dB_bipoc = 1 if `race_var' == `other_race_value'
+(316 real changes made)
+
+. replace dB_bipoc = 1 if `race_var' == `mult_race_value'
+(374 real changes made)
+
+. replace dB_bipoc = 1 if `race_var' == `hisp_value'
+(7,694 real changes made)
+
+. 
+. replace dB_bipoc = 0 if `race_var' == `white_race_value'
+(7,694 real changes made)
+
+. 
+. replace dB_bipoc = . if `race_missing_condition'
+(0 real changes made)
+
+. 
+. label var dB_bipoc "BIPOC Binary race variable"
+
+. label define dB_bipoc 1 "1_BIPOC" 0 "0_White"
+
+.         label val  dB_bipoc  dB_bipoc
+
+. 
+.         
+. ***--------------------------***
+. // # EDUCATION
+. ***-----------------------------***
+. 
+. local edu_var f_educcat2
+
+. tab `edu_var'
+
+     Education level category 2 |      Freq.     Percent        Cum.
+--------------------------------+-----------------------------------
+          Less than high school |        243        2.52        2.52
+           High school graduate |      1,085       11.24       13.76
+        Some college, no degree |      1,930       19.99       33.75
+             Associate's degree |        946        9.80       43.55
+College graduate/some post grad |      2,844       29.46       73.01
+                   Postgraduate |      2,588       26.81       99.81
+                        Refused |         18        0.19      100.00
+--------------------------------+-----------------------------------
+                          Total |      9,654      100.00
+
+. tab `edu_var', nolab m
+
+  Education |
+      level |
+ category 2 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |        243        2.52        2.52
+          2 |      1,085       11.24       13.76
+          3 |      1,930       19.99       33.75
+          4 |        946        9.80       43.55
+          5 |      2,844       29.46       73.01
+          6 |      2,588       26.81       99.81
+         99 |         18        0.19      100.00
+------------+-----------------------------------
+      Total |      9,654      100.00
+
+. 
+. *don't know/refused code(s) for `edu_var'
+. local edu_missing_condition `"`edu_var' == 99"'
+
+. 
+. * Conditions for each category
+. local lHS_condition     `"`edu_var' == 1"'
+
+. local HS_condition              `"`edu_var' == 2"'
+
+. local sCol_condition    `"`edu_var' == 3 | `edu_var' == 4"'
+
+. local col_condition             `"`edu_var' == 5"'
+
+. local grad_condition    `"`edu_var' == 6"'
+
+. 
+. include $stata/ckn02_demg00_education.doi
+
+. *! include file to label education variables
+. *! version 1.0 \ molly king 2017-01-24
+. 
+.   *compilation of originally individual include files that programmed each edu
+> cation variable separate
+. ***--------------------------***
+. 
+. // #1 GENERATE ALL VARIABLES, AND LABEL, ADD NOTES
+. 
+. 
+. // Categorical Education Variable
+.         gen dG_edu = .
+(9,654 missing values generated)
+
+.         label var dG_edu "Categorical education variable"
+
+.         label define edu_5categ 1 "< HS" 2 "HS" 3 "some college" 4 "college" 5
+>  "grad school"
+
+.                 label val dG_edu edu_5categ
+
+.         notes dG_edu: Education categorical variable, created from `edu_var' v
+> ariable in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+
+. 
+.         
+. // Less than HS
+.         if "`lHS_condition'" != "none" {
+.                 gen dB_edu_lHS = 0
+.                 // Replace each with . for missing edu. if there is a edu. mis
+> sing condition: 
+.                         if "`edu_missing_condition'" != "none" {
+.                                 replace dB_edu_lHS = . if `edu_missing_conditi
+> on'
+(18 real changes made, 18 to missing)
+.                         }
+.                 label var dB_edu_lHS "<HS"
+.                 label define dB_edu_lHS 0 "0_>HS" 1 "1_<HS"
+.                         label val dB_edu_lHS dB_edu_lHS
+.                 notes dB_edu_lHS: Less than HS edu. created from `edu_var' var
+> iable in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+.                 
+.                 replace dB_edu_lHS = 1 if `lHS_condition'
+(243 real changes made)
+.                 replace dG_edu     = 1 if `lHS_condition'
+(243 real changes made)
+.         }
+
+.         
+. 
+. // High School
+.         if "`HS_condition'" != "none" {
+.                 gen dB_edu_HS = 0
+.                 // Replace each with . for missing edu. if there is a edu. mis
+> sing condition: 
+.                         if "`edu_missing_condition'" != "none" {
+.                                 replace dB_edu_HS = . if `edu_missing_conditio
+> n'
+(18 real changes made, 18 to missing)
+.                         }
+.                 label var dB_edu_HS "HS"
+.                 label define dB_edu_HS 0 "0_notHS" 1 "1_HS"
+.                         label val dB_edu_HS dB_edu_HS
+.                 notes dB_edu_HS: HS edu. created from `edu_var' variable in `d
+> ataset' \ ki`category'`dataset'.do mmk $S_DATE
+.                 
+.                 replace dB_edu_HS = 1 if `HS_condition'
+(1,085 real changes made)
+.                 replace dG_edu    = 2 if `HS_condition'
+(1,085 real changes made)
+.         }
+
+.         
+.         
+. // Some college
+.         if "`sCol_condition'" != "none" {
+.                 gen dB_edu_sCol = 0
+.                 // Replace each with . for missing edu. if there is a edu. mis
+> sing condition: 
+.                         if "`edu_missing_condition'" != "none" {
+.                                 replace dB_edu_sCol = . if `edu_missing_condit
+> ion'
+(18 real changes made, 18 to missing)
+.                         }
+.                 label var dB_edu_sCol "Some College / Voc. Training"
+.                 label define dB_edu_sCol 0 "0_notSomeCol" 1 "1_SomeCol"
+.                         label val dB_edu_sCol dB_edu_sCol
+.                 notes dB_edu_sCol: Some College edu. created from `edu_var' va
+> riable in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+. 
+.                 replace dB_edu_sCol = 1 if `sCol_condition'
+(2,876 real changes made)
+.                 replace dG_edu      = 3 if `sCol_condition'
+(2,876 real changes made)
+.         }
+
+. 
+.         
+. // College Degree
+.         if "`col_condition'" != "none" {
+.                 gen dB_edu_col = 0
+.                 // Replace each with . for missing edu. if there is a edu. mis
+> sing condition: 
+.                         if "`edu_missing_condition'" != "none" {
+.                                 replace dB_edu_col = . if `edu_missing_conditi
+> on'
+(18 real changes made, 18 to missing)
+.                         }
+.                 label var dB_edu_col "College degree"
+.                 label define dB_edu_col 0 "0_notCol" 1 "1_College"
+.                         label val dB_edu_col dB_edu_col
+.                 notes dB_edu_col: College degree, created from `edu_var' varia
+> ble in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+.         
+.                 replace dB_edu_col = 1 if `col_condition'
+(2,844 real changes made)
+.                 replace dG_edu     = 4 if `col_condition'
+(2,844 real changes made)
+.         }
+
+.         
+.         
+. // Post-graduate degree
+.         if "`grad_condition'" != "none" {
+.                 gen dB_edu_grad = 0
+.                 // Replace each with . for missing edu. if there is a edu. mis
+> sing condition: 
+.                         if "`edu_missing_condition'" != "none" {
+.                                 replace dB_edu_grad = . if `edu_missing_condit
+> ion'
+(18 real changes made, 18 to missing)
+.                         }
+.                 label var dB_edu_grad "Graduate degree"
+.                 label define dB_edu_grad 0 "0_<GradDeg" 1 "1_GradDegree"
+.                         label val dB_edu_grad dB_edu_grad
+.                 notes dB_edu_grad: Graduate degree, created from `edu_var' var
+> iable in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+.                 
+.                 replace dB_edu_grad = 1 if `grad_condition'
+(2,588 real changes made)
+.                 replace dG_edu      = 5 if `grad_condition'
+(2,588 real changes made)
+.         }
+
+.         
+. 
+. // College + post-graduate
+.         if "`grad_condition'" != "none" & "`col_condition'" != "none" {
+.                 gen dB_edu_colp = 0
+.                 // Replace each with . for missing edu. if there is a edu. mis
+> sing condition: 
+.                         if "`edu_missing_condition'" != "none" {
+.                                 replace dB_edu_colp = . if `edu_missing_condit
+> ion'
+(18 real changes made, 18 to missing)
+.                         }
+.                 label var dB_edu_colp "College or Graduate Degree"
+.                 label define dB_edu_colp 0 "0_NoBA" 1 "1_BA+"
+.                         label val dB_edu_colp dB_edu_colp       
+.                 notes dB_edu_colp: College plus grad, created from `edu_var' v
+> ariable in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+. 
+.                 replace dB_edu_colp = 1  if `col_condition' | `grad_condition'
+(5,432 real changes made)
+.         }
+
+. 
+. // College + post-graduate, where can't disentangle the two
+.         if "`grad_condition'" == "none" & "`col_condition'" != "none" {
+.                 gen dB_edu_colp = 0
+.                 // Replace each with . for missing edu. if there is a edu. mis
+> sing condition: 
+.                         if "`edu_missing_condition'" != "none" {
+.                                 replace dB_edu_colp = . if `edu_missing_condit
+> ion'
+.                         }
+.                 label var dB_edu_colp "College or Graduate Degree"
+.                 label define dB_edu_colp 0 "0_NoBA" 1 "1_BA+"
+.                         label val dB_edu_colp dB_edu_colp       
+.                 notes dB_edu_colp: College plus grad, created from `edu_var' v
+> ariable in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+. 
+.                 replace dB_edu_colp = 1  if `col_condition' 
+.                 // here, the college condition covers both those who have a ba
+> chelors and more
+.                 drop dB_edu_col
+.         }
+
+.         
+. 
+. 
+. // # CHECK TO ENSURE CORRECT
+. if "`lHS_condition'" != "none" {
+.         tab `edu_var' dB_edu_lHS, m
+
+      Education level |               <HS
+           category 2 |     0_>HS      1_<HS          . |     Total
+----------------------+---------------------------------+----------
+Less than high school |         0        243          0 |       243 
+ High school graduate |     1,085          0          0 |     1,085 
+Some college, no degr |     1,930          0          0 |     1,930 
+   Associate's degree |       946          0          0 |       946 
+College graduate/some |     2,844          0          0 |     2,844 
+         Postgraduate |     2,588          0          0 |     2,588 
+              Refused |         0          0         18 |        18 
+----------------------+---------------------------------+----------
+                Total |     9,393        243         18 |     9,654 
+. }
+
+. if "`HS_condition'" != "none" {
+.         tab `edu_var' dB_edu_HS, m
+
+      Education level |                HS
+           category 2 |   0_notHS       1_HS          . |     Total
+----------------------+---------------------------------+----------
+Less than high school |       243          0          0 |       243 
+ High school graduate |         0      1,085          0 |     1,085 
+Some college, no degr |     1,930          0          0 |     1,930 
+   Associate's degree |       946          0          0 |       946 
+College graduate/some |     2,844          0          0 |     2,844 
+         Postgraduate |     2,588          0          0 |     2,588 
+              Refused |         0          0         18 |        18 
+----------------------+---------------------------------+----------
+                Total |     8,551      1,085         18 |     9,654 
+. }
+
+. if "`sCol_condition'" != "none" {
+.         tab `edu_var' dB_edu_sCol, m
+
+      Education level |   Some College / Voc. Training
+           category 2 | 0_notSome  1_SomeCol          . |     Total
+----------------------+---------------------------------+----------
+Less than high school |       243          0          0 |       243 
+ High school graduate |     1,085          0          0 |     1,085 
+Some college, no degr |         0      1,930          0 |     1,930 
+   Associate's degree |         0        946          0 |       946 
+College graduate/some |     2,844          0          0 |     2,844 
+         Postgraduate |     2,588          0          0 |     2,588 
+              Refused |         0          0         18 |        18 
+----------------------+---------------------------------+----------
+                Total |     6,760      2,876         18 |     9,654 
+. }
+
+. if "`col_condition'" != "none" & "`grad_condition'" != "none" {
+.         tab `edu_var' dB_edu_col, m
+
+      Education level |          College degree
+           category 2 |  0_notCol  1_College          . |     Total
+----------------------+---------------------------------+----------
+Less than high school |       243          0          0 |       243 
+ High school graduate |     1,085          0          0 |     1,085 
+Some college, no degr |     1,930          0          0 |     1,930 
+   Associate's degree |       946          0          0 |       946 
+College graduate/some |         0      2,844          0 |     2,844 
+         Postgraduate |     2,588          0          0 |     2,588 
+              Refused |         0          0         18 |        18 
+----------------------+---------------------------------+----------
+                Total |     6,792      2,844         18 |     9,654 
+. }
+
+. if "`col_condition'" != "none" {
+.         tab `edu_var' dB_edu_colp, m
+
+      Education level |    College or Graduate Degree
+           category 2 |    0_NoBA      1_BA+          . |     Total
+----------------------+---------------------------------+----------
+Less than high school |       243          0          0 |       243 
+ High school graduate |     1,085          0          0 |     1,085 
+Some college, no degr |     1,930          0          0 |     1,930 
+   Associate's degree |       946          0          0 |       946 
+College graduate/some |         0      2,844          0 |     2,844 
+         Postgraduate |         0      2,588          0 |     2,588 
+              Refused |         0          0         18 |        18 
+----------------------+---------------------------------+----------
+                Total |     4,204      5,432         18 |     9,654 
+. }
+
+. if "`grad_condition'" != "none" {
+.         tab `edu_var' dB_edu_grad, m
+
+      Education level |         Graduate degree
+           category 2 | 0_<GradDe  1_GradDeg          . |     Total
+----------------------+---------------------------------+----------
+Less than high school |       243          0          0 |       243 
+ High school graduate |     1,085          0          0 |     1,085 
+Some college, no degr |     1,930          0          0 |     1,930 
+   Associate's degree |       946          0          0 |       946 
+College graduate/some |     2,844          0          0 |     2,844 
+         Postgraduate |         0      2,588          0 |     2,588 
+              Refused |         0          0         18 |        18 
+----------------------+---------------------------------+----------
+                Total |     7,048      2,588         18 |     9,654 
+.         tab `edu_var' dB_edu_grad, m nolabel
+
+ Education |
+     level |         Graduate degree
+category 2 |         0          1          . |     Total
+-----------+---------------------------------+----------
+         1 |       243          0          0 |       243 
+         2 |     1,085          0          0 |     1,085 
+         3 |     1,930          0          0 |     1,930 
+         4 |       946          0          0 |       946 
+         5 |     2,844          0          0 |     2,844 
+         6 |         0      2,588          0 |     2,588 
+        99 |         0          0         18 |        18 
+-----------+---------------------------------+----------
+     Total |     7,048      2,588         18 |     9,654 
+. }
+
+. tab `edu_var' dG_edu, m
+
+      Education level |       Categorical education variable
+           category 2 |      < HS         HS  some coll    college |     Total
+----------------------+--------------------------------------------+----------
+Less than high school |       243          0          0          0 |       243 
+ High school graduate |         0      1,085          0          0 |     1,085 
+Some college, no degr |         0          0      1,930          0 |     1,930 
+   Associate's degree |         0          0        946          0 |       946 
+College graduate/some |         0          0          0      2,844 |     2,844 
+         Postgraduate |         0          0          0          0 |     2,588 
+              Refused |         0          0          0          0 |        18 
+----------------------+--------------------------------------------+----------
+                Total |       243      1,085      2,876      2,844 |     9,654 
+
+
+                      | Categorical education
+      Education level |       variable
+           category 2 | grad scho          . |     Total
+----------------------+----------------------+----------
+Less than high school |         0          0 |       243 
+ High school graduate |         0          0 |     1,085 
+Some college, no degr |         0          0 |     1,930 
+   Associate's degree |         0          0 |       946 
+College graduate/some |         0          0 |     2,844 
+         Postgraduate |     2,588          0 |     2,588 
+              Refused |         0         18 |        18 
+----------------------+----------------------+----------
+                Total |     2,588         18 |     9,654 
+
+.         
+. 
+. 
+. 
+. ***-----------------------------***
+. // # AGE
+. ***-----------------------------***
+. 
+. local age_var f_agecat
+
+. 
+. *codebook `age_var'
+. *uselabel labels66, clear
+. 
+. tab `age_var', m
+
+        Age |
+   category |      Freq.     Percent        Cum.
+------------+-----------------------------------
+      18-29 |      1,034       10.71       10.71
+      30-49 |      3,026       31.34       42.06
+      50-64 |      2,967       30.73       72.79
+        65+ |      2,591       26.84       99.63
+    Refused |         36        0.37      100.00
+------------+-----------------------------------
+      Total |      9,654      100.00
+
+. tab `age_var', m nolab
+
+        Age |
+   category |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      1,034       10.71       10.71
+          2 |      3,026       31.34       42.06
+          3 |      2,967       30.73       72.79
+          4 |      2,591       26.84       99.63
+         99 |         36        0.37      100.00
+------------+-----------------------------------
+      Total |      9,654      100.00
+
+. 
+. *don't know/refused code(s) for `age_var'
+. local age_missing_condition `"`age_var' == 99"' //Refused
+
+. 
+. local age18_29_condition `"`age_var' == 1"' //  18-29
+
+. local age30_49_condition `"`age_var' == 2"' //  30-49
+
+. local age50_64_condition `"`age_var' == 3"'     // 50-64
+
+. local age65p_condition   `"`age_var' == 4"'     // 65+
+
+. 
+. 
+. // Categorical Age
+. gen dG_age = .
+(9,654 missing values generated)
+
+.         label var dG_age "Categorical age variable"
+
+.         label define age_4categ 1       "18-29" 2       "30-49" 3       "50-64
+> " 4       "65plus"
+
+.                 label val dG_age age_4categ
+
+.         notes dG_age: Age categorical variable, created from `age_var' variabl
+> e in `dataset' \ ckn`category'`dataset'.do mmk $S_DATE
+
+. 
+.         replace dG_age     = 1 if `age18_29_condition'
+(1,034 real changes made)
+
+.         replace dG_age     = 2 if `age30_49_condition'
+(3,026 real changes made)
+
+.         replace dG_age     = 3 if `age50_64_condition'
+(2,967 real changes made)
+
+.         replace dG_age     = 4 if `age65p_condition'
+(2,591 real changes made)
+
+.         
+. local agelist "18_29 30_49 50_64 65p"
+
+. foreach age of local agelist {
+  2.         gen dB_age_`age' = 0
+  3.         // Replace each with . for missing 
+.                 if "`age_missing_condition'" != "none" {
+  4.                         replace dB_age_`age' = . if `edu_missing_condition'
+  5.                 }
+  6.         label var dB_age_`age' "Age category `age'"
+  7.         label define dB_age_`age' 0 "Not `age'" 1 "`age'"
+  8.                 label val dB_age_`age' dB_age_`age'
+  9.         notes dB_age_`age': Age category `age'. created from `age_var' vari
+> able in `dataset' \ ckn`category'`dataset'.do mmk $S_DATE
+ 10. 
+.         replace dB_age_`age' = 1 if `age`age'_condition'
+ 11. }
+(18 real changes made, 18 to missing)
+(1,034 real changes made)
+(18 real changes made, 18 to missing)
+(3,026 real changes made)
+(18 real changes made, 18 to missing)
+(2,967 real changes made)
+(18 real changes made, 18 to missing)
+(2,591 real changes made)
+
+. 
+. *tab `age_var' dG_age, m
+. *tab `age_var' dB_age_18_29, m
+. *tab `age_var' dB_age_65p, m
+. 
+. 
+. ***-----------------------------***
+. // SAVE DATA    
+. ***-----------------------------***
+. 
+. label data "`dataset' Demographics"
+
+. notes: ckn`category'`dataset'.dta \ `dataset' with recoded dempgraphics \ ckn`
+> category'`dataset'.do mmk $$_DATE
+
+. compress
+  variable year was float now int
+  variable survey_year was float now int
+  variable dB_fem was float now byte
+  variable dB_rwhite was float now byte
+  variable dB_rblack was float now byte
+  variable dB_rasian was float now byte
+  variable dB_rhisp was float now byte
+  variable dB_rother was float now byte
+  variable dG_race was float now byte
+  variable dB_bipoc was float now byte
+  variable dG_edu was float now byte
+  variable dB_edu_lHS was float now byte
+  variable dB_edu_HS was float now byte
+  variable dB_edu_sCol was float now byte
+  variable dB_edu_col was float now byte
+  variable dB_edu_grad was float now byte
+  variable dB_edu_colp was float now byte
+  variable dG_age was float now byte
+  variable dB_age_18_29 was float now byte
+  variable dB_age_30_49 was float now byte
+  variable dB_age_50_64 was float now byte
+  variable dB_age_65p was float now byte
+  (617,856 bytes saved)
+
+. datasignature set, reset
+  9654:119(86564):1520496462:982518389       (data signature reset)
+
+. save $deriv/ckn`category'`dataset'.dta, replace
+file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn02_demg01_Pe
+> wJune2020.dta saved
+
+. 
+. 
+. ***--------------------------***
+. 
+. log close ckn`category'`dataset'
+      name:  ckn02_demg01_PewJune2020
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/stata/
+> ckn02_demg01_PewJune2020.log
+  log type:  text
+ closed on:  23 Nov 2020, 13:58:11
+--------------------------------------------------------------------------------

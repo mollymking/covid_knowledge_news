@@ -1,0 +1,217 @@
+*! include file to label race/ethnicity variables
+*! version 1.0 \ molly king 2017-01-20
+
+  *compilation of originally individual include files that programmed each race/ethnicity separate
+***--------------------------***
+
+// #1 GENERATE ALL VARIABLES, AND LABEL, ADD NOTES
+
+// White
+		gen dB_rwhite = 0
+		// Replace each with . for missing race if there is a race missing condition: 
+			if "`race_missing_condition'" != "none" {
+				replace dB_rwhite = . if `race_var' == `race_missing_condition' // don't know/refused
+			}
+		label var dB_rwhite "Non-Hispanic White race = 1"
+			label define dB_rwhite 0 "0_NotWhite" 1 "1_White"
+		label val dB_rwhite dB_rwhite
+		notes dB_rwhite: White respondent race created from `race_var' & `hisp_var' in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+
+// Black
+		gen dB_rblack = 0
+		// Replace each with . for missing race if there is a race missing condition: 
+			if "`race_missing_condition'" != "none" {
+				replace dB_rblack = . if  `race_var' == `race_missing_condition' // don't know/refused
+			}
+		label var dB_rblack "Non-Hispanic Black/AfAmer race = 1"
+		label define dB_rblack 0 "0_NotBlack" 1 "1_Black"
+			label val dB_rblack dB_rblack
+		notes dB_rblack: Black/AfAmer race created from `race_var' & `hisp_var' in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+
+// Asian
+	if "`asian_race_value'" != "none" {
+		gen dB_rasian = 0
+		// Replace each with . for missing race if there is a race missing condition: 
+			if "`race_missing_condition'" != "none" {
+				replace dB_rasian = . if `race_var' == `race_missing_condition' 
+			}
+		label var dB_rasian "Non-Hispanic Asian race = 1"
+		label define dB_rasian 0 "0_NotAsian" 1 "1_Asian"
+			label val dB_rasian dB_rasian
+		notes dB_rasian: Asian race created from `race_var' & `hisp_var' in `dataset' \ ki`category'`dataset'.do mmk $S_DATE	
+	}
+
+// Hispanic
+	if "`hisp_value'" != "none" {
+		gen dB_rhisp = 0
+		// Replace each with . for missing race if there is a race missing condition: 
+			if "`race_missing_condition'" != "none" {
+				replace dB_rhisp  = . if `race_var' == `race_missing_condition' 
+			}
+		label var dB_rhisp  "Hispanic ethnicity = 1"
+		label define dB_rhisp  0 "0_NotHispanic" 1 "1_Hispanic"
+			label val dB_rhisp dB_rhisp	
+		notes dB_rhisp: Hispanic ethnicity only created from `race_var' & `hisp_var' in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+	}
+
+// Other
+	if "`mult_race_value'" != "none" |  "`other_race_value'" != "none" |  "`amerInd_race_value'" != "none" {
+		gen dB_rother = 0
+		// Replace each with . for missing race if there is a race missing condition: 
+			if "`race_missing_condition'" != "none" {
+				replace dB_rother = . if `race_var' == `race_missing_condition' // don't know/refused
+			}
+		label var dB_rother "Non-Hispanic Other, mixed race = 1"
+		label define dB_rother 0 "0_NotOther" 1 "1_Mixed/OtherRace"
+			label val dB_rother dB_rother	
+		notes dB_rother: Other, unknown, or mixed race created from `race_var' & `hisp_var' in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+	}
+	
+	
+// All Categories
+	gen dG_race = .
+	label var dG_race "Categorical race variable"
+	label define race_5categ 1 "White" 2 "Black" 3 "Asian" 4 "Hispanic" 5 "Other/mixed"
+		label val dG_race race_5categ
+	notes dG_race: Race/ethnicity categorical variable, created from `race_var' & `hisp_var'  variable in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+	
+
+***--------------------------***
+
+// #2 SEPARATE RACE AND HISPANIC VARIABLES
+
+if "`hisp_var'" != "none" {
+
+*White: dB_rwhite
+	if "`white_race_value'" != "none" {
+		replace dB_rwhite = 1 	if `race_var' == `white_race_value' & `hisp_var' != `hisp_value'
+		replace dG_race = 1 	if `race_var' == `white_race_value' & `hisp_var' != `hisp_value'
+	}
+	
+*Black: dB_rblack
+	if "`black_race_value'" != "none" {
+		replace dB_rblack = 1 	if `race_var' == `black_race_value' & `hisp_var' != `hisp_value'
+		replace dG_race = 2 	if `race_var' == `black_race_value' & `hisp_var' != `hisp_value'
+	}
+	
+*Asian: dB_rasian
+	if "`asian_race_value'" != "none" {
+		replace dB_rasian = 1 	if `race_var' == `asian_race_value' & `hisp_var' != `hisp_value' 
+		replace dG_race = 3 	if `race_var' == `asian_race_value' & `hisp_var' != `hisp_value' 
+	}
+		
+*Other/mixed: dB_rother
+	if "`other_race_value'" != "none" {
+		replace dB_rother = 1	if `race_var' == `other_race_value' & `hisp_var' != `hisp_value' 
+		replace dG_race = 5 	if `race_var' == `other_race_value' & `hisp_var' != `hisp_value' 
+	}
+	if "`mult_race_value'" != "none" {
+		replace dB_rother = 1	if `race_var' == `mult_race_value' & `hisp_var' != `hisp_value' 
+		replace dG_race = 5 	if `race_var' == `mult_race_value' & `hisp_var' != `hisp_value' 
+	}
+	if "`amerInd_race_value'" != "none" {
+		 replace dB_rother = 1	if `race_var' == `amerInd_race_value' & `hisp_var' != `hisp_value' 
+		 replace dG_race = 5 	if `race_var' == `amerInd_race_value' & `hisp_var' != `hisp_value' 
+	}
+	
+*Hispanic: dB_rhisp
+		replace dB_rhisp = 1 	if `hisp_var' == `hisp_value'
+		replace dG_race = 4 	if `hisp_var' == `hisp_value'
+}
+
+
+***--------------------------***
+
+// #3 with RACE variable only
+
+if "`hisp_var'" == "none" {
+
+*White: dB_rwhite
+	if "`white_race_value'" != "none" {
+		replace dB_rwhite = 1 	if `race_var' == `white_race_value'
+		replace dG_race = 1 	if `race_var' == `white_race_value'
+	}
+	
+*Black: dB_rblack
+	if "`black_race_value'" != "none" {
+		replace dB_rblack = 1 	if `race_var' == `black_race_value'
+		replace dG_race = 2 	if `race_var' == `black_race_value'
+	}
+	
+*Asian: dB_rasian
+	if "`asian_race_value'" != "none" {
+		replace dB_rasian = 1 	if `race_var' == `asian_race_value'
+		replace dG_race = 3 	if `race_var' == `asian_race_value'
+	}
+	
+*Other/mixed: dB_rother
+	if "`other_race_value'" != "none" {
+		replace dB_rother = 1	if `race_var' == `other_race_value'
+		replace dG_race = 5 	if `race_var' == `other_race_value'
+	}
+	if "`mult_race_value'" != "none" {
+		replace dB_rother = 1	if `race_var' == `mult_race_value'
+		replace dG_race = 5 	if `race_var' == `mult_race_value'
+	}
+	if "`amerInd_race_value'" != "none" {
+		replace dB_rother = 1	if `race_var' == `amerInd_race_value'
+		replace dG_race = 5 	if `race_var' == `amerInd_race_value'
+	}
+	
+*Hispanic: dB_rhisp
+	if "`hisp_value'" != "none" {
+		replace dB_rhisp = 1 	if `race_var' == `hisp_value'
+		replace dG_race = 4 	if `race_var' == `hisp_value'
+	}
+}
+	
+***--------------------------***
+
+//else {
+//	display as err /*
+//	*/ "Need to enter either name of Hispanic variable or none after local hisp_var"
+//	exit 198
+//}
+	
+***--------------------------***
+	
+// #4 CHECK ALL RESULTING VARIABLES	
+***check all to ensure correct***
+
+
+*Check White
+capture confirm variable dB_rwhite
+if !_rc {
+	tab `race_var' dB_rwhite, m
+}
+
+*Check Black
+capture confirm variable dB_rblack
+if !_rc {
+	tab `race_var' dB_rblack, m
+}
+
+*Check Asian
+capture confirm variable dB_rasian
+if !_rc {
+	tab `race_var' dB_rasian, m
+} 
+
+*Check Other
+capture confirm variable dB_rother
+if !_rc {
+	tab `race_var' dB_rother, m
+}
+
+*Check Hispanic
+capture confirm variable dB_rhisp
+if !_rc {
+	tab `race_var' dB_rhisp, m
+}
+
+*Check Categorical Race Variable
+tab `race_var' dG_race, m
+tab dG_race `race_var', m
+if "`hisp_var'" != "none" {
+	tab dG_race `hisp_var', m
+}
