@@ -1,0 +1,20 @@
+*! include file to create crely_ variables based on covidnewsrely_w66
+*! version 1.0 \ molly king 2020-11-23
+
+*Original file must specify the following locals:
+	*local source: a short name for the variable
+	*local source_code: a number indicating the original indicator for that source in covidnewsrely_w66
+	*local source_long: a phrase to describe the source in a label 
+
+
+***--------------------------***
+
+
+gen dB_crely_`source' = 0
+replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
+replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive question
+	covidnewsrely_w66 == 99 | /// Refused
+	covidnewsrely_w66 == . // Missing
+label var dB_crely_`source' "`source_long' - Source relies most on for news about coronavirus outbreak"
+
+label val dB_crely_`source' dB_source
