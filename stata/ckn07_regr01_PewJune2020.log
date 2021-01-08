@@ -1,0 +1,482 @@
+--------------------------------------------------------------------------------
+      name:  ckn07_regr01_PewJune2020
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
+> knowledge_news/stata/ckn07_regr01_PewJune2020.log
+  log type:  text
+ opened on:  10 Dec 2020, 11:08:48
+
+. ***-----------------------------***
+. 
+. //      project:        Knowledge of COVID & News Sources
+. //  task:               Regression Models - June Knowledge Questions
+. /*  data:    */ di "`dataset'"
+01_PewJune2020
+
+. 
+. //  github:     covid_knowledge_news
+. //  OSF:                https://osf.io/qf624/
+. 
+. //  author:     Molly King
+. 
+. display "$S_DATE  $S_TIME"
+10 Dec 2020  11:08:48
+
+. 
+. ***-----------------------------***
+. // # PROGRAM SETUP
+. ***-----------------------------***
+. 
+. version 16 // keeps program consistent for future replications
+
+. set linesize 80
+
+. clear all
+
+. set more off
+
+. 
+. *ssc install estout, replace
+. *ssc install outreg2, replace
+. 
+. use $deriv/ckn05_news`dataset'.dta, clear
+(01_PewJune2020 Knowledge variables)
+
+. save $deriv/ckn`category'`dataset'.dta, replace // data that results at end
+file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn07_regr01_Pe
+> wJune2020.dta saved
+
+. 
+. cd $deriv
+/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/data/data_derv
+
+. 
+. *Details on generating LaTeX tables using est and esttab thanks to the followi
+> ng websites:
+.         *http://repec.sowi.unibe.ch/stata/estout/esttab.html#h-12
+.         *https://lukestein.github.io/stata-latex-workflows/
+.         *https://www.jwe.cc/2012/03/stata-latex-tables-estout/
+. 
+.         
+. ***-----------------------------***
+. // # MODELS w CATEGORICAL RACE VARIABLE & ALL NEWS VARIABLEs
+. ***-----------------------------***
+. /*
+> // STORE BASE LEVELS for INTERACTIONS
+> 
+> fvset base 1 dG_cnews // ref: dB_cnews_news 
+> fvset base 2 dG_edu  // ref: HHS
+> 
+> local income_var  dV_finc_ln // 
+> 
+> 
+> foreach v in antibody fauci stateresponse   { // unemploy
+> 
+>         drop if `v'_c == 99 // Refused
+>         drop if `v'_c == 98 // Did not receive question
+>         drop if covidnewsrel == 98 | covidnewsrel == 99 // refused or Did not 
+> receive question 
+>                 // only 48 people
+> 
+> // # BASIC MODEL - CONTROLS ONLY
+>         svy: logit `v'_c dB_fem i.dG_age `income_var' i.dG_race ///
+>                 , or baselevels // report Odds Ratios
+>         
+>         
+>         est store `v'_controls
+> 
+> // # MODEL - ADD IN EDUCATION
+>         svy: logit `v'_c  dB_fem i.dG_age `income_var' i.dG_race ///
+>         i.dG_edu ///
+>                 , or baselevels // report Odds Ratios
+>                         
+>         est store `v'_edu
+> 
+> // # MODEL - ADD IN NEWS
+>                 
+>         svy: logit `v'_c  dB_fem i.dG_age `income_var' i.dG_race ///
+>         i.dG_edu  ///
+>         dB_crely_international dB_crely_local dB_crely_trump dB_crely_biden //
+> / comparison: crely_national 
+>         dB_crely_politicians dB_crely_ph dB_crely_friends dB_crely_neighbor dB
+> _crely_online ///
+>         , or baselevels // report Odds Ratios
+>         
+>         estat gof  //https://www.statalist.org/forums/forum/general-stata-disc
+> ussion/general/389818-goodness-of-fit-test-for-logistic-regression-on-survey-d
+> ata
+>         linktest
+>         
+>         est store `v'_edu_news  
+> 
+> 
+> // # MODEL - NEWS SHORT ALTERNATIVE
+>                 
+>         svy: logit `v'_c  dB_fem i.dG_age `income_var' i.dG_race ///
+>         i.dG_edu  ///
+>         i.dG_cnews /// comparison: cnews_news
+>         , or baselevels // report Odds Ratios
+>                         
+>         est store `v'_short
+> 
+>                         
+> // # MODEL - ADD IN NEWS DIFFICULT
+>                 
+>         svy: logit `v'_c  i.dG_race i.dG_age  `income_var' dB_fem  i.dG_edu  /
+> //
+>         dB_crely_international dB_crely_national dB_crely_trump dB_crely_biden
+>  /// comparison: crely_local
+>         dB_crely_politicians dB_crely_ph dB_crely_friends dB_crely_neighbor dB
+> _crely_online ///
+>         dB_cinfodiff, ///
+>                 or // report Odds Ratios
+> 
+>         est store `v'_edu_news_difficult        
+> 
+> 
+> // # CREATE LATEX TABLE
+> 
+>         esttab `v'_controls `v'_edu `v'_edu_news `v'_short ///
+>         using $results/`v'LOs.tex, ///
+>                 replace f ///
+>                 label booktabs b(3) p(3) eqlabels(none) alignment(S S) ///
+>                 collabels("\multicolumn{1}{c}{$\beta$ / SE}") ///
+>                 star(* 0.05 ** 0.01 *** 0.001) ///
+>                 cells("b(fmt(3)star)" "se(fmt(3)par)") ///
+>                 stats(N aic pr, fmt(0 3) layout("\multicolumn{1}{c}{@}") ///
+>                         labels(`"Observations"' `"AIC"' `"Baseline predicted p
+> robability"'))
+>                 *refcat(dB_bipoc "\emph{BIPOC}" dB_fem "\emph{Gender}" dG_age 
+> "\emph{Age}" ///
+>                         *dV_finc_ln "\emph{Family Income (Ln)}"  ///
+>                         *dG_edu "\emph{Education}" dG_cnews "\emph{News Outlet
+> }") ///
+> 
+> } // Close loop through variables
+> 
+> */
+. 
+. ***-----------------------------***
+. // #  INTERACTION MODELS - APPENDIX
+. ***-----------------------------***
+. 
+. // STORE BASE LEVELS for INTERACTIONS
+. 
+. fvset base 0 dB_bipoc
+
+. fvset base 1 dG_cnews // ref: dB_cnews_news 
+
+. fvset base 2 dG_edu  // ref: HHS
+
+. 
+. local income_var  dV_finc_ln // l
+
+. 
+. foreach v in  fauci antibody stateresponse  { // unemploy 
+  2. 
+.         drop if `v'_c == 99 // Refused
+  3.         drop if `v'_c == 98 // Did not receive question
+  4.         drop if covidnewsrel == 98 | covidnewsrel == 99 // refused or Did n
+> ot receive question 
+  5.                 // only 48 people
+. /*
+> // # BASIC MODEL - CONTROLS ONLY
+>         svy: logit `v'_c  dB_fem i.dG_age `income_var'  ///
+>         dB_bipoc ///
+>         , or baselevels // report Odds Ratios
+>         
+>         est store `v'_controls
+> 
+> // # MODEL - ADD IN EDUCATION
+>         svy: logit `v'_c  dB_fem i.dG_age `income_var'  i.dG_edu ///
+>         dB_bipoc ///
+>         , or baselevels // report Odds Ratios
+>                 
+>         est store `v'_edu
+> 
+> 
+> // # MODEL - ADD IN NEWS
+>                 
+>         svy: logit `v'_c    dB_bipoc i.dG_age  dV_finc_1k dB_fem  `edu_vars'  
+> ///
+>         dB_crely_international dB_crely_local dB_crely_trump dB_crely_biden //
+> / comparison: crely_national 
+>         dB_crely_politicians dB_crely_ph dB_crely_friends dB_crely_neighbor dB
+> _crely_online, ///
+>         or // report Odds Ratios
+> 
+>         est store `v'_edu_news  
+> 
+> 
+> // # MODEL - NEWS SHORT ALTERNATIVE
+>                 
+>         svy: logit `v'_c  dB_fem  i.dG_age  `income_var'  i.dG_edu ///
+>         dB_bipoc ///
+>         i.dG_cnews /// comparison: cnews_news
+>         , or baselevels // report Odds Ratios
+>                 
+>         est store `v'_edu_news
+>                         
+> // # MODEL - ADD IN NEWS DIFFICULT
+>                 
+>         svy: logit `v'_c   dB_bipoc i.dG_age  dV_finc_1k dB_fem  `edu_vars'  /
+> //
+>         dB_crely_international dB_crely_national dB_crely_trump dB_crely_biden
+>  /// comparison: crely_local
+>         dB_crely_politicians dB_crely_ph dB_crely_friends dB_crely_neighbor dB
+> _crely_online ///
+>         dB_cinfodiff, ///
+>                 or // report Odds Ratios
+> 
+>         est store `v'_edu_news_difficult        
+> 
+> // # MODEL - ADD IN INTERACTIONS BIPOC
+>         
+>         svy: logit `v'_c  i.dG_age  dB_fem  `income_var'  i.dG_edu  ///
+>         dB_bipoc##i.dG_cnews /// ## includes both main effects and interaction
+> s
+>         , or baselevels // report Odds Ratios
+>         
+> 
+>         est store `v'_int_bipoc
+>         
+>         *test dG_race[2] = , common nosvyadjust 
+>         
+> *       margins, over(dB_bipoc dG_cnews) expression(exp(xb())) noatlegend
+> 
+> *       margins dB_bipoc, dydx(dG_cnews)
+> 
+> */
+. // # MODEL - ADD IN INTERACTIONS INCOME
+.                 
+.         svy: logit `v'_c  i.dG_age  dB_fem    ///i.dG_edu
+>         dB_bipoc ///
+>         c.`income_var'##i.dG_cnews /// ## includes both main effects and inter
+> actions
+>         , or baselevels // report Odds Ratios
+  6.         
+. 
+.         est store `v'_int_income
+  7. /*      
+> // # MODEL - ADD IN INTERACTIONS EDUCATION
+>                 
+>         svy: logit `v'_c  i.dG_age  dB_fem `income_var'   ///
+>         dB_bipoc ///
+>         i.dG_edu##i.dG_cnews /// ## includes both main effects and interaction
+> s
+>         , or baselevels // report Odds Ratios
+>         
+> 
+>         est store `v'_int_income
+>         
+> // # MODEL - ADD IN INTERACTIONS GENDER
+>                 
+>         svy: logit `v'_c  i.dG_age `income_var'  i.dG_edu  ///
+>         dB_bipoc ///
+>         dB_fem##i.dG_cnews /// ## includes both main effects and interactions
+>         , or baselevels // report Odds Ratios
+>         
+> 
+>         est store `v'_int_fem   
+> 
+> // # CREATE LATEX TABLE
+> 
+>         esttab `v'_controls `v'_edu `v'_edu_news `v'_int_bipoc `v'_int_income 
+> `v'_int_fem ///
+>                 using $results/`v'LOs_interactions.tex, ///
+>                 replace f ///
+>                 label booktabs b(3) p(3) eqlabels(none) alignment(S S) ///
+>                 collabels("\multicolumn{1}{c}{$\beta$ / SE}") ///
+>                 star(* 0.05 ** 0.01 *** 0.001) ///
+>                 cells("b(fmt(3)star)" "se(fmt(3)par)") ///
+>                 stats(N aic pr, fmt(0 3) layout("\multicolumn{1}{c}{@}") ///
+>                         labels(`"Observations"' `"AIC"' `"Baseline predicted p
+> robability"'))
+>                 *refcat(dB_bipoc "\emph{BIPOC}" dB_fem "\emph{Gender}" dG_age 
+> "\emph{Age}" ///
+>                         *dV_finc_ln "\emph{Family Income (Ln)}"  ///
+>                         *dG_edu "\emph{Education}" dG_cnews "\emph{News Outlet
+> }") ///
+>                         
+> */              
+. } // Close loop through variables
+(0 observations deleted)
+(0 observations deleted)
+(50 observations deleted)
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                 Number of obs     =       8,706
+Number of PSUs     =     8,706                 Population size   =  16,468,701
+                                               Design df         =       8,705
+                                               F(  14,   8692)   =       45.50
+                                               Prob > F          =      0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+      fauci_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |   1.768486   .1901423     5.30   0.000      1.43242    2.183399
+       50-64  |   2.662523   .3067499     8.50   0.000     2.124284    3.337138
+      65plus  |   3.633898   .4686705    10.00   0.000     2.822127    4.679172
+              |
+       dB_fem |   .4828697   .0378827    -9.28   0.000     .4140389    .5631431
+     dB_bipoc |   .6211259   .0536962    -5.51   0.000      .524304    .7358275
+   dV_finc_ln |   1.321967   .0593184     6.22   0.000     1.210656    1.443512
+              |
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .3614467   .3382258    -1.09   0.277      .057732    2.262933
+3_Politici~s  |   1.529209   1.007042     0.64   0.519     .4205718    5.560238
+4_Pub Health  |   .9965433   .7712614    -0.00   0.996     .2185891    4.543221
+  5_Informal  |    .280888   .5912395    -0.60   0.546     .0045352    17.39688
+              |
+     dG_cnews#|
+ c.dV_finc_ln |
+2_Local news  |   .9780374   .0841467    -0.26   0.796     .8262493     1.15771
+3_Politici~s  |    .910043   .0540362    -1.59   0.112     .8100514    1.022378
+4_Pub Health  |   .9487719    .066046    -0.76   0.450     .8277509    1.087487
+  5_Informal  |   .9506122   .1845158    -0.26   0.794     .6497712    1.390741
+              |
+        _cons |   .3662903   .1855477    -1.98   0.047     .1357006    .9887107
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                 Number of obs     =       8,706
+Number of PSUs     =     8,706                 Population size   =  16,468,701
+                                               Design df         =       8,705
+                                               F(  14,   8692)   =       31.70
+                                               Prob > F          =      0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+   antibody_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |   1.308929   .1331124     2.65   0.008     1.072359    1.597686
+       50-64  |   1.289692   .1348138     2.43   0.015     1.050742    1.582982
+      65plus  |   1.155004   .1228417     1.35   0.175     .9376496    1.422744
+              |
+       dB_fem |   .9408412   .0573837    -1.00   0.317     .8348196    1.060327
+     dB_bipoc |   .4332156   .0310944   -11.65   0.000      .376357    .4986644
+   dV_finc_ln |   1.381432   .0968555     4.61   0.000     1.204042    1.584958
+              |
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .0348927    .049309    -2.37   0.018     .0021862    .5569136
+3_Politici~s  |   .5864801    .711284    -0.44   0.660     .0544216    6.320267
+4_Pub Health  |    1.26781   1.431296     0.21   0.834     .1386612    11.59186
+  5_Informal  |   .9204572   2.094414    -0.04   0.971     .0106391    79.63468
+              |
+     dG_cnews#|
+ c.dV_finc_ln |
+2_Local news  |   1.257231   .1622294     1.77   0.076     .9762552    1.619075
+3_Politici~s  |   1.012169   .1106244     0.11   0.912     .8169743       1.254
+4_Pub Health  |   .9688412   .0980274    -0.31   0.754     .7945404    1.181379
+  5_Informal  |   .9191506   .1923274    -0.40   0.687     .6098914    1.385227
+              |
+        _cons |   .1084839   .0852274    -2.83   0.005     .0232568    .5060359
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                 Number of obs     =       8,706
+Number of PSUs     =     8,706                 Population size   =  16,468,701
+                                               Design df         =       8,705
+                                               F(  14,   8692)   =       14.22
+                                               Prob > F          =      0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+staterespo~_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |   1.165559   .1086436     1.64   0.100     .9709156    1.399224
+       50-64  |   1.149119   .1085686     1.47   0.141     .9548441    1.382922
+      65plus  |   1.314706   .1283835     2.80   0.005     1.085665    1.592068
+              |
+       dB_fem |   .9237202   .0491487    -1.49   0.136     .8322311    1.025267
+     dB_bipoc |   .6832121   .0463799    -5.61   0.000      .598086    .7804542
+   dV_finc_ln |   1.123719   .0384427     3.41   0.001     1.050833     1.20166
+              |
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .0307686   .0305211    -3.51   0.000     .0044019    .2150702
+3_Politici~s  |   .8902426    .516361    -0.20   0.841     .2855771    2.775194
+4_Pub Health  |   1.261626   .7250105     0.40   0.686     .4089858    3.891824
+  5_Informal  |   .7656594   .6972082    -0.29   0.769     .1284769    4.562954
+              |
+     dG_cnews#|
+ c.dV_finc_ln |
+2_Local news  |    1.30014   .1176001     2.90   0.004     1.088897    1.552365
+3_Politici~s  |   .9917373   .0516491    -0.16   0.873     .8954893     1.09833
+4_Pub Health  |   .9696176   .0498206    -0.60   0.548     .8767145    1.072365
+  5_Informal  |   .9729678   .0816619    -0.33   0.744      .825366    1.146966
+              |
+        _cons |   .5203495   .2024589    -1.68   0.093     .2426954    1.115652
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. 
+. 
+. *LIKELIHOOD RATIO TESTs
+. *https://www.stata.com/support/faqs/statistics/likelihood-ratio-test/
+. 
+. /*
+> foreach v in antibody  fauci  stateresponse { // unemploy
+>                 
+>         test [`v'_controls = `v'_edu], common nosvyadjust // for use with svy 
+> estimation commands
+>         test [`v'_edu = `v'_edu_news], common nosvyadjust // for use with svy 
+> estimation commands
+>         test [`v'_edu_news =`v'_int_bipoc], common nosvyadjust // for use with
+>  svy estimation commands 
+>         test [`v'_edu_news =`v'_int_income], common nosvyadjust // for use wit
+> h svy estimation commands
+>         test [`v'_edu_news = `v'_int_fem], common nosvyadjust // for use with 
+> svy estimation commands
+> }
+> */
+. ***--------------------------***
+. // # MEDIATION ANALYSIS
+. ***--------------------------***
+. 
+. /*
+> foreach v in antibody   { // fauci  stateresponse
+> 
+>         medeff ///
+>                 (logit `v'_c    dB_bipoc i.dG_age  dV_finc_1k dB_fem  `edu_var
+> s') ///
+>                 (logit `v'_c    dB_bipoc i.dG_age  dV_finc_1k dB_fem  `edu_var
+> s' i.dG_crely) ///
+>                 [pweight=weight] ///
+>                 , mediate(dG_crely) treat(dB_bipoc)
+> 
+> }
+> */
+. 
+. 
+. ***--------------------------***
+. 
+. log close ckn`category'`dataset'
+      name:  ckn07_regr01_PewJune2020
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
+> knowledge_news/stata/ckn07_regr01_PewJune2020.log
+  log type:  text
+ closed on:  10 Dec 2020, 11:08:50
+--------------------------------------------------------------------------------
