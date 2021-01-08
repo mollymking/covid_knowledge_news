@@ -1,19 +1,16 @@
---------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
       name:  master
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
-> knowledge_news/stata/ckn_master.log
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/stata/ckn_master.log
   log type:  text
- opened on:   4 Dec 2020, 10:41:21
+ opened on:  12 Dec 2020, 13:09:08
 
 . 
 . ** COVID_Knowledge_News - Master Data Management Do File ***
 . 
 . //      project:        COVID Knowledge & News
 . 
-. //  task:               Master file to rerun sequence of do-files to reproduce
->  all work
-. //                              related to data import, cleaning, and variable
->  creation
+. //  task:               Master file to rerun sequence of do-files to reproduce all work
+. //                              related to data import, cleaning, and variable creation
 . //                              This will run all files in stata folders
 . 
 . //  program:    ckn_master.do
@@ -36,7 +33,7 @@
 
 . 
 . display "$S_DATE  $S_TIME"
- 4 Dec 2020  10:41:21
+12 Dec 2020  13:09:09
 
 . ***--------------------------***
 . 
@@ -60,8 +57,8 @@
 >   // documentation folder
 
 . 
-. global tables   "~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_
-> news/tables"              // tables and figures added to tex folder
+. global results  "~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_
+> news/stata/results"  // tables and figures added to stata folder
 
 . 
 . /*
@@ -121,12 +118,467 @@
 > do $stata/ckn07_regr01_PewJune2020.do
 > 
 > 
-> */
-. ***--------------------------***
-. log close master
-      name:  master
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
-> knowledge_news/stata/ckn_master.log
-  log type:  text
- closed on:   4 Dec 2020, 10:41:21
+> 
+> ***--------------------------***
+> log close master
+> exit
+
+end of do-file
+
+. do "/var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//SD75908.000000"
+
+. local dataset `"01_PewJune2020"'
+
+. local category `"06_desc"'
+
+. 
+. capture log close ckn`category'`dataset'
+
+. log using $stata/ckn`category'`dataset'.log, name(ckn`category'`dataset') repl
+> ace text
 --------------------------------------------------------------------------------
+      name:  ckn06_desc01_PewJune2020
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
+> knowledge_news/stata/ckn06_desc01_PewJune2020.log
+  log type:  text
+ opened on:  12 Dec 2020, 13:09:53
+
+. ***-----------------------------***
+. 
+. //      project:        Knowledge of COVID & News Sources
+. //  task:       Descriptive Statistics - June Knowledge Questions
+. /*  data:    */ di "`dataset'"
+01_PewJune2020
+
+. 
+. //  github:     covid_knowledge_news
+. //  OSF:                https://osf.io/qf624/
+. 
+. //  author:     Molly King
+. 
+. display "$S_DATE  $S_TIME"
+12 Dec 2020  13:09:53
+
+. 
+. ***--------------------------***
+. // # PROGRAM SETUP
+. ***-----------------------------***
+. 
+. version 16 // keeps program consistent for future replications
+
+. set linesize 80
+
+. clear all
+
+. set more off
+
+. 
+. use  $deriv/ckn05_news`dataset'.dta, clear
+(01_PewJune2020 Knowledge variables)
+
+. save $deriv/ki`category'`dataset'.dta, replace // data that results at end
+file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ki06_desc01_Pew
+> June2020.dta saved
+
+. 
+. ***-----------------------------***
+. // # HOW CLOSELY FOLLOW
+. ***-----------------------------***
+. tab covidfol
+
+ COVIDFOL_W68. How |
+  closely have you |
+    been following |
+    news about the |
+   outbreak of the |      Freq.     Percent        Cum.
+-------------------+-----------------------------------
+      Very closely |      4,419       47.78       47.78
+    Fairly closely |      4,038       43.66       91.45
+   Not too closely |        660        7.14       98.58
+Not at all closely |        102        1.10       99.69
+           Refused |         29        0.31      100.00
+-------------------+-----------------------------------
+             Total |      9,248      100.00
+
+. 
+end of do-file
+
+. do "/var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//SD75908.000000"
+
+. svy: tab covidfol
+(running tabulate on estimation sample)
+
+Number of strata   =         1                 Number of obs     =       9,2
+> 48
+Number of PSUs     =     9,248                 Population size   =  17,472,6
+> 75
+                                               Design df         =       9,2
+> 47
+
+----------------------
+COVIDFOL_ |
+W68. How  |
+closely   |
+have you  |
+been      |
+following |
+news      |
+about the |
+outbreak  |
+of the    | proportion
+----------+-----------
+ Very clo |      .4797
+ Fairly c |       .436
+  Not too |      .0698
+ Not at a |      .0117
+  Refused |      .0028
+          | 
+    Total |          1
+----------------------
+  Key:  proportion  =  cell proportion
+
+. 
+end of do-file
+
+. do "/var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//SD75908.000000"
+
+. svy: mean covidfol
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1       Number of obs   =       9,248
+Number of PSUs   =   9,248       Population size =  17,472,675
+                                 Design df       =       9,247
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+covidfol_w68 |     1.8828   .0586122      1.767907    1.997692
+--------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//SD75908.000000"
+
+. svy: mean covidfol if covidfol ==1
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      4,419
+Number of PSUs   =   4,419        Population size =  8,381,609
+                                  Design df       =      4,418
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+covidfol_w68 |          1          .             .           .
+--------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//SD75908.000000"
+
+. svy: tab covidfol, detail
+(running tabulate on estimation sample)
+option detail not allowed
+r(198);
+
+end of do-file
+
+r(198);
+
+. do "/var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//SD75908.000000"
+
+. svy: tab covidfol
+(running tabulate on estimation sample)
+
+Number of strata   =         1                 Number of obs     =       9,2
+> 48
+Number of PSUs     =     9,248                 Population size   =  17,472,6
+> 75
+                                               Design df         =       9,2
+> 47
+
+----------------------
+COVIDFOL_ |
+W68. How  |
+closely   |
+have you  |
+been      |
+following |
+news      |
+about the |
+outbreak  |
+of the    | proportion
+----------+-----------
+ Very clo |      .4797
+ Fairly c |       .436
+  Not too |      .0698
+ Not at a |      .0117
+  Refused |      .0028
+          | 
+    Total |          1
+----------------------
+  Key:  proportion  =  cell proportion
+
+. 
+end of do-file
+
+. help tab
+
+. do "/var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//SD75908.000000"
+
+. svy: tab covidfol, standard
+(running tabulate on estimation sample)
+option standard not allowed
+r(198);
+
+end of do-file
+
+r(198);
+
+. do "/var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//SD75908.000000"
+
+. tab covidfol, nolab
+
+COVIDFOL_W6 |
+     8. How |
+    closely |
+   have you |
+       been |
+  following |
+ news about |
+        the |
+outbreak of |
+        the |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      4,419       47.78       47.78
+          2 |      4,038       43.66       91.45
+          3 |        660        7.14       98.58
+          4 |        102        1.10       99.69
+         99 |         29        0.31      100.00
+------------+-----------------------------------
+      Total |      9,248      100.00
+
+. 
+end of do-file
+
+. do "/var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//SD75908.000000"
+
+. svy: mean covidfol*, standard
+(running mean on estimation sample)
+option standard not allowed
+r(198);
+
+end of do-file
+
+r(198);
+
+. do "/var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//SD75908.000000"
+
+. svy: mean covidfol*
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1       Number of obs   =       9,248
+Number of PSUs   =   9,248       Population size =  17,472,675
+                                 Design df       =       9,247
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+covidfol_w68 |     1.8828   .0586122      1.767907    1.997692
+--------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//SD75908.000000"
+
+. svy: mean covidfol1 covidfol2 covidfol3 covidfol4 covidfol5
+(running mean on estimation sample)
+variable covidfol1 not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "/var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//SD75908.000000"
+
+. gen covidfol1 = 0
+
+.         replace covidfol1 = 1 if covidfol == 1
+covidfol ambiguous abbreviation
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "/var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//SD75908.000000"
+
+. gen covidfol1 = 0
+variable covidfol1 already defined
+r(110);
+
+end of do-file
+
+r(110);
+
+. do "/var/folders/rp/96l526kj7ybdjr5vs5bqqjw80000gn/T//SD75908.000000"
+
+. local dataset `"01_PewJune2020"'
+
+. local category `"06_desc"'
+
+. 
+. capture log close ckn`category'`dataset'
+
+. log using $stata/ckn`category'`dataset'.log, name(ckn`category'`dataset') 
+> replace text
+----------------------------------------------------------------------------
+      name:  ckn06_desc01_PewJune2020
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/co
+> vid_knowledge_news/stata/ckn06_desc01_PewJune2020.log
+  log type:  text
+ opened on:  12 Dec 2020, 13:28:16
+
+. ***-----------------------------***
+. 
+. //      project:        Knowledge of COVID & News Sources
+. //  task:       Descriptive Statistics - June Knowledge Questions
+. /*  data:    */ di "`dataset'"
+01_PewJune2020
+
+. 
+. //  github:     covid_knowledge_news
+. //  OSF:                https://osf.io/qf624/
+. 
+. //  author:     Molly King
+. 
+. display "$S_DATE  $S_TIME"
+12 Dec 2020  13:28:16
+
+. 
+. ***--------------------------***
+. // # PROGRAM SETUP
+. ***-----------------------------***
+. 
+. version 16 // keeps program consistent for future replications
+
+. set linesize 80
+
+. clear all
+
+. set more off
+
+. 
+. use  $deriv/ckn05_news`dataset'.dta, clear
+(01_PewJune2020 Knowledge variables)
+
+. save $deriv/ki`category'`dataset'.dta, replace // data that results at end
+file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ki06_desc01_Pew
+> June2020.dta saved
+
+. 
+. ***-----------------------------***
+. // # HOW CLOSELY FOLLOW
+. ***-----------------------------***
+. tab covidfol
+
+ COVIDFOL_W68. How |
+  closely have you |
+    been following |
+    news about the |
+   outbreak of the |      Freq.     Percent        Cum.
+-------------------+-----------------------------------
+      Very closely |      4,419       47.78       47.78
+    Fairly closely |      4,038       43.66       91.45
+   Not too closely |        660        7.14       98.58
+Not at all closely |        102        1.10       99.69
+           Refused |         29        0.31      100.00
+-------------------+-----------------------------------
+             Total |      9,248      100.00
+
+. tab covidfol, nolab
+
+COVIDFOL_W6 |
+     8. How |
+    closely |
+   have you |
+       been |
+  following |
+ news about |
+        the |
+outbreak of |
+        the |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      4,419       47.78       47.78
+          2 |      4,038       43.66       91.45
+          3 |        660        7.14       98.58
+          4 |        102        1.10       99.69
+         99 |         29        0.31      100.00
+------------+-----------------------------------
+      Total |      9,248      100.00
+
+. 
+. gen covidfol1 = 0
+
+.         replace covidfol1 = 1 if covidfol_w68  == 1
+(4,419 real changes made)
+
+. gen covidfol2 = 0
+
+.         replace covidfol2 = 1 if covidfol_w68  == 2
+(4,038 real changes made)
+
+. gen covidfol3 = 0
+
+.         replace covidfol3 = 1 if covidfol_w68  == 3
+(660 real changes made)
+
+. gen covidfol4 = 0
+
+.         replace covidfol4 = 1 if covidfol_w68  == 4
+(102 real changes made)
+
+. gen covidfol5 = 0
+
+.         replace covidfol5 = 1 if covidfol_w68  == 99
+(29 real changes made)
+
+. 
+. 
+. svy: mean covidfol1 covidfol2 covidfol3 covidfol4 covidfol5
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1       Number of obs   =       9,248
+Number of PSUs   =   9,248       Population size =  17,472,675
+                                 Design df       =       9,247
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+   covidfol1 |   .4796981    .006051      .4678368    .4915594
+   covidfol2 |   .4359716   .0060067      .4241972    .4477461
+   covidfol3 |   .0698368   .0030623       .063834    .0758396
+   covidfol4 |   .0117179   .0013604      .0090513    .0143846
+   covidfol5 |   .0027755    .000596      .0016072    .0039439
+--------------------------------------------------------------
+
+. 
+end of do-file
+
+. exit, clear
