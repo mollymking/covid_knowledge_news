@@ -1,9 +1,9 @@
 --------------------------------------------------------------------------------
       name:  ckn05_news01_PewJune2020
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/stata/
-> ckn05_news01_PewJune2020.log
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
+> knowledge_news/stata/ckn05_news01_PewJune2020.log
   log type:  text
- opened on:  23 Nov 2020, 14:09:30
+ opened on:   9 Dec 2020, 15:55:04
 
 . ***-----------------------------***
 . 
@@ -19,7 +19,7 @@
 . //  author:     Molly King
 . 
 . display "$S_DATE  $S_TIME"
-23 Nov 2020  14:09:30
+ 9 Dec 2020  15:55:04
 
 . 
 . ***--------------------------***
@@ -108,6 +108,16 @@ you RELY ON |
           . |        313        3.38      100.00
 ------------+-----------------------------------
       Total |      9,248      100.00
+
+. 
+. clonevar dG_crely = covidnewsrely_w66 
+(313 missing values generated)
+
+.         replace dG_crely = . if covidnewsrely_w66 == 98 | /// Did not receive 
+> question
+>         covidnewsrely_w66 == 99 | /// Refused
+>         covidnewsrely_w66 == . // Missing
+(50 real changes made, 50 to missing)
 
 . 
 . label define dB_source 0 "0_Not source" 1 "1_Main source"
@@ -783,7 +793,7 @@ coronavirus |
   (471,648 bytes saved)
 
 . datasignature set, reset
-  9248:157(19220):249926464:273332089       (data signature reset)
+  9248:158(55014):880653184:1497752934       (data signature reset)
 
 . save $deriv/ckn`category'`dataset'.dta, replace
 file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn05_news01_Pe
@@ -794,8 +804,8 @@ file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn05_news01_Pe
 . 
 . log close ckn`category'`dataset'
       name:  ckn05_news01_PewJune2020
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/stata/
-> ckn05_news01_PewJune2020.log
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
+> knowledge_news/stata/ckn05_news01_PewJune2020.log
   log type:  text
- closed on:  23 Nov 2020, 14:09:30
+ closed on:   9 Dec 2020, 15:55:04
 --------------------------------------------------------------------------------

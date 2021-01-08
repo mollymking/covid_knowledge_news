@@ -47,6 +47,11 @@ save $deriv/ki`category'`dataset'.dta, replace // data that results at end
 tab covidnewsrely_w66, m
 tab covidnewsrely_w66, m nolabel
 
+clonevar dG_crely = covidnewsrely_w66 
+	replace dG_crely = . if covidnewsrely_w66 == 98 | /// Did not receive question
+	covidnewsrely_w66 == 99 | /// Refused
+	covidnewsrely_w66 == . // Missing
+
 label define dB_source 0 "0_Not source" 1 "1_Main source"
 
 // International news
