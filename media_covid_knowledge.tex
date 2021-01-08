@@ -1,8 +1,6 @@
 %----------------------------------------------------------------------------------------
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
-%!TEX root = media_covid_knowledge.tex
-
 \PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
 \PassOptionsToPackage{hyphens}{url}
 %
@@ -26,7 +24,9 @@
 \pagestyle{fancy}
 \fancyhf{}% Clear header/footer
 \fancyhead[L]{Paying Attention to the Pandemic}
-\cfoot{\thepage} %page numbers bottom center
+%\cfoot{\thepage} %page numbers bottom center
+\rhead{\thepage} %page number right side header
+\cfoot{}
 
 % where figures/tables in document
 %\usepackage[nolists,tablesfirst]{endfloat} % forces all floats to appear at end of document
@@ -46,6 +46,41 @@
 \usepackage{geometry}
 \usepackage{pdflscape}
 
+%--------
+% For Tables created by estout
+\newcommand{\sym}[1]{\rlap{$#1$}} % for symbols in Table
+\usepackage{siunitx}
+\sisetup{ detect-mode,
+          group-digits            = false ,
+          input-signs             = ,
+          input-symbols           = ()[]-+* , % specifying \sym here does not work
+          input-open-uncertainty  = ,
+          input-close-uncertainty = ,
+          table-align-text-post   = false
+        }
+
+\def\xxx#1{%
+  \bgroup\uccode`\~\expandafter`\string#1%
+  \uppercase{\egroup\edef~{\noexpand\text\string#1}}%
+  \mathcode\expandafter`\string#1"8000 }
+\def\textsymbols{\xxx[\xxx]\xxx(\xxx)\xxx*}
+
+\makeatletter
+\edef\originalbmathcode{%
+    \noexpand\mathchardef\noexpand\@tempa\the\mathcode`\(\relax}
+\def\resetMathstrut@{%
+  \setbox\z@\hbox{%
+    \originalbmathcode
+    \def\@tempb##1"##2##3{\the\textfont"##3\char"}%
+    \expandafter\@tempb\meaning\@tempa \relax
+  }%
+  \ht\Mathstrutbox@\ht\z@ \dp\Mathstrutbox@\dp\z@
+}
+\makeatother
+
+\usepackage{changepage} % allows to use \begin{adjustwidth} to shift margins for table
+%--------
+
 % for figures in multiple parts
 \usepackage{caption}
 %\DeclareCaptionLabelFormat{cont}{#1~#2\alph{ContinuedFloat}}
@@ -54,6 +89,7 @@
 %Bibliography
 \usepackage{natbib}
 \setcitestyle{round,aysep={},yysep={,},notesep={:}}
+
 
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
@@ -116,13 +152,9 @@
 
 \begin{document}
 
-\title{Tentative Title: Paying Attention to the Pandemic: Knowledge of COVID-19 by News Sources and Demographics
-\footnote{Corresponding Author: Molly M. King,
-          Department of Sociology, Santa Clara University,
-          500 El Camino Real, Santa Clara, CA, 95053.
-          Email: mmking@scu.edu.}}
+\title{Paying Attention to the Pandemic: \\ Knowledge of COVID-19 by News Sources and Demographics}
 
-\author{Molly M. King \\ Department of Sociology, Santa Clara University}
+\author{} 
 \date{}
 
 \clearpage\maketitle
@@ -133,22 +165,8 @@
 \pagestyle{fancy} %Running header
 \setcounter{page}{1} %resets page number to 1
 
-Never before has so much information been so immediately accessible to
-so many. Yet the challenges in sorting through this information are perhaps
-greater than ever. Previous research has looked at the role of social media and
-other news sources on shaping the U.S. population’s understanding of the COVID-19
-pandemic. However, what has not been studied is how this knowledge acquisition
-is structured by the demographic characteristics of gender, race and ethnicity, and
-income. Furthermore, how does uncertainty about this knowledge also differ by
-demographic group membership? This study reveals how the use of
-different news sources differentially shape access to accurate information about
-COVID-19 and related topics for different demographics. I answer these questions
-by analyzing recent Pew Research survey data asking respondents about their news
-media consumption and their knowledge of COVID-19 science and related current
-events information. I determine the effect of demographic group memberships in
-shaping (mis)information and (un)certainty about COVID-19 received through news sources.
-
-
+Previous research has looked at the role of social media and other news sources on shaping the U.S. population?s understanding of the COVID-19 pandemic. However, what has not been studied is how this knowledge acquisition is structured by the demographic characteristics of gender, race and ethnicity, income, and education. This study reveals how the use of different news sources differentially shapes access to accurate information about COVID-19 and related topics for different demographics. I answer these questions by analyzing recent Pew Research survey data asking respondents about their news media consumption and their knowledge of COVID-19 science and related current events information. I determine the effect of demographic group memberships in shaping knowledge about COVID-19 received through news sources.
+ 
 \section{Keywords}
 
 knowledge, inequality, media, COVID-19
@@ -159,196 +177,67 @@ knowledge, inequality, media, COVID-19
 \section{Introduction}\label{sec:introduction}
 %----------------------------------------------------------------------------------------
 
-
-Never before has such a wealth of information been so immediately accessible to
-so many. Yet the challenges in sorting through this information are perhaps
-greater than ever \citep{Metaxa-Kakavouli2017}.
-Correct and incorrect factual knowledge shaped the
-2016 U.S. election cycle \citep{Allcott2017, Gunther2017} and promise to shape
-politics for years to come. Topics many believe to be objective and resolved
-after years of scientific consensus are now resurfacing as topics of factual
-debate \citep[e.g.,][]{Hmielowski2014}. Command over information matters for a
-great many outcomes \citep{Webster2006}. Social media platforms play an increasingly important role in
-what we perceive as true. This paper investigates how demographic categories
-influence accurate understanding of the facts about COVID-19, and how this
-varies by news source.
-
-I determine the effect of demographic group memberships in shaping
-(mis)information about COVID-19 received through news sources. This research
-project has important implications for sociology, technology, and information
-studies. Understanding how misinformation breaks down along class, gender, and
-race and ethnicity lines makes it a contribution in the style of Mannheim's
-sociology of knowledge \citep{Mannheim1929,Swidler1994}.
+Given the rapidly developing landscape of knowledge about COVID-19, as well as the importance of the disease in people's lives, nine in ten Americans say they are following news about the outbreak very or fairly closely.\footnote
+    {See Appendix Table~\ref{table:followClosely}.} 
+Having up-to-date, accurate knowledge of science and public health policy has consequences not only for one's own health, but also for the well-being of one's family and community. Yet the challenges in sorting through this information are perhaps greater than ever \citep{Metaxa-Kakavouli2017}. This paper investigates how demographic categories and news source influence accurate understanding of the facts about COVID-19. This research has implications for sociology, media, and information studies. 
 
 
 %-------------------------
 \subsection{Information Inequalities}
 
-In the context of COVID-19 knowledge, there are two reasons why we might
-be concerned about differential access to correct facts:
+Many prior studies have evaluated information seeking behaviors and needs \citep{Case2016}. Broadly speaking, there are two reasons why we might be concerned about differential access to correct facts:
 
 \begin{enumerate}
 \def\labelenumi{(\arabic{enumi})}
 \item
-  Differences in the amount of information people have are influenced by
-  unequal social positions in our society; and
+  Differences in the amount of information people have are influenced by unequal social positions in our society; and
 \item
-  Information is a potential cause of later inequality in outcomes and
-  access to resources.
+  Accurate information is a potential source of later inequality in outcomes.
 \end{enumerate}
 
-Many studies have evaluated information seeking behaviors and needs
-\citep{Case2016}. Researchers have sought to understand what contributes to the information divide
-and the resulting states of advantage and disadvantage. For a person to be
-informationally advantaged, they need not only the economic capital for
-information access, but also the intellectual resources for information
-gathering, processing, and assessment \citep{Sweetland1993}. In this way,
-information filtering skills are key. Information overload, in certain contexts,
-can thus actually create information poverty rather than making people
-information rich \citep{Yu2006}. In the modern context, skill spillovers from
-knowledge work may give some groups more abilities than others. Those who use
-information sorting skills in their occupations may be more able to use these
-abilities to benefit their private lives, as well \citep{Xanthopoulou2012}.
+Researchers have sought to understand which factors contribute to gaps in information and the resulting states of advantage and disadvantage. For a person to be informationally advantaged, they need not only the economic capital for information access, but also the intellectual resources for information gathering, processing, and assessment \citep{Sweetland1993}. In this way, information filtering skills are key. Information overload, in certain contexts, can thus create information poverty rather than making people information rich \citep{Yu2006}. Skill spillovers from knowledge work to personal life may give some groups more abilities than others. Those who use information sorting skills in their occupations may be more able to use these abilities to benefit their private lives, as well \citep{Edwards2000,Xanthopoulou2012}. This may be particularly true in sorting through misinformation in rapidly developing news environments, such as that with the current coronavirus pandemic. 
 
-The information divide can be defined as ``inequality in the possession and usage of
-information and communication sources in a particular society''
-\citep{VanDijk1997,VanDijk2000}. Various terms have been used by researchers to characterize this information
-divide and the resulting state of deprivation for those in less advantaged
-positions. One of the more sociological definitions is offered by Britz and
-colleagues, who argue that information poverty is based on an interrelated
-set of knowledge, information, and information infrastructures:
-
-\noindent\begin{minipage}{\linewidth}
-\begin{quote}
-  [A] situation in which individuals and communities, within a given context, do
-  not have the requisite skills, abilities or material means to obtain efficient
-  access to information, interpret it and apply it appropriately; [information
-  poverty] is further characterized by a lack of essential information in a
-  poorly developed information infrastructure. \citep[194]{Britz2004}
-\end{quote}
-\end{minipage} \\
-
-Information inequalities are the product of the unequal distributions of information resources.
-Where might systematic variations in the distribution of
-information by demographic characteristics come from? Understanding the causes
-at the root of information differences can point to systemic inequities in societal institutions, such as the media.
-
-%-------------------------
-\subsection{Inequalities \& Media Consumption}
-
-The vertical (or hierarchical) perspective on information equity associates
-better information access and use with greater socioeconomic advantages
-(individual or group demographics). The most socioeconomically advantaged
-members of society are therefore more likely to have better information access
-and use. Information is viewed as a private good or commodity. The vertical
-theory holds that knowledge is a resource that can be traded and distributed,
-and there is a mutually agreed-upon value hierarchy among information
-categories. This form of knowledge inequality could be ameliorated through the
-more equitable allocation of socioeconomic resources.
-
-The horizontal perspective, in contrast, views knowledge categories as
-subjectively and socially constructed. Information is a public good. Under this
-view, the value of information is subjective and context-dependent
-\citep{Lievrouw}. As such, information advantages are the result of groups'
-differential behaviors, which create the context for which information is most
-important for that group. People may have different ``interests, concerns,
-expertise, experiences, and social contexts that affect their requirements for
-and uses of information, even within the same community, economic, or ethnic
-group'' \citep[501]{Lievrouw}. The inequality is horizontal because there is
-little agreement over which types of knowledge are most important. Under the
-horizontal approach, the ``fairness or equity of access and use, rather than the
-more or less equal distribution of information goods, may be a more useful
-foundation for studying inequities'' and rectifying them \citep[501]{Lievrouw}.
-
-
-
-
-%[Example studies on info inequality here from diss papers]
-
-What these studies tell us is that demographic gaps (gender and race/ethnicity)
-in knowledge cannot be explained entirely by the usual suspects. Even after
-controlling for income and educational attainment, large gaps remain.
-Understanding the influence of demographic status characteristics on information
-inequality not only helps us understand the state of misinformation in the U.S.,
-it also lays the groundwork for the future study of potential causes.
-
-Research on algorithmic bias in ad delivery reveals widespread implicit and
-explicit discrimination \citep{Sweeney2013}. The distribution of attention on
-the World Wide Web also concentrates attention on fewer sites each year,
-reducing entropy and increasing the Gini coefficient, creating an effective size
-of fewer than 20,000 websites \citep{McCurley2007}. However, we do not know how
-this demand for attention is spread across the population, nor do we know how it
-may differentially affect the information people of different demographic status
-groups receive over time.
-
-
-We do know that different demographics are more likely to consume different types of news. For example, older adults follow more local news and more highly educated adults are more likely to follow international news \citep{Mitchell2018}. Local news is viewed as more trustworthy than national news, particularly among Democrats \citep{KnightGallup2019}.
-
--does national news cater to a majority white audience?
+The information divide results from inequalities in ``the possession and usage of information and communication sources in a particular society'' \citep[231]{Yu2006}. Information inequalities are the product of the unequal distributions of information resources. Information poverty results from this state of deprivation for those in less advantaged positions, based on an interrelated set of knowledge, information, and information infrastructures \citep{Britz2004}. Where might systematic variations in the distribution of information by demographic characteristics come from? Understanding the causes at the root of knowledge differences can point to systemic inequities in the consumption of information, such as those that result from the media.
 
 
 %-------------------------
-\subsection{Media Consumption \& Misinformation}
+\subsection{Inequalities \& Information Consumption}
 
-%INFO - NEWS SOURCE - DEMOGRAPHIC (pre-pandemic)
-We know a bit about these dynamics before the COVID-19 pandemic.
+Understanding the influence of demographic status characteristics and the media on factual information inequality helps us understand the state of knowledge in the U.S.; it also lays the groundwork for the study of potential causes. Here I briefly review relevant research on information acquisition through news aggregators and search engines, social networks and social media, and more traditional TV, print, and radio news. I also discuss briefly what we know about different groups' information seeking patterns through these media during the pandemic. 
 
--political sociology of local news:
---from fake local news conglomerates
---decentralized versus centralized new sources
---what is meaning of friends and family? not getting any news at all?
+Mobile news aggregators like Google News and Apple News are increasingly important forces in the media landscape; about 17\% of people get their news from Google News \citep{Reuters2020}. The distribution of attention on the internet concentrates attention on fewer sites each year, creating an effective size of fewer than 20,000 websites and increasing the Gini coefficient \citep{McCurley2007}. Furthermore, research on algorithmic bias reveals widespread implicit and explicit discrimination \citep{Sweeney2013,ONeil2016,Eubanks2018,Noble2018}. At the same time, while Google does alter its search and news results based on location \citep{KlimanSilver2015,Fischer2020}, it does not appear to do so on ideological grounds \citep{Haim2018}. Email is also an increasingly important format, with one in five Americans accessing an newsletter update direct from a news publisher each week, and half of these reporting it was their primary way of accessing news \citep{Reuters2020}. 
 
-%Search Engines
-Search engines play an increasingly important role in what we perceive as true (CITE). To my knowledge, no research has been done to look at how this impacts people over time or differs by demographic characteristics.
+Information also spreads through social networks online. Contrary to widespread opinion, however, engagement with news on Facebook is more limited by user preferences for ideologically homogenous content than by the platform's algorithms \citep{Bakshy2015}. People ``are probabilistically influenced to adopt the opinions of their neighbors, and can promote their own opinions by being reluctant to change them. In this way, an intransigent minority can convert the entire group over to their minority opinion'' \citep{West2011}. Strongly opinionated minority group members can have a strong influence in the information ecosystem of the World Wide Web. In short, psychological and cognitive biases \citep{DiMaggio1997} are colliding with the technological realities of our time to create novel knowledge inequities \citep{Mohammed2012}. Nearly one in two Americans seeks out news on social media websites \citep{Reuters2020}. Many people consume news from Facebook-affiliated social companies, including 35\% from Facebook, 9\% from Facebook Messenger, and 4\% from WhatsApp \citep[87]{Reuters2020}. About one in five people in the U.S. turn primarily to social media for their political news, and these tend to be the least engaged and knowledgeable about coronavirus news \citep{Mitchell2020a}. An increasing proportion of Americans (24\%) also get their news from YouTube \cite{Shearer2017,Reuters2020}.
 
-An increasing number of Americans get their news from YouTube
-\cite{Shearer2017}, making this an ever more important system to understand with
-respect to misinformation.
+Among TV, radio and print consumers, 28\% of Americans reported getting their news from local TV news, and only 18\% from a local or regional newspaper, on a weekly basis \citep{Reuters2020}. Only 14\% reported weekly use of a local television news website and 9\% of a regional or local newspaper website \citep{Reuters2020}. This may be partly due to difficulties discovering local news online because Google's search returns favor a small number of large news outlets over local news \citep{Diakopoulos2019,Fischer2020}.
 
-%Social Networks
-Information also spreads through social networks online. People ``are probabilistically influenced to adopt the opinions of their neighbors, and can promote their own opinions by being reluctant to change them. In this way, an intransigent minority can convert the entire group over to their minority opinion'' \citep{West2011}. In this way, strongly opinionated minority group members can have a strong influence in what is essentially a very small information ecosystem in the World Wide Web. For example, influential figures in the alternative conservative media network promote a stepwise radicalization process amongst more moderate conservatives: ``when libertarian and conservative influencers invite white nationalists onto their channels, they expose their audiences to alternative frameworks for understanding the world. Thus, audiences may quickly move from following influencers who criticize feminism to those promoting white nationalism. This is why the high concentration of the networking between influencers can prove so powerful'' \citep{Lewis}.
+We do know that different demographics are more likely to consume different types of news. For example, older adults follow more local news and more highly educated adults are more likely to follow international news \citep{Mitchell2018}. Local news is viewed as more trustworthy than national news, particularly among Democrats \citep{KnightGallup2019,Reuters2020}. This is confounded by thoroughly documented digital inequalities \citep{Robinson2020a}, which influences what type of news people consume. Those who get their news primarily through local TV and social media are more likely to have lower incomes and less education than those who turn primarily to news websites or apps, cable or network TV, or radio or print news \citep{Mitchell2020a}. This also has implications for who consumes the most misinformation; we do not know how this distribution may differentially affect the information different demographic groups receive about different COVID-19 news topics. 
 
-In short, psychological and cognitive biases \citep{DiMaggio1997} are colliding with the technological realities of our time to create novel knowledge inequities \citep{Mohammed2012}.
+For example, people who use social media as their most common method of consuming political and election news were the most likely to have heard `a lot' (26\%) about the (false) conspiracy theory that the pandemic was intentionally planned, followed by those who got their news through local TV (20\%) \citep{Mitchell2020a}. Prior to the presidential election, 67\% of U.S. adults reported concern "about what is real and what is fake on the internet" related to news \citep[18]{Reuters2020}. The largest proportion (35\%) reported that they were most concerned about distinguishing misinformation on the Facebook platform \citep[19]{Reuters2020}.
+
+
+%-political sociology of local news:
+%--from fake local news conglomerates
+%--decentralized versus centralized new sources
+%--what is meaning of friends and family? not getting any news at all?
 
 
 %-------------------------
-\subsection{Demographics, Information Behavior, \& Misinformation}
+\subsection{COVID-19 Knowledge \& Health Outcomes}
 
+Gaps in information produce inequalities in later outcomes. Aside from their role in producing status differences \citep{Ridgeway2014}, differences in knowledge also result in concrete differences in health outcomes. Accurate health knowledge is necessary (though not sufficient) to affect health behavior change \citep{hints11}. For example, in the domain of health, 25\% of Hispanics inaccurately believe that there is nothing people can do to reduce their chances of getting cancer, while only 14\% of non-Hispanic Whites believe this \citep{hints11}. Correct knowledge is a required foundation that is both influenced by and built upon by structural inequalities.
 
-%-------------------------
-\subsection{COVID-19 \& Misinformation}
+Researchers have looked at the implications of this differential access to accurate information on consequences for health during the COVID-19 pandemic. Those with accurate knowledge about COVID-19 are more likely to have positive health outcomes during the pandemic \citep{Fridman2020}. Early in the pandemic, trust in social media and private news sources was negatively associated with both knowledge about COVID-19 and the practice of social distancing behavior, compared to trust in government information sources \citep{Fridman2020}. On average, U.S. adults indicated they prefer that scientists and government public health leadership manage the response to the COVID-19 pandemic \citep{McFadden2020}. Generally, U.S. adults trust scientists' knowledge about COVID-19; however, this trust varies widely based on demographic characteristics \citep{Evans2020}. It follows that different demographic groups would follow different news sources for emerging information about COVID-19 and the pandemic response.
 
-We know from research in several domains that gaps in information produce
-inequalities in later outcomes. Aside from their role in producing status
-differences that have consequences in everyday lives
-\citep{Ridgeway2014,KingGender}, differences in knowledge may also result in
-concrete access to other resources. In the case of correct knowledge about
-COVID-19, we might imagine that those with the most correct knowledge might be
-more likely to have positive health outcomes during the pandemic (CITE). Many
-would find this even more normatively problematic if those types of information
-which historically marginalized groups have the least access to correspond to
-the types of information which tend to provide access to important other
-resources (such as health, economic or material goods).
-
-%COVID / TECH ACCESS & INEQUALITY
-More recently, researchers are looking at the implications of this differential
-access to accurate information on consequences for schooling, employment, and health
-during the COVID-19 pandemic.
-
-%Health outcomes
-
-
-
+Demographic characteristics also heavily influence health outcomes from the COVID-19 pandemic. Many would find this normatively problematic if these types of information which historically marginalized groups have the least access to or trust in correspond to the types of information which tend to ensure positive health outcomes. Prior work suggest this is the case, as non-White populations express greater trust in non-government information sources \citep{Fridman2020}.
+Because of systemic racism, Black Americans are at greater risk of contracting and dying from COVID-19 \citep{Adegunsoye2020,Kim2020,Millett2020,PriceHaywood2020}.
+Older adults are also at much greater risk of infection and mortality from COVID-19 \citep{Ho2020,LeCouteur2020}.
+Furthermore, since health management has moved online more than ever during the pandemic \citep{Khilnani2020}, and access to certain digital resources can act as substitutes for in-person interactions \citep{Robinson2020b}, digital inequality is widening existing health and age disparities.
+Because of these greater risks, one might expect these demographic groups to more closely follow news about the COVID-19 pandemic; this is the case among Black Americans. 
+At least early in the pandemic in spring 2020, Black Americans were more likely to closely follow news about the outbreak and more likely to discuss it with others \citep{Mitchell2020b}. 
 
 %-------------------------
-RESEARCH QUESTION
-But to my knowledge, no one has yet investigated the consequences of different
-demographics on differential information availability on the internet and on
-misinformation spread through social media and other new sources during the COVID-19 pandemic.
-How is knowledge structured by the demographic characteristics of gender,
-race/ethnicity, and income? How does uncertainty about this knowledge also
-differ by demographic group? And how does use of different news sources
-differentially shape access for different demographics?
+Yet, to my knowledge, no one has yet investigated the consequences of demographic group membership on the joint relationship between differential information acquisition behaviors and knowledge during the COVID-19 pandemic. Therefore, this study investigates how knowledge of the COVID-19 pandemic is structured by the demographic characteristics of gender, race, income, and education. Furthermore, I investigate whether use of different news sources differentially shapes knowledge of current COVID-19 topics based on demographics.
 
 
 %----------------------------------------------------------------------------------------
@@ -357,29 +246,22 @@ differentially shape access for different demographics?
 
 \subsection{Data}\label{sec:data}
 
-In this analysis, I investigate factual (mis)information and uncertainty using
-the Pew Pathways June 2020 American Trends Panel Wave 68 Survey (CITE). The
-survey features four questions of particular interest, which ask about factual
-knowledge about the COVID-19 pandemic and the economy during this time:
+In this analysis, I investigate factual knowledge of the pandemic using the Pew Pathways June 2020 American Trends Panel Wave 68 Survey \citep{PewJune2020}. The survey features three questions of particular interest, which ask about factual knowledge about the COVID-19 pandemic:
 
 \begin{enumerate}
 \def\labelenumi{(\arabic{enumi})}
-  \item ``As far as you know, are antibody tests for the coronavirus (also known as serology tests) intended to detect…'' (Correct answer is ``A previous infection'')
-  \item ``Do you happen to know who Anthony Fauci is?'' (Correct answer is ``An infectious disease expert and government health adviser.q)'
+  \item ``As far as you know, are antibody tests for the coronavirus (also known as serology tests) intended to detect?'' (Correct answer is ``A previous infection'')
+  \item ``Do you happen to know who Anthony Fauci is?'' (Correct answer is ``An infectious disease expert and government health adviser.)'
   \item ``As far as you know, how did states in the U.S. respond during the coronavirus outbreak?''" (Correct answer is ``Some states in the U.S. have not had a statewide stay-at-home order.'')
-  \item ``Is the national unemployment rate as reported by the government currently…'' (Correct answer is 15\%)
+%  \item ``Is the national unemployment rate as reported by the government currently?'' (Correct answer is 15\%)
 \end{enumerate}
 
-My analysis also includes basic demographic variables for respondents, including
-gender, race and ethnicity, income, age, and educational attainment. So that
-readers can see all analysis decisions for themselves, all annotated code is
-available at my Open Science Framework project page:
-(URL removed for blinded review).
-%\url{https://osf.io/qf624/}.
+My analysis also includes basic demographic variables for respondents, including gender, age, family income, educational attainment, and race. I discuss these in the order they appear in the models. So that readers can see all analysis decisions for themselves, annotated code is available at the Open Science Framework project page: [redacted for blind review].
+
 
 
 %-------%
-\subsubsection{Gender}\label{sec:gender}
+\subsubsection{Gender}\label{sec:gender-vars}
 
 Gender and sex are not binary designations, but rather lie along a flexible
 spectrum or at least exist in multiple categories \citep{Connell2002b,
@@ -388,310 +270,236 @@ However, the available data have only categories of `woman' or
 `man.' Therefore, I code gender as a binary variable.
 
 %-------%
+\subsubsection{Age}\label{sec:age-vars}
+
+Pew provides only categorical age, in predefined groups: 18-29; 30-49; 50-64; and 65 and over. There are, of course, different kinds of things people are expected to know at different life stages. However, there is no reason to expect that the rate of accumulation of knowledge should vary based on any of my other covariates, especially regarding rapidly developing news about the COVID-19 pandemic. Therefore, I include age group as a predictor in my models, but I do not include any squared terms or interaction variables with age.
+
+% Since Pew provides only categorical age, I also use the REDI method
+% \citep{KingREDI} to convert age to a continuous variable. I calculate the number % of respondents in each age category, and pull at random an equivalent number of observations within that age range from the CPS ASEC. I take the exact age value  of that observation from the CPS ASEC and assign the age value as if it were the % original respondent's exact age. Again, this preserves variance in the age
+% distribution.
+
+
+
+%-------%
+\subsubsection{Family Income}\label{sec:class-income}
+
+Social class both creates and is produced by differences in knowledge. I use family income and education as measures of social class.\footnote
+    {Family income and education are imperfect measures of class, to be sure. Others (such as parental occupation data) would be preferable for both their causal separability\,---\,given the temporal antecedence of parental occupation,\--\,and their empirical validity \citep{Weeden2005a, Weeden2012}. However, parental occupation is not available for these data.}
+I choose family income rather than individual (personal) income because it more accurately reflects the total resources available to the individual, and therefore are a better reflection of socioeconomic status.\footnote
+  {The reliability of self-reported income typically ranges from 71\% to 98\%, with a mean of 86\% \citep{Marquis1986}. In other words, if the same individuals are asked about their income at two different points in the survey using two slightly different measures to get at the same question, the results will agree, on average, within about 0.86. Compared to tax or Social Security Administration records, self-reported measures of income tend to be about 70  to 78\% of official amounts \citep{Coder1996, Reardon2011a}.}
+  
+I transform categorical income into continuous income in order to make regression coefficients more interpretable. A continuous measure of income is more intuitive to interpret than categorical income bins. Therefore, I use the Random Empirical Distribution Imputation (REDI) method to convert the Pew categorical family income data into continuous income estimations \citep{KingREDI}. For each category of family income, I randomly draw the same number of observations from within those same bounds in the Current Population Survey March Annual Social and Economic (CPS ASEC) supplement \citep{ASEC2018}. I then apply these exact family income values from the CPS ASEC to the corresponding set of categorical values within the original Pew survey. Thus, I get a distribution of numerical values in the original Pew survey that corresponds to their probability of occurrence in the CPS ASEC. Repeating this for all income categories provides continuous cold-deck imputed income values for every respondent. I used this method rather than assigning the midpoint value to preserve variance and keep information from the extreme income categories. For more details on the conversion of categorical to continuous family incomes, see \citet{KingREDI}.
+
+%https://stats.stackexchange.com/questions/143110/when-to-use-log-in-regression
+To aid interpretation, I then take the natural log of this continuous value of family income. Thus, the variable may be interpreted as the impact of a one percent increase in family income on the log odds (or odds) of knowing the correct answer to the question.
+
+
+%-------%
 \subsubsection{Race and Ethnicity}\label{sec:race-and-ethnicity}
 
 Measurement of race is another area in which best practice\footnote
-  {Beginning in 2000, the U.S. Census moved from allowing people to choose only
-  one racial category identity to allowing people to choose as many racial
-  categories as they identified with \citep{OfficeofManagementandBudget1997,
-  OfficeofManagementandBudget2000}.}
-is often limited by available data. I code the racial categories of non-Hispanic
-White, non-Hispanic Black/African-American, and non-Hispanic Asian, the ethnic
-category of Hispanics who do not identify with any of the other racial
-categories, and the category of `other.' This race `pentagon' classification has
-been found most useful in explaining variation in education and income (compared
-to either a seven or eight category, tri-racial, or skin tone classification
-system) \citep{Howell2017}.
+  {Beginning in 2000, the U.S. Census moved from allowing people to choose only one racial category identity to allowing people to choose as many racial categories as they identified with \citep{OfficeofManagementandBudget1997,OfficeofManagementandBudget2000}.}
+is often limited by available data. I code the racial categories of non-Hispanic White, non-Hispanic Black/African-American, non-Hispanic Asian, the ethnic category of Hispanics who do not identify with any of the other racial categories, and the category of `other.' This race `pentagon' classification has been found most useful in explaining variation in education and income (compared to either a seven or eight category, tri-racial, or skin tone classification system) \citep{Howell2017}.
+
+In order to simplify the application and interpretation of interaction effects, I also coded a single BIPOC (Black, Indigenous and people of color) variable. This variable includes all respondents that do not identify as non-Hispanic White: Hispanic, Black/African-American, Asian, and other.
+
 
 %-------%
-\subsubsection{Socioeconomic Class: Income}\label{sec:class-income}
+\subsubsection{Education}\label{sec:education-vars}
 
-Social class both creates and is produced by differences in knowledge. I use
-income as my primary measure of social class. This is an imperfect measure, to
-be sure, and others (such as parental occupation data) would be preferable for
-both their causal separability\,---\,given the temporal antecedence of parental
-occupation,\--\,and their empirical validity \citep{Weeden2005a, Weeden2012}.
-However, parental occupation is not available for these data. An analysis of the
-association of income and knowledge is thus best understood as an analysis of
-which knowledge is crucial to socioeconomic elites.
-
-I choose family income rather than individual (personal) income because it
-more accurately reflects the total resources available to the individual, and
-therefore are a better reflection of socioeconomic status.\footnote
-  {The reliability of self-reported income typically ranges from 71\% to 98\%,
-  with a mean of 86\% \citep{Marquis1986}. In other words, if the same
-  individuals are asked about their income at two different points in the survey
-  using two slightly different measures to get at the same question, the results
-  will agree, on average, within about 0.86. Compared to tax or Social Security
-  Administration records, self-reported measures of income tend to be about 70
-  to 78\% of official amounts \citep{Coder1996, Reardon2011a}.}
-I transform categorical income into continuous income in order to make
-regression coefficients more interpretable. A continuous measure of income is
-more intuitive to interpret than categorical income bins. Therefore, I use the
-Random Empirical Distribution Imputation (REDI) method to convert the Pew
-categorical family income data into continuous income estimations
-\citep{KingREDI}. For each category of family income, I randomly draw the same
-number of observations from within those same bounds in the Current Population
-Survey March Annual Social and Economic (CPS ASEC) supplement \citep{ASEC2018}.
-I then apply these exact family income values from the CPS ASEC to the
-corresponding set of categorical values within the original Pew survey. Thus, I
-get a distribution of numerical values in the original Pew survey that
-corresponds to their probability of occurrence in the CPS ASEC. Repeating this
-for all income categories provides continuous cold-deck imputed income values
-for every respondent. I used this method rather than assigning the midpoint
-value to preserve variance and keep information from the extreme income
-categories. For more details on the conversion of categorical to continuous
-family incomes, see \citet{KingREDI}.
-
-%https://stats.stackexchange.com/questions/143110/when-to-use-log-in-regression
-To aid interpretation, I take the natural log of the family income. Thus, the
-control variable may be interpreted as the impact of a one percent increase in
-family income on the odds (or log odds) of knowing the correct answer.
+Education categories are defined by five categories: less than high school, completed high school, some college, bachelor's degree, and graduate or professional degree. Though education and family income are collinear, education would be expected to have an independent effect on the ability to consume and interpret the news. Therefore, both family income and educational attainment are included in all but the basic models.
 
 %-------%
-\subsubsection{Age}\label{sec:age}
-
-I restrict my analyses to adults ages 18 and over.  Pew provides only
-categorical age, in predefined groups: 18-29; 30-49; 50-64; and 65 and over.
-
-% Since Pew provides only categorical age, I also use the REDI method
-% \citep{KingREDI} to convert age to a continuous variable. I calculate the number
-% of respondents in each age category, and pull at random an equivalent number of
-% observations within that age range from the CPS ASEC. I take the exact age value
-% of that observation from the CPS ASEC and assign the age value as if it were the
-% original respondent's exact age. Again, this preserves variance in the age
-% distribution.
-
-There are of course different kinds of things people are expected to know at
-different life stages. However, there is no reason to expect that the rate of
-accumulation of knowledge should vary based on any of my other covariates.
-Therefore, I include age as a regressor in my models, but I do not include any
-interaction variables.
-%But the kinds of things women and men expect to learn at different  of lifestages are likely to be different ...
-
-%-------%
-\subsubsection{Education}\label{sec:ducation}
-
-Education categories are collapsed to four categories (less than high school,
-completed high school, some college, and bachelor's degree or more). Though some
-studies provide more fine-grained detail\,---\,including either the precise number
-of years of education or additional possible educational degrees like
-Associate's or technical school\,---\,these four categories are present in all
-surveys.
-
-
-
 \subsubsection{News}
-After initially analyzing the models with all news source categories separate
-(results available in online appendix), I grouped news sources together based on
-their structurally similar roles. This grouping was meant to facilitate the
-application of interaction terms and interpretation of results. The substantive
-interpretation of model results prior to the addition of interaction terms to
-the model remain unchanged between the separation of each unique news source and
-the combination of socially similar sources.
 
-The sources were combined in the following way: International and national news
-were combined into a single variable; local news remained separate for analysis;
-all political sources of COVID-19 information were combined, including Trump and
-his coronavirus task force, Joe Biden and his campaign, and State and local
-elected officials and their offices; and public health organizations and
-officials remained a separate variable. Finally, I created a single variable
-representing informal networks, including the original variables representing
-information received from friends, family and neighbors; community or
-neighborhood newsletters or listservs; and online forums or discussion groups.
+The survey asked respondents ``which of these sources do you \emph{rely on most} for news about the coronavirus outbreak?'' \citep{PewJune2020,Shearer2020}. There were ten choices available to respondents:
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+    \item International news outlets;
+    \item National news outlets;
+    \item Local news outlets;
+    \item Trump and his coronavirus task force;
+    \item Joe Biden and his campaign;
+    \item State and local elected officials and their offices;
+    \item Public health organizations and officials;
+    \item Friends, family and neighbors;
+    \item Community or neighborhood newsletters or listserv; and
+    \item Online forums or discussion groups.
+\end{enumerate}
+
+After initially analyzing the models with all news source categories separate, I grouped news sources together based on their structurally similar roles to facilitate the application of interaction terms and interpretation of results. The sources were combined in the following way: international and national news were combined into a single variable (for the baseline category). Local news remained separate. All political sources of COVID-19 information were combined, including Donald Trump, Joe Biden, and State and local elected officials and their offices. Public health organizations and officials remained a separate variable. Finally, I created a single variable representing informal networks, including the original variables representing information received from friends, family and neighbors; newsletters or listservs; and online groups. The substantive interpretation of model results after the addition of interaction terms to the model remain unchanged between the separation of each unique news source and the combination of socially similar sources (results available in Appendix).
 
 
  %-------%
-\subsection{Model}\label{sec:model}
+\subsection{Knowledge}\label{sec:knowledge}
 
-I use a two-step model to analyze the levels of uncertain and correct answers
-for the three factual knowledge question in this study
-(Figure~\ref{fig:TwoStepModelOfKnowledge}).
+Figure~\ref{fig:TwoStepModelOfKnowledge} explains which responses are included in the analysis of correct and incorrect knowledge and lays out a model justifying these decisions. In any survey of factual knowledge questions, there will always be a proportion of respondents who are uncertain. These respondents either choose to guess or opt out of answering. Those who do guess may choose the correct answer by chance or guess incorrectly. Those who respond `don't know' or `refused' for each knowledge question are included among those who are `incorrect,' since by definition they did not respond correctly.
 
 
 \begin{figure}[ht]
   \begin{center}
-    \includegraphics[width=1.0\textwidth]{/Users/mollymking/Documents/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/figures/two-step-model-of-knowledge}
+    \includegraphics[width=.8\textwidth]{two-step-model-of-knowledge}
   \end{center}
   \caption[A model of responses to knowledge questions]
   {\emph{A model of responses to knowledge questions.}
-   My analytical approach conceives of respondents following a two-step decision
-   process when answering factual knowledge questions in surveys. First, the
-   respondent decides if they are sufficiently certain to answer the question or
-   not (a measure of collective certainty when aggregated). Others answer the
-   question either `don't know' or some variation thereof. Conditional on
-   answering, the respondent proceeds to step two, either getting the question
-   correct or incorrect (a measure of misinformation).}
+   My analytical approach conceives of respondents following a two-step decision process when answering factual knowledge questions in surveys. First, the respondent decides if they are sufficiently certain to answer the question or not (a measure of collective certainty when aggregated). Others answer the question either `don't know' or some variation thereof. Conditional on answering, the respondent proceeds to step two, either getting the question correct or incorrect (a measure of misinformation).}
   \label{fig:TwoStepModelOfKnowledge}
 \end{figure}
 
-
-I separate my model of knowledge into two steps (see
-Figure~\ref{fig:TwoStepModelOfKnowledge}). First, I analyze the proportion of
-respondents who are uncertain about each factual knowledge question by domain.
-To do this, I estimate the weighted population mean for the response of `don't
-know' (or similar answers such as `not sure,' `no opinion,' `prefer not to say,'
-and `don't know / refused') for each knowledge question where such an answer was
-available to the respondent:
-
- $$ mean_{DK} = \frac{P(y = 1)}{N}. $$
-
-In this model, \emph{y = 1} is the outcome variable (`don't know' answer), and
-\emph{N} is the size of the dataset. The mean value `don't know' for the population for a single knowledge
-question ($mean_DK$) is equal to the survey-weighted probability of the
-respondent answering `don't know' (or a variant) divided by the total number of
-survey respondents who were asked the question. Respondents who refused to answer are excluded from the analysis.
-
-Second, I analyze the proportion of the population (out of those providing an answer related to the substance of the
-question) who answered correctly and incorrectly. To do this, I estimate the
-population mean (and standard error) for the binary variable indicating correct
-answer:
+First, I provide a set of descriptive statistics for each question. To evaluate the proportion answering correctly, I estimate the population mean (and standard error) for the binary variable indicating correct answer, within a given demographic group:
 
  $$ mean_C = \frac{P(y = 1)}{N}. $$
 
-In this model, \emph{N} is the size of the dataset, and \emph{y = 1} the outcome
-variable (correct answer). The probability of answering correctly ($P(y = 1)$)
-is calculated out of all individuals who provided a correct or incorrect answer and those who respond
-`don't know'. Respondents who refused to answer are excluded from the analysis.
-Hence, the mean value correct for the population for a single knowledge
-question ($mean_C$) is equal to the survey-weighted probability of the
-respondent getting the knowledge question correct divided by the total number of
-survey respondents.
+In this model, \emph{N} is the size of the sample responding to that question, and \emph{y = 1} the outcome variable (correct answer). The probability of answering correctly ($P(y = 1)$) is calculated out of all individuals who provided a correct or incorrect answer (including those who respond `don't know'). Hence, the mean value correct for the population for a single knowledge question ($mean_C$) is equal to the survey-weighted probability of getting the knowledge question correct divided by the total number of survey respondents within the group.
+
+
+%-------%
+\subsection{Model}\label{sec:model}
+
+I analyze the likelihood of answering correctly (compared to incorrectly). Because the outcome of interest is dichotomous (correct = 1, incorrect = 0), I analyze the data using logistic regression. Logistic regression is appropriate because it bounds the estimates between 0 and 1. Linear models are ill-suited  because they can yield probability estimates less than 0 or greater than 1. Logistic regression assumes that the distribution of [repeated Bernoulli trials of] the dependent variable (correct answer) follows the binomial distribution. Logistic models link the independent variables to the probability of the dependent variable through the logistic function to estimate parameters. Hence, the probability of the respondent getting knowledge question correct is linked to the set of independent variables through the logistic function
+
+ $$ ln \frac{P(y=1)}{P(y=0)}=x. $$
+
+In this model, $x$ is a vector of independent variables, and $\beta$ is a vector of parameter estimates that measure the effect of the $x$ vector on the log odds that the outcome variable $y = 1$.
+
+%The log-odds that individual i answers question j correctly is represented as a function of individual characteristics:
+
+% $$  ln \frac{P({y_{ij}}=1)}{P({y_{ij}}=0)} =\beta_{0i} + \beta_{edu}Education_i + \beta_{woman}Woman_i + ?_{age}Age_i + \beta_{inc}Income_i + ?_{black}Black_i + $$
+
+%where $\beta_{i0}$ signifies an individual-level random intercept (which can be interpreted as the variation in individuals? knowledge), and the $\beta_j$ coefficients represent group-level random effects, which allow the effect of each variable to vary across questions.
+
+
+%To assess the role of news consumption and demographic groups in acquiring accurate knowledge about the COVID-19 pandemic, I develop a multiple-step multiple mediator model \citep{Hayes2009}. First, I introduce a baseline model for each knowledge question that includes only demographic characteristics of respondents. Next, I introduce educational attainment as a mediator. Finally, I add the mediator variable of news source.
+
+%Because the analysis uses a survey design, I use an adjusted Wald tests to examine the significance of differences in the coefficients between models \citep{SurveyDatattest}. Wald tests examine the null hypothesis of whether two independent variables, either within or between models, have the same effect on the dependent variable.
+
+
+%----------------------------------------------------------------------------------------
+\section{Results}\label{sec:results}
+%----------------------------------------------------------------------------------------
+
+Here I analyze the effect of demographic group membership and news sources on the log odds that people have correct knowledge about questions related to COVID-19. Analyses look at the role of gender, age group, race, family income, and education, in order to explore the role of socioeconomic context and news consumption during the pandemic and knowledge of these questions. 
+Summary statistics for each of these demographic factors related to the three knowledge questions are presented in Table~\ref{table:SummaryStats}. This table presents descriptive statistics of the proportion of each group who answered the knowledge questions correctly, adjusted for survey sampling \citep{UCLASurveyDataAnalysis}. For the continuous value of family income, the table presents the income mean value for respondents who answered each question correctly. As the table demonstrates, there are dramatic descriptive disparities among demographic groups in the proportion of the population answering each question correctly.
+
+\input{summaryStats_byrow}
+
+As Tables~\ref{table:fauciLOs}, \ref{table:stateresponseLOs}, and \ref{table:antibodyLOs} indicate, I analyzed a series of nested models, the first including only the control variables and the final model including all variables. Model 1 in each of Tables~\ref{table:fauciLOs}, \ref{table:stateresponseLOs}, and \ref{table:antibodyLOs} present the basic control models predicting correct knowledge for each of the questions. In this baseline model, age, income, and race are important predictors across all three knowledge questions. Model 2 for each question adds education variables. Finally, Model 3 introduces the variable indicating the source the respondent relied on most for news about COVID-19, allowing us to compare the relative contributions of demographic and information factors in determining correct knowledge. In supplementary analyses, I also investigate interactions of race and news source and of income and news source to see if different groups get different factual knowledge outcomes from consuming different news sources (see Appendix Tables~\ref{table:FauciLOs_appendix}, \ref{table:stateresponseLOs_appendix}, and \ref{table:antibodyLOs_appendix}).
+
+
+%-------%
+% MODELS
+
+%-FAUCI-%
+%\item ``Do you happen to know who Anthony Fauci is?'' (Correct answer is ``An infectious disease expert and government health adviser.q)'
+\input{fauciLOs_mod}
+
+
+%-STATE RESPONSE-%
+%\item ``As far as you know, how did states in the U.S. respond during the coronavirus outbreak?''" (Correct answer is ``Some states in the U.S. have not had a statewide stay-at-home order.'')
+ \input{stateresponseLOs_mod}
+
+%-ANTIBODY TESTS-%
+%\item ``As far as you know, are antibody tests for the coronavirus (also known as serology tests) intended to detect?'' (Correct answer is ``A previous infection'')
+ \input{antibodyLOs_mod}
 
 
 
 %-------%
-\subsection{Descriptive Findings}\label{sec:descriptives}
+\subsection{Gender}\label{sec:gender}
 
-Summary statistics for each of these factors related to the three knowledge questions are presented in Table%~\ref{table:SummaryStats}.
+Women are significantly less likely to correctly identify Fauci as an infectious disease expert and government advisor, an effect that does not disappear with later additions of education and news variables. This difference may be attributable to women's tendency to follow political news less than men \citep{Verba1997}. In the baseline Model 1, women are also less likely to correctly answer that some states did not have a stay-at-home order, though this effect is moderate and disappears in later models. There is no significant difference between women and men in correct knowledge of antibody tests, perhaps the most important fact for health outcomes. 
 
-% Table) Summary Statistics
+\subsection{Age}
 
-% %this is all to turn table horizontal and clean page
-% \newpage
-% \newgeometry{margin=1in} % modify this if you need even more space
-% \begin{landscape}
-% \thispagestyle{empty}
-%
-%
-% \begin{table}
-%   \caption[Descriptive statistics for predictors of correct COVID-19 knowledge.]
-%   {\emph{Descriptive statistics for predictors of correct COVID-19 knowledge: mean (standard deviation). }}
-%   \label{table:SummaryStats}
-% %  \small
-%   \begin{tabular}{l|c|c|c|c}
-%     \hline   % adds horizontal lines to the top of the table
-%                           & Anthony Fauci            & Antibody tests          & Unemployment      & Some states\\
-%                           & is an infectious disease & detect previous         & rate around 15\%  & had no stay-at- \\
-%     Variable              & expert \& govt. adviser  & coronavirus infections  & in June           & home order \\
-%     \hline
-%     \multicolumn{4}{l}{{\bf News Source} }   \\
-%       \enspace International news outlets &               &                    &                   &                \\
-%       \enspace National news outlets &                    &       &   &    \\
-%       \enspace Local news outlets    &                    &       &   &    \\
-%       \enspace Trump or coronavirus  &                    &       &   &    \\
-%       \enspace task force            &                    &                    &                   &      \\
-%       \enspace Biden campaign        &                    &       &   &    \\
-%       \enspace State and local       &                    &       &   &    \\
-%       \enspace elected officials     &                    &                    &                   &       \\
-%       \enspace Public health         &                    &       &   &    \\
-%       \enspace orgs. \& officials    &                    &                    &                   &       \\
-%       \enspace Friends, family       &                    &       &   &    \\
-%       \enspace \& neighbors          &                    &                    &                   &       \\
-%       \enspace Community or          &                    &       &   &    \\
-%       \enspace neighborhood news     &                    &                    &                   &       \\
-%       \enspace Online forums         &                    &       &   &    \\
-%       \enspace or discussion groups  &                    &                    &                   &      \\
-%     \multicolumn{5}{l}{{\bf Race} }   \\
-%       \enspace White                 &                    &       &   &    \\
-%       \enspace Black                 &                    &       &   &    \\
-%       \enspace Asian                 &                    &       &   &    \\
-%       \enspace Hispanic              &                    &       &   &    \\
-%       \enspace Other/Mixed           &                    &       &   &    \\
-%     \multicolumn{5}{l}{{\bf Income}}   \\
-%       \enspace \$0 to \$10,000       &                    &       &   &    \\
-%       \enspace \$10,000 to \$20,000  &                    &       &   &    \\
-%       \enspace \$20,000 to \$30,000  &                    &       &   &    \\
-%       \enspace \$30,000 to \$40,000  &                    &       &   &    \\
-%       \enspace \$40,000 to \$50,000  &                    &       &   &    \\
-%       \enspace \$50,000 to \$75,000  &                    &       &   &    \\
-%       \enspace \$75,000 to \$100,000 &                    &       &   &    \\
-%       \enspace \$100,000 to \$150,000 &                    &       &   &    \\
-%       \enspace \$150,000 and above  &                    &       &   &    \\
-%     \hline  % adds horizontal line to the bottom edges
-%     N                     & 9173                     &  9173                   &   9173            &  9173 \\
-%     \hline
-%   \end{tabular}
-% \end{table}
-%
-% \end{landscape}
-% \restoregeometry
-\newpage
+Older age groups are significantly more likely to know that Fauci is an infectious disease expert and government advisor, even controlling for education and primary news source. The older you are, the more likely you are to know who  Fauci is, as well. %need to do test
+This held across all models. 
+This is not the case with knowledge about statewide stay-at-home orders. Only those in the 65 and over age group were slightly more likely to have correct knowledge of this question, compared to those ages 18 to 29 (p$<$.05 for Model 3 in Table~\ref{table:stateresponseLOs}). Finally, this is in contrast to knowledge about antibody tests. Only those in the middle two age groups, 30 to 49 (p$<$.05) and 50 to 64 (p$<$.01), had more knowledge of the antibody tests, compared to 18- to 29-year-olds. 
 
 
+%-------%
+\subsection{Income}\label{sec:income}
 
+Across all models and questions, family income has a significant effect on how likely people are to be correct about COVID-19 facts. The addition of education into the models (from Model 1 to Model 2 in Tables~\ref{table:fauciLOs}, \ref{table:stateresponseLOs}, and \ref{table:antibodyLOs}) naturally reduces the magnitude of the effect of income on the likelihood of knowing the correct answer, but in no case does it eliminate the effect altogether.
+
+In the full Model 3 in Table~\ref{table:fauciLOs}, each additional 1\% increase in family income increases the log-odds of knowing who Fauci is by 0.148, holding constant gender, age group, race, education, and news source (p$<$.001). 
+Each additional 1\% increase in family income significantly increases the log-odds of knowing some states did not have a stay at home order by 0.078 (Model 3 in Table~\ref{table:stateresponseLOs}), all else constant (p$<$.001).
+In the effect with the greatest magnitude, each additional 1\% increase in family income significantly increases the odds of knowing that antibody tests are intended to detect previous infection by 23.6\% (p$<$.001). %[(exp(0.212)-1)*\%=] 
+Overall, family income has a positive and significant effect on the likelihood of having knowledge of COVID-19 topics in these three different and important areas: governmental, public health, and scientific knowledge.
+
+
+%-------%
+\subsection{Race}\label{sec:race}
+
+All models show a significant effect of the race of the respondent on the likelihood of answering the question correctly. This holds true regardless of whether race is modeled using the pentagon classification (Black, Asian, Hispanic, Other / mixed, and White, as seen in Tables~\ref{table:fauciLOs}, \ref{table:stateresponseLOs}, and \ref{table:antibodyLOs}) or using a binary BIPOC variable (White and non-White, as seen in Appendix Tables~\ref{table:FauciLOs_appendix}, \ref{table:stateresponseLOs_appendix}, and \ref{table:antibodyLOs_appendix}).
+
+There is a significant negative effect of being Black (compared to being white) on the likelihood of knowing the correct answer to all questions. The effect is striking: Black people are about half as likely to know the answer to each question, controlling for age, income, education, and news source (model 3 in tables~\ref{table:fauciLOs}, \ref{table:stateresponseLOs}, and \ref{table:antibodyLOs}). Specifically, being Black decreased the odds of knowing the correct answer about Fauci by a factor of 0.48 ($p<0.001$), %[$e^{?0.66}-1$ =]
+decreased the odds of knowing the correct answer about statewide stay-at-home orders by a factor of 0.46 ($p<0.001$), % [$e^{?0.62}-1$ =]
+and decreased the odds of knowing the correct answer about antibodies by a factor of 0.76 (p$<$0.001). %[$e^{?1.435}-1$ =]
+There are similar negative effects of being Asian and Hispanic, although the magnitudes are not as great.
+
+%-------%
+\subsection{Education}\label{sec:education}
+
+These effects of income and race persist when controlling for education (see Models 2 and 3 in Tables~\ref{table:fauciLOs}, \ref{table:stateresponseLOs}, and \ref{table:antibodyLOs}). Furthermore, each additional level of educational attainment significantly increases the odds of answering correctly, except completing High School. Adding in variables for the source of news does somewhat reduce the magnitude of the effect of education, but it does not eliminate the significance of education in any of the models across any of the knowledge questions. Considering that the effect of education holds in models where family income is also controlled, this speaks to the importance of education in acquiring and digesting information in order to attain accurate knowledge about COVID-19.
 
 
 %-------%
 \subsection{News Source}\label{sec:news source}
 
+Next, I added in variables for the news source the respondent relied on most for news about the coronavirus pandemic (see Model 3 in Tables~\ref{table:fauciLOs}, \ref{table:stateresponseLOs}, and \ref{table:antibodyLOs}).
 
+Notably, those who primarily get their news about COVID-19 through national news sources are the most likely to answer all three questions correctly. Respondents who consume their news from any other source (including, surprisingly, public health officials) were significantly less likely to correctly identify Fauci's role, controlling for all other factors. The same held true for correct knowledge about antibody tests. Those who rely primarily on national news for information about COVID-19 were most likely to correctly answer this question, controlling for gender, age, family income, race, and education.
 
+Those who received their information primarily from local news were significantly less likely to know that some states in the U.S. did not have a statewide stay-at-home order, as were those who primarily relied on friends, family, and neighbors for their news. However, those who rely on state and local elected officials or community or neighborhood newsletters or listservs for their information were just as likely as those relying on national news to know that some states did not have statewide orders, all other variables held equal. This is an interesting contrast to those relying on local news; it seems that the particular \emph{form} of local information matters when it comes to having accurate knowledge about nationwide events.
 
+Relying on friends, family, and neighbors for information about COVID-19 was the most consistent predictor of error, with these respondents only between 0.095 and 0.42 times as likely to answer correctly than those relying on national news (holding constant all other factors).
+
+I also derive a collapsed version of the news source variable (Appendix Tables~\ref{table:FauciLOs_appendix}, \ref{table:stateresponseLOs_appendix}, and \ref{table:antibodyLOs_appendix}: Model~3), which I later use to investigate interaction effects. In moving from ten news source categories to five, the substantive nature of the results remains largely unchanged. All variables remain significant in predicting correct answers about Fauci. Where relying on local news and friends, family, and neighbors were significant predictors of knowledge about a stay-at-home order, the collapsed categories of local news and informal networks remain significant, with the new combined category of politicians also becoming significant. Finally, the collapsed predictor category of public health officials and organizations does become non-significant in predicting knowledge of antibodies, but all others remain significant.
 
 %-------%
-\subsection{Race, Ethnicity, and News Source}\label{sec:race-news}
+\subsection{Interactions with News Source}\label{sec:race-news}
 
-%interactions of race and news source
+I used these collapsed news source categories to test interactions with race and income. First, I tested interactions of binary BIPOC race and news source, using the collapsed news source variable (see Model~4 in Appendix Tables~\ref{table:FauciLOs_appendix}, \ref{table:stateresponseLOs_appendix}, and \ref{table:antibodyLOs_appendix}). Surprisingly, there is only one significant interaction effect here. Being BIPOC and relying on Public Health officials decreases the odds of knowing the correct answer about Fauci by a factor of 0.882 %[exp(0.541-0.666) =]
+compared to being White and relying on Public Health officials. For all other news sources, race does not have a differential effect on whether people have correct knowledge about COVID-19.\footnote
+    {Technically, the statistically accurate statement is that I cannot prove that the effect of news on racial category is not uniform.}
 
+%Being black and relying on national news, however, decreased the odds of knowing
+%the correct answer by a factor of [exp(-0.666) =] 0.514.
 
-%-------%
-\subsection{Income and News Source}\label{sec:income-news}
+% constant BIPOC = 0    Public Health = 0
+%          BIPOC = 1    Public Health = 0       LO = ?0.666   baseline odds decreases by a factor exp(?0.666)=.514
+%          BIPOC = 0    Public Health = 1       LO = ?0.717   baseline odds decreases by a factor exp(?0.717)=.488
+%          BIPOC = 1    Public Health = 1       LO = 0.541
 
- income and news source
+% black and rely on public health: baseline odds decreases by a factor of exp(0.541-0.717-0.666) = 0.431
+% white and rely on public health: exp(-0.717)
+% black and rely on natl news:     exp(-0.666)
 
+I also tested interactions of income and news source (see Model~5 in Appendix Tables~\ref{table:FauciLOs_appendix}, \ref{table:stateresponseLOs_appendix}, and \ref{table:antibodyLOs_appendix}). The only significant interaction effect in this model is the impact of income on the effect of local news on knowledge of statewide stay-at-home orders. Those with higher family incomes who rely primarily on local news for information about the coronavirus pandemic are more likely than those with lower incomes to extract accurate information about the state responses from that news. There is no detectable differential effect of income on how other news sources influence other types of knowledge. These results are robust to the omission of education variables from the model. 
+
+% constant Inc = 0    Local News = 0
+%          Inc = 1    Local News = 0       LO = 0.073
+%          Inc = 0    Local News = 1       LO = -2.992   
+%          Inc = 1    Local News = 1       LO = 0.227
+%additional 1% income and rely on local news: baseline odds decreases by a factor of exp(0.227-) = 
+
+Overall, there are few differential effects of race or income on how new sources influence knowledge of COVID-19. However, two important limitations apply. First, the two significant effects that are present may be the result of chance.\footnote
+    {Concerns about these results being significant solely due to chance are particularly apt because these analyses do not control for multiple comparisons or multiple testing \citep{Howell2012}.} 
+Furthermore, I cannot determine if the lack of additional significant interactions is indicative of real-world conditions or merely a lack of statistical power to detect interaction effects.
 
 
 %----------------------------------------------------------------------------------------
 \section{Discussion \& Conclusions}\label{sec:conclusion}
 %----------------------------------------------------------------------------------------
 
-This paper describes the current state of COVID-19 knowledge in the U.S. as a
-function of demographic characteristics and news consumption. This makes it a
-contribution in the style of Mannheim's sociology of knowledge
-\citep{Mannheim1929,Swidler1994} and the study of demographic inequalities in
-gender, class, and race/ethnicity. These are all important implications of
-knowledge inequality and important reasons compelling its relevance to scholars
-of inequality and policy-makers.
+This paper describes the current state of COVID-19 knowledge in the U.S. as a function of demographic characteristics and news consumption. This makes it a contribution in the style of Mannheim's sociology of knowledge \citep{Mannheim1929,Swidler1994} and the study of demographic inequalities in gender, age, class, and race and ethnicity. 
 
-Individuals face the world with different sets of knowledge, shaped by their
-social contexts. Some of this knowledge may be correct, and some of it may be
-incorrect, as we see in the results of this analysis. People may be aware that
-some of their incorrect knowledge represents a gap in their understanding, but
-in other domains, they may falsely believe what they know is the truth.
+Individuals face the world with different sets of knowledge, shaped by their social contexts. Some of this knowledge may be correct, and some of it may be incorrect, as we see in the results of this analysis. Misinformation is an important emerging topic in information science and sociology \citep{Metaxa-Kakavouli2017}: How do we come to know what we know? How do we come to be misinformed? Both, often through engagement with news sources and informal sources. Contrary to current popular narratives that news media, search algorithms, and other sources of factual information are pushing users in biased ways that depend on the demographics of the user, this study finds that there are few statistically significant interactions between news source and demographic characteristics. 
 
+However, this does not mean that certain demographic groups do not gravitate toward more or less effective forms of information. My results show that there are clear demographic distinctions in who knows what facts about the coronavirus pandemic. There are also clear descriptive patterns in media consumption between these groups. Education has persistent effects on the likelihood of knowing all of the questions, although its effects do differ among questions focused on governmental  (Fauci), public health (state stay-at-home order), and scientific (antibody tests) knowledge. The results find that both news source and demographic identities are significant predictors of whether or not people answer questions related to COVID-19 correctly. Race has the most consistent and dramatic effect on correct knowledge about antibody tests, even controlling for income, education, and news source. In contrast, news source and income seem to have the most influence on whether respondents knew that Anthony Fauci is an infectious disease expert and government advisor. However, news source does not have much of a \emph{differential} effect on knowledge based on the race or income of the respondent. Put another way, I cannot reject the hypothesis that race and income have similar effects across news sources.
 
-Misinformation is an important emerging topic in
-information science and sociology \citep{Metaxa-Kakavouli2017}. In essence, this
-is a study of modern epistemology. How do we come to know what we know? How do
-we come to be misinformed? Both, often through engagement with internet news
-sources and social media. If our news media and other sources of factual
-information are pushing users in biased ways and ways that depend on the
-demographics of the user, then we cannot be assured that this information is
-reliable. Understanding how this differs by demographic variables has important
-implications for social research and policy.
-
-Democracy depends on collective decision-making, which in turn depends on trust
-in institutions and access to reliable information, regardless of political
-persuasion. If our search engines and recommendation algorithms are pushing
-users in biased ways and ways that depend on the demographics of the user, then
-we cannot be assured that this information is reliable. Once we better
-understand the ways our media are shaping information consumption and knowledge,
-we can design better systems to reduce bias in these sociotechnical
-institutions. This research project will provide concrete evidence on different
-groups' command over information resources, a matter of increasing importance in
-modern society. It aims to understand how identity categories influence
-consumption of information online.
+This study documents concrete evidence on different groups' command over different types of information resources, a matter of increasing importance in modern society. It aims to understand how identity categories influence consumption of information, including some vital to health outcomes during COVID-19. Democracy depends on collective decision-making, which in turn depends on trust in institutions and access to reliable information. Once we better understand the ways social contexts shape information consumption and knowledge, we can design better systems to improve information accuracy and dissemination in the media, government, and other sociotechnical institutions. 
 
 
 
@@ -700,26 +508,40 @@ consumption of information online.
 \section{Data Availability}\label{sec:data-availability}
 %----------------------------------------------------------------------------------------
 
-The project described in this paper relies on publicly available data from
-surveys administered by the Pew Research Center.
-In keeping with recommendations on transparent and open social science
-\citep{Freese2018}, all code used to analyze these data are available at the
-Open Science Framework project repository at [redacted for blind review].
-%\url{DOI.ORG/10.17605/OSF.IO/QF624}.
+The research described in this paper relies on a publicly available dataset from surveys administered by the Pew Research Center.
+In keeping with recommendations on transparent and open social science \citep{Freese2018}, all code used to analyze these data are available at the Open Science Framework project repository at : [redacted for blind review].
 
 
 %----------------------------------------------------------------------------------------
 \section{Acknowledgments}\label{sec:acknowledgments}
 %----------------------------------------------------------------------------------------
 
-The author gratefully acknowledges Christof Brandtner for helpful comments on
-earlier drafts of this paper.
-
 
 %----------------------------------------------------------------------------------------
 \subsection{Funding}\label{sec:funding}
 %-------------------------------------------
-This work was supported by funding from Santa Clara University.
+
+
+%----------------------------------------------------------------------------------------
+\newpage
+\section{Appendix}
+%----------------------------------------------------------------------------------------
+%-FOLLOW CLOSELY-%
+\input{followClosely}
+
+%-FAUCI-%
+%\item ``Do you happen to know who Anthony Fauci is?'' (Correct answer is ``An infectious disease expert and government health adviser.q)'
+\input{fauciLOs_appendix}
+
+
+%-STATE RESPONSE-%
+%\item ``As far as you know, how did states in the U.S. respond during the coronavirus outbreak?''" (Correct answer is ``Some states in the U.S. have not had a statewide stay-at-home order.'')
+ \input{stateresponseLOs_appendix}
+
+%-ANTIBODY TESTS-%
+%\item ``As far as you know, are antibody tests for the coronavirus (also known as serology tests) intended to detect?'' (Correct answer is ``A previous infection'')
+ \input{antibodyLOs_appendix}
+
 
 
 %------------------------------------------------------------------------------
@@ -728,8 +550,8 @@ This work was supported by funding from Santa Clara University.
 \label{references}}
 \renewcommand{\bibname}{References}
 
-\bibliographystyle{/Users/mollymking/Documents/SocResearch/LatexStyleFiles/asa} %tells to use asr style file instead of natbib
-\bibliography{/Users/mollymking/Documents/SocResearch/Mendeley/library}
+\bibliographystyle{asa} %tells to use asr style file instead of natbib
+\bibliography{references}
 
 %----------------------------------------------------------------------------------------
 
