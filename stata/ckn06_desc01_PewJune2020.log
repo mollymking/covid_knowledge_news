@@ -1,0 +1,137 @@
+----------------------------------------------------------------------------
+      name:  ckn06_desc01_PewJune2020
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/co
+> vid_knowledge_news/stata/ckn06_desc01_PewJune2020.log
+  log type:  text
+ opened on:  12 Dec 2020, 13:28:16
+
+. ***-----------------------------***
+. 
+. //      project:        Knowledge of COVID & News Sources
+. //  task:       Descriptive Statistics - June Knowledge Questions
+. /*  data:    */ di "`dataset'"
+01_PewJune2020
+
+. 
+. //  github:     covid_knowledge_news
+. //  OSF:                https://osf.io/qf624/
+. 
+. //  author:     Molly King
+. 
+. display "$S_DATE  $S_TIME"
+12 Dec 2020  13:28:16
+
+. 
+. ***--------------------------***
+. // # PROGRAM SETUP
+. ***-----------------------------***
+. 
+. version 16 // keeps program consistent for future replications
+
+. set linesize 80
+
+. clear all
+
+. set more off
+
+. 
+. use  $deriv/ckn05_news`dataset'.dta, clear
+(01_PewJune2020 Knowledge variables)
+
+. save $deriv/ki`category'`dataset'.dta, replace // data that results at end
+file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ki06_desc01_Pew
+> June2020.dta saved
+
+. 
+. ***-----------------------------***
+. // # HOW CLOSELY FOLLOW
+. ***-----------------------------***
+. tab covidfol
+
+ COVIDFOL_W68. How |
+  closely have you |
+    been following |
+    news about the |
+   outbreak of the |      Freq.     Percent        Cum.
+-------------------+-----------------------------------
+      Very closely |      4,419       47.78       47.78
+    Fairly closely |      4,038       43.66       91.45
+   Not too closely |        660        7.14       98.58
+Not at all closely |        102        1.10       99.69
+           Refused |         29        0.31      100.00
+-------------------+-----------------------------------
+             Total |      9,248      100.00
+
+. tab covidfol, nolab
+
+COVIDFOL_W6 |
+     8. How |
+    closely |
+   have you |
+       been |
+  following |
+ news about |
+        the |
+outbreak of |
+        the |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      4,419       47.78       47.78
+          2 |      4,038       43.66       91.45
+          3 |        660        7.14       98.58
+          4 |        102        1.10       99.69
+         99 |         29        0.31      100.00
+------------+-----------------------------------
+      Total |      9,248      100.00
+
+. 
+. gen covidfol1 = 0
+
+.         replace covidfol1 = 1 if covidfol_w68  == 1
+(4,419 real changes made)
+
+. gen covidfol2 = 0
+
+.         replace covidfol2 = 1 if covidfol_w68  == 2
+(4,038 real changes made)
+
+. gen covidfol3 = 0
+
+.         replace covidfol3 = 1 if covidfol_w68  == 3
+(660 real changes made)
+
+. gen covidfol4 = 0
+
+.         replace covidfol4 = 1 if covidfol_w68  == 4
+(102 real changes made)
+
+. gen covidfol5 = 0
+
+.         replace covidfol5 = 1 if covidfol_w68  == 99
+(29 real changes made)
+
+. 
+. 
+. svy: mean covidfol1 covidfol2 covidfol3 covidfol4 covidfol5
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1       Number of obs   =       9,248
+Number of PSUs   =   9,248       Population size =  17,472,675
+                                 Design df       =       9,247
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+   covidfol1 |   .4796981    .006051      .4678368    .4915594
+   covidfol2 |   .4359716   .0060067      .4241972    .4477461
+   covidfol3 |   .0698368   .0030623       .063834    .0758396
+   covidfol4 |   .0117179   .0013604      .0090513    .0143846
+   covidfol5 |   .0027755    .000596      .0016072    .0039439
+--------------------------------------------------------------
+
+. 
+end of do-file
+
+. exit, clear
