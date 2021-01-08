@@ -1,0 +1,83 @@
+\begin{table}[htbp]\centering
+  %\begin{adjustwidth}{-1cm}{-1cm}
+  \caption[Predicting Knowledge of Antibody tests: Logistic regressions estimating
+  correct knowledge that antibody tests for the coronavirus (also known as
+  serology tests) are intended to detect a previous infection.]
+  {\emph{Predicting Knowledge of Antibody tests: Logistic regressions estimating
+  correct knowledge that antibody tests for the coronavirus (also known as
+  serology tests) are intended to detect a previous infection. Log odds (and
+  linearized standard errors) for each model.}}
+  \label{table:antibodyLOs}
+{\footnotesize
+{\textsymbols
+\begin{tabular*}{1\textwidth}{l @{\extracolsep\fill} *{5}{S[table-format=4.6]} @{}}
+\hline
+                      &\multicolumn{1}{c}{(1)}  &\multicolumn{1}{c}{(2)}  &\multicolumn{1}{c}{(3)}  &\multicolumn{1}{c}{(4)}  \\
+                      &\multicolumn{1}{c}{Baseline model}  &\multicolumn{1}{c}{Add education} &\multicolumn{1}{c}{Add news source} &\multicolumn{1}{c}{News collapsed}  \\
+                      &\multicolumn{1}{c}{$\beta$ / SE}  &\multicolumn{1}{c}{$\beta$ / SE}  &\multicolumn{1}{c}{$\beta$ / SE}  &\multicolumn{1}{c}{$\beta$ / SE}    \\
+\hline
+\multicolumn{1}{l}{\emph{Gender (woman)}}
+                      &      -0.053         &      -0.029         &      -0.019         &      -0.017         \\
+                      &     (0.059)         &     (0.060)         &     (0.063)         &     (0.062)         \\
+\multicolumn{3}{l}{\emph{Age} (Comparison: 18-29)}                &                     &                    \\
+\enspace 30 to 49     &       0.269\sym{**} &       0.257\sym{*}  &       0.255\sym{*}  &       0.245\sym{*}  \\
+                      &     (0.096)         &     (0.100)         &     (0.104)         &     (0.104)         \\
+\enspace 50 to 64     &       0.262\sym{**} &       0.352\sym{***}&       0.282\sym{**} &       0.281\sym{**} \\
+                      &     (0.100)         &     (0.102)         &     (0.107)         &     (0.107)         \\
+\enspace 65 and over  &       0.105         &       0.102         &       0.032         &       0.027         \\
+                      &     (0.102)         &     (0.106)         &     (0.112)         &     (0.112)         \\
+\multicolumn{1}{l}{\emph{Ln(Household Income)}}
+                      &       0.311\sym{***}&       0.201\sym{***}&       0.212\sym{***}&       0.213\sym{***}\\
+                      &     (0.042)         &     (0.028)         &     (0.028)         &     (0.029)         \\
+\multicolumn{3}{l}{\emph{Race} (Comparison: Non-Hispanic White)}  &                     &                     \\
+\enspace Black        &      -1.377\sym{***}&      -1.408\sym{***}&      -1.435\sym{***}&      -1.423\sym{***}\\
+                      &     (0.099)         &     (0.103)         &     (0.108)         &     (0.107)         \\
+\enspace Asian        &      -0.521\sym{***}&      -0.776\sym{***}&      -0.843\sym{***}&      -0.854\sym{***}\\
+                      &     (0.158)         &     (0.160)         &     (0.166)         &     (0.167)         \\
+\enspace Hispanic     &      -0.972\sym{***}&      -0.894\sym{***}&      -0.893\sym{***}&      -0.908\sym{***}\\
+                      &     (0.073)         &     (0.076)         &     (0.078)         &     (0.078)         \\
+\enspace Other/mixed  &      -0.572\sym{***}&      -0.489\sym{**} &      -0.528\sym{**} &      -0.526\sym{**} \\
+                      &     (0.162)         &     (0.163)         &     (0.168)         &     (0.167)         \\
+\multicolumn{3}{l}{\emph{Education} (Comparison: High School)}    &                     &                     \\
+\enspace Less than HS &                     &      -0.006         &      -0.096         &      -0.096         \\
+                      &                     &     (0.195)         &     (0.205)         &     (0.203)         \\
+\enspace Some College &                     &       0.741\sym{***}&       0.658\sym{***}&       0.668\sym{***}\\
+                      &                     &     (0.092)         &     (0.095)         &     (0.095)         \\
+\enspace College      &                     &       1.284\sym{***}&       1.165\sym{***}&       1.173\sym{***}\\
+                      &                     &     (0.098)         &     (0.103)         &     (0.102)         \\
+\enspace Grad School  &                     &       1.673\sym{***}&       1.483\sym{***}&       1.495\sym{***}\\
+                      &                     &     (0.107)         &     (0.112)         &     (0.111)         \\
+\multicolumn{5}{l}{\emph{Source relied most on for news about COVID-19} (Comparison: National  News)}         \\
+\enspace International News&                &                     &    -0.591\sym{***}  &                     \\
+                      &                     &                     &     (0.155)         &                     \\
+\enspace Local News   &                     &                     &      -0.768\sym{***}&                     \\
+                      &                     &                     &     (0.094)         &                     \\
+\multicolumn{2}{l}{\enspace Trump / COVID task force}   &         &      -0.454\sym{***}&                     \\
+                      &                     &                     &     (0.098)         &                     \\
+\multicolumn{2}{l}{\enspace Biden and his campaign} &             &     -0.967          &                     \\
+                      &                     &                     &     (0.573)         &                     \\
+\multicolumn{3}{l}{\enspace State and local elected officials}    &      -0.273\sym{*}  &                     \\
+                      &                     &                     &     (0.122)         &                     \\
+\multicolumn{3}{l}{\enspace Public health organizations and officials} & -0.246\sym{**} &                     \\
+                      &                     &                     &     (0.092)         &                     \\
+\multicolumn{2}{l}{\enspace Friends, family and neighbors}  &     &      -1.360\sym{***}&                     \\
+                      &                     &                     &     (0.187)         &                     \\
+\multicolumn{3}{l}{\enspace Community or neighborhood newsletter or Listserv} &  -0.622 &                     \\
+                      &                     &                     &     (0.513)         &                     \\
+\multicolumn{3}{l}{\enspace Online forums or discussion groups}   &     -0.595\sym{**}  &                     \\
+                      &                     &                     &     (0.184)         &                     \\
+\multicolumn{5}{l}{\emph{Source relied most on for news about COVID-19 (Collapsed)} (Comparison: National \& International News)}   \\
+\enspace Local news   &                     &                     &                     &      -0.686\sym{***}\\
+                      &                     &                     &                     &     (0.091)         \\
+\enspace Politicians  &                     &                     &                     &      -0.311\sym{***}\\
+                      &                     &                     &                     &     (0.083)         \\
+\enspace Public Health&                     &                     &                     &      -0.167         \\
+                      &                     &                     &                     &     (0.089)         \\
+\enspace Informal     &                     &                     &                     &      -0.864\sym{***}\\
+                      &                     &                     &                     &     (0.131)         \\
+\hline
+Observations   &\multicolumn{1}{c}{9079}    &\multicolumn{1}{c}{9069} &\multicolumn{1}{c}{8763} &\multicolumn{1}{c}{8763}  \\
+\hline
+\end{tabular*}}}
+%\end{adjustwidth} %adjust margins of page for wide table
+\end{table}
