@@ -49,7 +49,6 @@ global results	"~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_new
 ***--------------------------***
 
 do $stata/ckn01_impe01_PewJune2020.do 				// Import "Pathways June 2020 (ATP W68).sav"
-do $stata/ckn01_impe02_PewSept2020.do 				// Import "Pathways Sep 2020 (ATP W73).sav"
 do $stata/ckn01_impe03_asec.do						// Import CPS ASEC 2019-2020 data
 
 ***--------------------------***
@@ -57,7 +56,6 @@ do $stata/ckn01_impe03_asec.do						// Import CPS ASEC 2019-2020 data
 ***--------------------------***
 
 do $stata/ckn02_demg01_PewJune2020.do 
-do $stata/ckn02_demg02_PewSept2020.do
 
 *Include files needed for above	
 	*ckn02_demg00_education.doi
@@ -69,7 +67,6 @@ do $stata/ckn02_demg02_PewSept2020.do
 ***--------------------------***
 
 do $stata/ckn03_know01_PewJune2020.do
-do $stata/ckn03_know02_PewSept2020.do
 
 ***--------------------------***
 // 04 INCOME VARIABLES (ckn04_inc)  
