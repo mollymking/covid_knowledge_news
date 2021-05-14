@@ -1,0 +1,1243 @@
+--------------------------------------------------------------------------------
+      name:  ckn08_prob01_PewJune2020
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
+> knowledge_news/stata/ckn08_prob01_PewJune2020.log
+  log type:  text
+ opened on:  16 Mar 2021, 18:34:23
+
+. ***-----------------------------***
+. 
+. //      project:        Knowledge of COVID & News Sources
+. //  task:               Predicted Probabilities - June Knowledge Questions
+. /*  data:    */ di "`dataset'"
+01_PewJune2020
+
+. 
+. //  github:     covid_knowledge_news
+. //  OSF:                https://osf.io/qf624/
+. 
+. //  author:     Molly King
+. 
+. display "$S_DATE  $S_TIME"
+16 Mar 2021  18:34:23
+
+. 
+. ***-----------------------------***
+. // # PROGRAM SETUP
+. ***-----------------------------***
+. 
+. version 16 // keeps program consistent for future replications
+
+. set linesize 80
+
+. clear all
+
+. set more off
+
+. 
+. use $deriv/ckn05_news`dataset'.dta, clear
+(01_PewJune2020 Knowledge variables)
+
+. save $deriv/ckn`category'`dataset'.dta, replace // data that results at end
+file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn08_prob01_Pe
+> wJune2020.dta saved
+
+. 
+. cd $deriv
+/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/data/data_derv
+
+. 
+. ***--------------------------***
+. // SET LOCALS
+. ***--------------------------***
+. // correct/not correct variables set
+. if "`CD'" == "C" {
+.         local title "correctness"
+.         local coef_meaning "Correct"
+.         local answer "Correctly"
+. }
+
+. 
+. // don't know variables set
+. if "`CD'" == "D" {
+.         local title "certainty"
+.         local coef_meaning "Uncertain"
+.         local answer "Don't Know"
+. }
+
+. 
+. // Color locals
+. local Teal "57 118 104"
+
+. local Gold "188 121 18"
+
+. local Green "149 158 74"
+
+. local Blue "93 164 181"
+
+. local LtGrey "233 233 234"
+
+. local DkGrey "147 149 152"
+
+. 
+. // Graph fonts
+. local graphfont "Palatino"
+
+. graph set window fontface "`graphfont'"
+
+. graph set window fontfaceserif "`graphfont'"
+
+. graph set window /*echo back preferences*/
+
+   window           current
+   setting          default          choices
+   ------------------------------------------------------------------------
+   fontface         Palatino          font name
+   fontfacesans     Helvetica         font name
+   fontfaceserif    Palatino          font name
+   fontfacemono     Courier           font name
+   fontfacesymbol   Symbol            font name
+   ------------------------------------------------------------------------
+   To change setting, type "graph set window setting choice"
+
+. 
+. ***-----------------------------***
+. // # INTERACTIONS / MARGINS
+. ***-----------------------------***
+. 
+. // STORE BASE LEVELS for INTERACTIONS
+. 
+. fvset base 0 dB_bipoc
+
+. fvset base 1 dG_cnews // ref: dB_cnews_news 
+
+. fvset base 2 dG_edu  // ref: HS
+
+. fvset base 1 dG_age      // ref: 18-29
+
+. 
+. local income_var  dV_finc_ln // 
+
+. 
+. *https://stats.idre.ucla.edu/stata/faq/how-can-i-graph-the-results-of-the-marg
+> ins-command-stata-12/
+. 
+. /*
+> Adjusted predicted probability of y = 1 for each level of a when x is at its m
+> ean after
+> logit y a##c.x
+> margins a, atmeans
+> 
+> Adjusted predicted probability for each level of the interaction of a and b, h
+> olding x at 25, after
+> logit y a##b##c.x
+> margins a#b, at(x=25)
+> 
+> Adjusted prediction for each level of a when x = 25 and b = 1
+> margins a, at(x=25 b=1)
+> */
+. *Also
+. *https://www.stata.com/statalist/archive/2013-01/msg00293.html
+. 
+. ***-----------------------------***
+. // # INCOME * LOCAL NEWS MARGINS
+. ***-----------------------------***
+. /*
+> foreach v in  stateresponse { //  antibody  unemploy 
+> 
+>         drop if `v'_c == 99 // Refused
+>         drop if `v'_c == 98 // Did not receive question
+>         drop if covidnewsrel == 98 | covidnewsrel == 99 // refused or Did not 
+> receive question 
+> 
+>         svy: logit `v'_c  i.dG_age  dB_fem i.dG_edu   ///
+>         dB_bipoc ///
+>         c.`income_var'##i.dG_cnews /// ## includes both main effects and inter
+> actions
+>         , or baselevels // report Odds Ratios
+>         
+> *predict `v'_pp
+> 
+> *summarize `v'_pp
+> *summarize `v'_c
+> 
+> margins dG_cnews,  at(`income_var'=(-7(1)7)) vsquish
+> marginsplot
+> *shows significant interaction  of income and local news
+> *graph export  "/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/c
+> ovid_knowledge_news/figures/pp_stateresponse_inc_news.jpg", ///
+>         as(jpg) name("Graph") quality(90)
+> 
+> } // close loop through fauci antibody stateresponse    
+> */
+. 
+. ***-----------------------------***
+. // # NO INTERACTIONS - HISTOGRAM OF RACE AND NEWS
+. ***-----------------------------***
+. *https://journals.sagepub.com/doi/pdf/10.1177/1536867X0500500111
+. 
+. foreach v in  antibody fauci stateresponse  { //   unemploy 
+  2. 
+.         drop if `v'_c == 99 // Refused
+  3.         drop if `v'_c == 98 // Did not receive question
+  4.         drop if covidnewsrel == 98 | covidnewsrel == 99 // refused or Did n
+> ot receive question 
+  5. 
+. svy: logit `v'_c  dB_fem ///
+>         dB_age_30_49 dB_age_50_64 dB_age_65p ///
+>         `income_var' ///
+>         dB_rwhite dB_rblack dB_rasian dB_rhisp dB_rother ///
+>         dB_edu_lHS dB_edu_sCol dB_edu_col dB_edu_grad  ///
+>         dB_cnews_local dB_cnews_politicians dB_cnews_pubhealth dB_cnews_inform
+> al /// comparison: cnews_news
+>         , baselevels 
+  6. 
+. *this command does not work for some reason:
+. *prtab dB_rblack dB_rasian dB_rhisp dB_rother, rest(mean)
+. 
+. gen  `v'_race_news = .
+  7. gen  `v'_race_news_cilo = .
+  8. gen  `v'_race_news_cihi = .
+  9. 
+. foreach racevar of varlist dB_rwhite dB_rblack dB_rasian dB_rhisp dB_rother {
+ 10.         foreach newsvar of varlist dB_cnews_local dB_cnews_politicians dB_c
+> news_pubhealth dB_cnews_informal {
+ 11.                 prvalue, x(`racevar'=1 `newsvar'=1) rest(mean) brief
+ 12.                                 
+.                 *return list
+.                 replace  `v'_race_news = r(p1)                  if `racevar' =
+> = 1 & `newsvar' == 1
+ 13.                 replace  `v'_race_news_cilo = r(p1_lo)  if `racevar' == 1 &
+>  `newsvar' == 1
+ 14.                 replace  `v'_race_news_cihi = r(p1_hi)  if `racevar' == 1 &
+>  `newsvar' == 1
+ 15.          
+.         } // close newsvar loop
+ 16.         
+.         prvalue, x(`racevar'=1 dB_cnews_local=0 dB_cnews_politicians=0 dB_cnew
+> s_pubhealth=0 dB_cnews_informal=0) ///
+>                 rest(mean) brief        
+ 17. 
+.         replace `v'_race_news = r(p1) if `racevar' == 1 & ///
+>                 dB_cnews_local==0 & dB_cnews_politicians==0 & dB_cnews_pubheal
+> th==0 & dB_cnews_informal==0
+ 18.         replace `v'_race_news_cilo = r(p1_lo) if `racevar' == 1 & ///
+>                 dB_cnews_local==0 & dB_cnews_politicians==0 & dB_cnews_pubheal
+> th==0 & dB_cnews_informal==0
+ 19.         replace `v'_race_news_cihi = r(p1_hi) if `racevar' == 1 & ///
+>                 dB_cnews_local==0 & dB_cnews_politicians==0 & dB_cnews_pubheal
+> th==0 & dB_cnews_informal==0
+ 20.         
+. } // close racevar loop
+ 21. } // close loop through fauci antibody stateresponse    
+(0 observations deleted)
+(0 observations deleted)
+(50 observations deleted)
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                 Number of obs     =       8,869
+Number of PSUs     =     8,869                 Population size   =  16,775,214
+                                               Design df         =       8,868
+                                               F(  18,   8851)   =       47.51
+                                               Prob > F          =      0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+   antibody_c |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       dB_fem |  -.0114811    .061762    -0.19   0.853     -.132549    .1095867
+ dB_age_30_49 |   .2489178   .1031098     2.41   0.016     .0467987    .4510369
+ dB_age_50_64 |   .2999467   .1064369     2.82   0.005     .0913058    .5085876
+   dB_age_65p |   .0400197   .1105525     0.36   0.717    -.1766887    .2567282
+   dV_finc_ln |   .2147449   .0286445     7.50   0.000      .158595    .2708948
+    dB_rwhite |   .7002854   .2621877     2.67   0.008     .1863368    1.214234
+    dB_rblack |  -.7124664   .2783574    -2.56   0.010    -1.258111   -.1668215
+    dB_rasian |  -.1467422   .3057736    -0.48   0.631    -.7461292    .4526448
+     dB_rhisp |  -.2010792   .2686944    -0.75   0.454    -.7277824    .3256241
+    dB_rother |   .1784001   .3063652     0.58   0.560    -.4221467    .7789469
+   dB_edu_lHS |   -.097361    .201685    -0.48   0.629    -.4927104    .2979884
+  dB_edu_sCol |   .6720562   .0939189     7.16   0.000     .4879534    .8561591
+   dB_edu_col |   1.187808   .1018196    11.67   0.000     .9882178    1.387398
+  dB_edu_grad |   1.499301   .1102417    13.60   0.000     1.283202      1.7154
+dB_cnews_lo~l |  -.6718798   .0908975    -7.39   0.000    -.8500599   -.4936996
+dB_cnews_po~s |  -.3027005    .082381    -3.67   0.000    -.4641864   -.1412147
+dB_cnews_pu~h |  -.1355231     .08828    -1.54   0.125    -.3085724    .0375262
+dB_cnews_in~l |  -.8717802   .1295107    -6.73   0.000    -1.125651   -.6179092
+        _cons |  -2.538169   .4167689    -6.09   0.000    -3.355132   -1.721205
+-------------------------------------------------------------------------------
+(9,198 missing values generated)
+(9,198 missing values generated)
+(9,198 missing values generated)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6789   [ 0.6287,    0.7291]
+  Pr(y=0_Incorr|x):   0.3211   [ 0.2709,    0.3713]
+(736 real changes made)
+(736 real changes made)
+(736 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.7495   [ 0.7092,    0.7899]
+  Pr(y=0_Incorr|x):   0.2505   [ 0.2101,    0.2908]
+(1,662 real changes made)
+(1,662 real changes made)
+(1,662 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.7717   [ 0.7321,    0.8112]
+  Pr(y=0_Incorr|x):   0.2283   [ 0.1888,    0.2679]
+(1,272 real changes made)
+(1,272 real changes made)
+(1,272 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6219   [ 0.5516,    0.6922]
+  Pr(y=0_Incorr|x):   0.3781   [ 0.3078,    0.4484]
+(272 real changes made)
+(272 real changes made)
+(272 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.8273   [ 0.8000,    0.8546]
+  Pr(y=0_Incorr|x):   0.1727   [ 0.1454,    0.2000]
+(2,190 real changes made)
+(2,190 real changes made)
+(2,190 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.4681   [ 0.3351,    0.6010]
+  Pr(y=0_Incorr|x):   0.5319   [ 0.3990,    0.6649]
+(147 real changes made)
+(147 real changes made)
+(147 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5546   [ 0.4232,    0.6861]
+  Pr(y=0_Incorr|x):   0.4454   [ 0.3139,    0.5768]
+(92 real changes made)
+(92 real changes made)
+(92 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5845   [ 0.4549,    0.7141]
+  Pr(y=0_Incorr|x):   0.4155   [ 0.2859,    0.5451]
+(122 real changes made)
+(122 real changes made)
+(122 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.4064   [ 0.2683,    0.5445]
+  Pr(y=0_Incorr|x):   0.5936   [ 0.4555,    0.7317]
+(47 real changes made)
+(47 real changes made)
+(47 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6660   [ 0.5521,    0.7798]
+  Pr(y=0_Incorr|x):   0.3340   [ 0.2202,    0.4479]
+(246 real changes made)
+(246 real changes made)
+(246 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5962   [ 0.4497,    0.7426]
+  Pr(y=0_Incorr|x):   0.4038   [ 0.2574,    0.5503]
+(27 real changes made)
+(27 real changes made)
+(27 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6763   [ 0.5439,    0.8087]
+  Pr(y=0_Incorr|x):   0.3237   [ 0.1913,    0.4561]
+(33 real changes made)
+(33 real changes made)
+(33 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.7024   [ 0.5751,    0.8296]
+  Pr(y=0_Incorr|x):   0.2976   [ 0.1704,    0.4249]
+(51 real changes made)
+(51 real changes made)
+(51 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5346   [ 0.3755,    0.6936]
+  Pr(y=0_Incorr|x):   0.4654   [ 0.3064,    0.6245]
+(22 real changes made)
+(22 real changes made)
+(22 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.7698   [ 0.6660,    0.8737]
+  Pr(y=0_Incorr|x):   0.2302   [ 0.1263,    0.3340]
+(123 real changes made)
+(123 real changes made)
+(123 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5903   [ 0.4772,    0.7034]
+  Pr(y=0_Incorr|x):   0.4097   [ 0.2966,    0.5228]
+(313 real changes made)
+(313 real changes made)
+(313 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6710   [ 0.5685,    0.7735]
+  Pr(y=0_Incorr|x):   0.3290   [ 0.2265,    0.4315]
+(285 real changes made)
+(285 real changes made)
+(285 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6973   [ 0.5986,    0.7959]
+  Pr(y=0_Incorr|x):   0.3027   [ 0.2041,    0.4014]
+(322 real changes made)
+(322 real changes made)
+(322 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5285   [ 0.4002,    0.6568]
+  Pr(y=0_Incorr|x):   0.4715   [ 0.3432,    0.5998]
+(89 real changes made)
+(89 real changes made)
+(89 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.7655   [ 0.6853,    0.8457]
+  Pr(y=0_Incorr|x):   0.2345   [ 0.1543,    0.3147]
+(507 real changes made)
+(507 real changes made)
+(507 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6694   [ 0.5346,    0.8043]
+  Pr(y=0_Incorr|x):   0.3306   [ 0.1957,    0.4654]
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.7413   [ 0.6252,    0.8575]
+  Pr(y=0_Incorr|x):   0.2587   [ 0.1425,    0.3748]
+(60 real changes made)
+(60 real changes made)
+(60 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.7640   [ 0.6544,    0.8735]
+  Pr(y=0_Incorr|x):   0.2360   [ 0.1265,    0.3456]
+(58 real changes made)
+(58 real changes made)
+(58 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6117   [ 0.4590,    0.7644]
+  Pr(y=0_Incorr|x):   0.3883   [ 0.2356,    0.5410]
+(12 real changes made)
+(12 real changes made)
+(12 real changes made)
+
+logit: Predictions for antibody_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.8210   [ 0.7342,    0.9079]
+  Pr(y=0_Incorr|x):   0.1790   [ 0.0921,    0.2658]
+(82 real changes made)
+(82 real changes made)
+(82 real changes made)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                 Number of obs     =       8,869
+Number of PSUs     =     8,869                 Population size   =  16,775,214
+                                               Design df         =       8,868
+                                               F(  18,   8851)   =       45.40
+                                               Prob > F          =      0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+      fauci_c |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       dB_fem |  -.7232831   .0793328    -9.12   0.000    -.8787938   -.5677725
+ dB_age_30_49 |    .503844   .1111082     4.53   0.000     .2860462    .7216418
+ dB_age_50_64 |   1.057313   .1194127     8.85   0.000     .8232368     1.29139
+   dB_age_65p |   1.277174   .1334584     9.57   0.000     1.015565    1.538784
+   dV_finc_ln |   .1469803   .0230298     6.38   0.000     .1018366    .1921241
+    dB_rwhite |   .0773336   .5090538     0.15   0.879    -.9205296    1.075197
+    dB_rblack |  -.5952976   .5214104    -1.14   0.254    -1.617383    .4267876
+    dB_rasian |  -.3888223   .5505431    -0.71   0.480    -1.468014    .6903696
+     dB_rhisp |   -.458648   .5138325    -0.89   0.372    -1.465879    .5485827
+    dB_rother |  -.0672773    .541693    -0.12   0.901    -1.129121    .9945665
+   dB_edu_lHS |  -.4283811   .2161174    -1.98   0.047    -.8520213    -.004741
+  dB_edu_sCol |   .5832584   .1076543     5.42   0.000      .372231    .7942857
+   dB_edu_col |   1.430412   .1216458    11.76   0.000     1.191958    1.668866
+  dB_edu_grad |   1.672296   .1364026    12.26   0.000     1.404916    1.939677
+dB_cnews_lo~l |  -.9715991   .1135854    -8.55   0.000    -1.194253   -.7489454
+dB_cnews_po~s |  -.4018151   .1073497    -3.74   0.000    -.6122455   -.1913848
+dB_cnews_pu~h |  -.5718448    .107962    -5.30   0.000    -.7834753   -.3602143
+dB_cnews_in~l |  -1.606908   .1450771   -11.08   0.000    -1.891293   -1.322523
+        _cons |  -.5844989   .5816705    -1.00   0.315    -1.724708      .55571
+-------------------------------------------------------------------------------
+(9,198 missing values generated)
+(9,198 missing values generated)
+(9,198 missing values generated)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.7648   [ 0.6981,    0.8315]
+  Pr(y=0_Incorr|x):   0.2352   [ 0.1685,    0.3019]
+(736 real changes made)
+(736 real changes made)
+(736 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.8466   [ 0.7996,    0.8936]
+  Pr(y=0_Incorr|x):   0.1534   [ 0.1064,    0.2004]
+(1,662 real changes made)
+(1,662 real changes made)
+(1,662 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.8263   [ 0.7739,    0.8787]
+  Pr(y=0_Incorr|x):   0.1737   [ 0.1213,    0.2261]
+(1,272 real changes made)
+(1,272 real changes made)
+(1,272 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6194   [ 0.5198,    0.7191]
+  Pr(y=0_Incorr|x):   0.3806   [ 0.2809,    0.4802]
+(272 real changes made)
+(272 real changes made)
+(272 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.9205   [ 0.8962,    0.9447]
+  Pr(y=0_Incorr|x):   0.0795   [ 0.0553,    0.1038]
+(2,190 real changes made)
+(2,190 real changes made)
+(2,190 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6465   [ 0.4254,    0.8676]
+  Pr(y=0_Incorr|x):   0.3535   [ 0.1324,    0.5746]
+(147 real changes made)
+(147 real changes made)
+(147 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.7564   [ 0.5773,    0.9355]
+  Pr(y=0_Incorr|x):   0.2436   [ 0.0645,    0.4227]
+(92 real changes made)
+(92 real changes made)
+(92 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.7279   [ 0.5359,    0.9199]
+  Pr(y=0_Incorr|x):   0.2721   [ 0.0801,    0.4641]
+(122 real changes made)
+(122 real changes made)
+(122 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.4780   [ 0.2286,    0.7273]
+  Pr(y=0_Incorr|x):   0.5220   [ 0.2727,    0.7714]
+(47 real changes made)
+(47 real changes made)
+(47 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.8668   [ 0.7579,    0.9758]
+  Pr(y=0_Incorr|x):   0.1332   [ 0.0242,    0.2421]
+(246 real changes made)
+(246 real changes made)
+(246 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6851   [ 0.4536,    0.9167]
+  Pr(y=0_Incorr|x):   0.3149   [ 0.0833,    0.5464]
+(27 real changes made)
+(27 real changes made)
+(27 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.7870   [ 0.6070,    0.9669]
+  Pr(y=0_Incorr|x):   0.2130   [ 0.0331,    0.3930]
+(33 real changes made)
+(33 real changes made)
+(33 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.7609   [ 0.5659,    0.9560]
+  Pr(y=0_Incorr|x):   0.2391   [ 0.0440,    0.4341]
+(51 real changes made)
+(51 real changes made)
+(51 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5214   [ 0.2480,    0.7948]
+  Pr(y=0_Incorr|x):   0.4786   [ 0.2052,    0.7520]
+(22 real changes made)
+(22 real changes made)
+(22 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.8856   [ 0.7801,    0.9912]
+  Pr(y=0_Incorr|x):   0.1144   [ 0.0088,    0.2199]
+(123 real changes made)
+(123 real changes made)
+(123 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6845   [ 0.4988,    0.8702]
+  Pr(y=0_Incorr|x):   0.3155   [ 0.1298,    0.5012]
+(313 real changes made)
+(313 real changes made)
+(313 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.7865   [ 0.6419,    0.9311]
+  Pr(y=0_Incorr|x):   0.2135   [ 0.0689,    0.3581]
+(285 real changes made)
+(285 real changes made)
+(285 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.7604   [ 0.6035,    0.9173]
+  Pr(y=0_Incorr|x):   0.2396   [ 0.0827,    0.3965]
+(322 real changes made)
+(322 real changes made)
+(322 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5207   [ 0.2973,    0.7440]
+  Pr(y=0_Incorr|x):   0.4793   [ 0.2560,    0.7027]
+(89 real changes made)
+(89 real changes made)
+(89 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.8853   [ 0.8006,    0.9701]
+  Pr(y=0_Incorr|x):   0.1147   [ 0.0299,    0.1994]
+(507 real changes made)
+(507 real changes made)
+(507 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.7483   [ 0.5499,    0.9468]
+  Pr(y=0_Incorr|x):   0.2517   [ 0.0532,    0.4501]
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.8347   [ 0.6889,    0.9804]
+  Pr(y=0_Incorr|x):   0.1653   [ 0.0196,    0.3111]
+(60 real changes made)
+(60 real changes made)
+(60 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.8131   [ 0.6528,    0.9733]
+  Pr(y=0_Incorr|x):   0.1869   [ 0.0267,    0.3472]
+(58 real changes made)
+(58 real changes made)
+(58 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5982   [ 0.3375,    0.8588]
+  Pr(y=0_Incorr|x):   0.4018   [ 0.1412,    0.6625]
+(12 real changes made)
+(12 real changes made)
+(12 real changes made)
+
+logit: Predictions for fauci_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.9137   [ 0.8325,    0.9948]
+  Pr(y=0_Incorr|x):   0.0863   [ 0.0052,    0.1675]
+(82 real changes made)
+(82 real changes made)
+(82 real changes made)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                 Number of obs     =       8,869
+Number of PSUs     =     8,869                 Population size   =  16,775,214
+                                               Design df         =       8,868
+                                               F(  18,   8851)   =       18.49
+                                               Prob > F          =      0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+staterespo~_c |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       dB_fem |  -.0825966   .0531638    -1.55   0.120    -.1868098    .0216167
+ dB_age_30_49 |   .1177268   .0924778     1.27   0.203    -.0635512    .2990048
+ dB_age_50_64 |   .1148895   .0941662     1.22   0.222     -.069698    .2994771
+   dB_age_65p |   .2002943   .0985812     2.03   0.042     .0070523    .3935364
+   dV_finc_ln |   .0791881   .0189806     4.17   0.000     .0419816    .1163945
+    dB_rwhite |   .1823489   .2620183     0.70   0.486    -.3312675    .6959653
+    dB_rblack |  -.4281048   .2766742    -1.55   0.122    -.9704503    .1142408
+    dB_rasian |  -.2200695   .3009676    -0.73   0.465    -.8100356    .3698966
+     dB_rhisp |  -.2636416   .2684643    -0.98   0.326    -.7898937    .2626106
+    dB_rother |  -.2136533   .3003891    -0.71   0.477    -.8024855    .3751788
+   dB_edu_lHS |  -.2371298   .1863041    -1.27   0.203     -.602329    .1280694
+  dB_edu_sCol |   .3679909   .0902864     4.08   0.000     .1910086    .5449732
+   dB_edu_col |   .5359123   .0926211     5.79   0.000     .3543535    .7174712
+  dB_edu_grad |   .6705527   .0960962     6.98   0.000     .4821818    .8589236
+dB_cnews_lo~l |  -.5325559   .0810667    -6.57   0.000    -.6914654   -.3736464
+dB_cnews_po~s |   -.154569   .0702413    -2.20   0.028    -.2922583   -.0168798
+dB_cnews_pu~h |  -.1235402    .073816    -1.67   0.094    -.2682367    .0211564
+dB_cnews_in~l |  -.4407103   .1251937    -3.52   0.000    -.6861189   -.1953018
+        _cons |  -.7857378   .3474806    -2.26   0.024     -1.46688   -.1045953
+-------------------------------------------------------------------------------
+(9,198 missing values generated)
+(9,198 missing values generated)
+(9,198 missing values generated)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5213   [ 0.4680,    0.5746]
+  Pr(y=0_Incorr|x):   0.4787   [ 0.4254,    0.5320]
+(736 real changes made)
+(736 real changes made)
+(736 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6047   [ 0.5575,    0.6519]
+  Pr(y=0_Incorr|x):   0.3953   [ 0.3481,    0.4425]
+(1,662 real changes made)
+(1,662 real changes made)
+(1,662 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6093   [ 0.5610,    0.6575]
+  Pr(y=0_Incorr|x):   0.3907   [ 0.3425,    0.4390]
+(1,272 real changes made)
+(1,272 real changes made)
+(1,272 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5309   [ 0.4584,    0.6033]
+  Pr(y=0_Incorr|x):   0.4691   [ 0.3967,    0.5416]
+(272 real changes made)
+(272 real changes made)
+(272 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6689   [ 0.6286,    0.7093]
+  Pr(y=0_Incorr|x):   0.3311   [ 0.2907,    0.3714]
+(2,190 real changes made)
+(2,190 real changes made)
+(2,190 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.4091   [ 0.2834,    0.5348]
+  Pr(y=0_Incorr|x):   0.5909   [ 0.4652,    0.7166]
+(147 real changes made)
+(147 real changes made)
+(147 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.4930   [ 0.3633,    0.6228]
+  Pr(y=0_Incorr|x):   0.5070   [ 0.3772,    0.6367]
+(92 real changes made)
+(92 real changes made)
+(92 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.4978   [ 0.3681,    0.6276]
+  Pr(y=0_Incorr|x):   0.5022   [ 0.3724,    0.6319]
+(122 real changes made)
+(122 real changes made)
+(122 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.4184   [ 0.2813,    0.5555]
+  Pr(y=0_Incorr|x):   0.5816   [ 0.4445,    0.7187]
+(47 real changes made)
+(47 real changes made)
+(47 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5623   [ 0.4371,    0.6874]
+  Pr(y=0_Incorr|x):   0.4377   [ 0.3126,    0.5629]
+(246 real changes made)
+(246 real changes made)
+(246 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.4539   [ 0.3075,    0.6003]
+  Pr(y=0_Incorr|x):   0.5461   [ 0.3997,    0.6925]
+(27 real changes made)
+(27 real changes made)
+(27 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5387   [ 0.3928,    0.6846]
+  Pr(y=0_Incorr|x):   0.4613   [ 0.3154,    0.6072]
+(33 real changes made)
+(33 real changes made)
+(33 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5434   [ 0.3974,    0.6894]
+  Pr(y=0_Incorr|x):   0.4566   [ 0.3106,    0.6026]
+(51 real changes made)
+(51 real changes made)
+(51 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.4635   [ 0.3078,    0.6191]
+  Pr(y=0_Incorr|x):   0.5365   [ 0.3809,    0.6922]
+(22 real changes made)
+(22 real changes made)
+(22 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6066   [ 0.4687,    0.7445]
+  Pr(y=0_Incorr|x):   0.3934   [ 0.2555,    0.5313]
+(123 real changes made)
+(123 real changes made)
+(123 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.4526   [ 0.3393,    0.5660]
+  Pr(y=0_Incorr|x):   0.5474   [ 0.4340,    0.6607]
+(313 real changes made)
+(313 real changes made)
+(313 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5374   [ 0.4246,    0.6502]
+  Pr(y=0_Incorr|x):   0.4626   [ 0.3498,    0.5754]
+(285 real changes made)
+(285 real changes made)
+(285 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5422   [ 0.4293,    0.6550]
+  Pr(y=0_Incorr|x):   0.4578   [ 0.3450,    0.5707]
+(322 real changes made)
+(322 real changes made)
+(322 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.4622   [ 0.3365,    0.5879]
+  Pr(y=0_Incorr|x):   0.5378   [ 0.4121,    0.6635]
+(89 real changes made)
+(89 real changes made)
+(89 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6054   [ 0.4991,    0.7117]
+  Pr(y=0_Incorr|x):   0.3946   [ 0.2883,    0.5009]
+(507 real changes made)
+(507 real changes made)
+(507 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.4554   [ 0.3090,    0.6017]
+  Pr(y=0_Incorr|x):   0.5446   [ 0.3983,    0.6910]
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5401   [ 0.3947,    0.6856]
+  Pr(y=0_Incorr|x):   0.4599   [ 0.3144,    0.6053]
+(60 real changes made)
+(60 real changes made)
+(60 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.5449   [ 0.3993,    0.6904]
+  Pr(y=0_Incorr|x):   0.4551   [ 0.3096,    0.6007]
+(58 real changes made)
+(58 real changes made)
+(58 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.4649   [ 0.3085,    0.6214]
+  Pr(y=0_Incorr|x):   0.5351   [ 0.3786,    0.6915]
+(12 real changes made)
+(12 real changes made)
+(12 real changes made)
+
+logit: Predictions for stateresponse_c
+
+                                95% Conf. Interval
+  Pr(y=1_Correc|x):   0.6080   [ 0.4702,    0.7459]
+  Pr(y=0_Incorr|x):   0.3920   [ 0.2541,    0.5298]
+(82 real changes made)
+(82 real changes made)
+(82 real changes made)
+
+. 
+. **Next step: also store confidence intervals
+. 
+. label define media_source 1 "Intl/Natl" 2 "Local" 3 "Politicians" 4 "Public He
+> alth" 5 "Informal"
+
+. lab val dG_cnews media_source
+
+. 
+. *make table of predicted probability by race and news source, at mean income:
+. foreach v in  antibody fauci stateresponse  { //    unemploy 
+  2.         table dG_cnews dG_race , contents(mean `v'_race_news mean `v'_race_
+> news_cihi mean `v'_race_news_cilo)
+  3. 
+.         
+. //HISTOGRAM
+. 
+. *need to add CIs: https://stats.idre.ucla.edu/stata/faq/how-can-i-make-a-bar-g
+> raph-with-error-bars/
+. 
+. graph bar `v'_race_news, ///
+>         over(dG_race, ///
+>                 label(labcolor(black) angle(45) labsize(small)) ///  gap (betw
+> een group bars); group label(color; angle; size; gap between label and graph);
+>                 axis(outergap(2))) /// axis(line color; gap between label and 
+> legend)) 
+>                 bargap(0) outergap(15) /// gap between within group bars; gap 
+> outside first/last group
+>         asyvars ///
+>         over(dG_cnews) ///
+>         bar(1, fcolor("57 118 104") fintensity(inten60) lcolor("57 118 104") l
+> width(small)) /// Bar(fill color, fill intensity, line color, line width)
+>         bar(2, fcolor("188 121 18") fintensity(inten60) lcolor("188 121 18") l
+> width(small)) /// fill intensity = 60%
+>         bar(3, fcolor("149 158 74") fintensity(inten60) lcolor("149 158 74") l
+> width(small)) ///
+>         bar(4, fcolor("93 164 181") fintensity(inten60) lcolor("93 164 181") l
+> width(small)) ///
+>         plotregion(fcolor("233 233 234") lcolor(white)) /// graph plot(fill co
+> lor; line color)
+>         ytitle("Predicted Probability of Answering Correctly" , color("147 149
+>  152")) /// y-axis: title(text; text color) 
+>         ylabel(0(.1)1, gmax labcolor("`DkGrey'") tlcolor("`DkGrey'") tlwidth(m
+> edium) glcolor(white) glwidth(medium)) yscale(lcolor("`DkGrey'")) /// y-ticks:
+>  label(scale, max line, label color, tick color; tick width; grid color; grid 
+> width); axis color
+>         legend(on order(1 "Non-Hispanic White" 2 "Black" 3 "Asian" 4 "Hispanic
+> " ) nostack rows(1) size(small) color(black) margin(small) nobox region(fcolor
+> (white) lcolor(white)))
+  4. 
+. graph export  "/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/co
+> vid_knowledge_news/figures/pp_`v'_inc_news.jpg", ///
+>         as(jpg) name("Graph") quality(100) replace
+  5. 
+. } // close loop through fauci antibody stateresponse    
+
+-------------------------------------------------------------------------------
+categorical-S |
+ource relies  |
+most on for   |
+news about    |
+coronavirus   |                    Categorical race variable                   
+outbreak      |       White        Black        Asian     Hispanic  Other/mixed
+--------------+----------------------------------------------------------------
+    Intl/Natl |    .8272934      .665961     .7698379     .7655013     .8210437
+              |    .8546315     .7797889     .8736592     .8456959     .9079246
+              |    .7999553      .552133     .6660165     .6853066     .7341627
+              | 
+        Local |    .6789033     .4680796     .5961785     .5903112     .6694295
+              |    .7291041      .601041     .7426109     .7034438     .8042839
+              |    .6287026     .3351182      .449746     .4771787     .5345751
+              | 
+  Politicians |    .7495189     .5546448     .6763129     .6709673     .7413347
+              |    .7898719     .6861141     .8087236     .7734532     .8575113
+              |    .7091658     .4231756     .5439022     .5684815      .625158
+              | 
+Public Health |    .7716712     .5844771     .7023686     .6972607      .763983
+              |    .8112035      .714101      .829625     .7959039     .8735257
+              |    .7321389     .4548532     .5751123     .5986176     .6544402
+              | 
+     Informal |     .621899      .406374     .5345566      .528502     .6117052
+              |     .692188     .5444884     .6935726     .6567622     .7644206
+              |      .55161     .2682596     .3755405     .4002419     .4589899
+-------------------------------------------------------------------------------
+(note:  named style small not found in class linewidth, default attributes
+    used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes
+    used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes
+    used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes
+    used)
+(note:  linewidth not found in scheme, default attributes used)
+(file /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_knowled
+> ge_news/figures/pp_antibody_inc_news.jpg written in JPG format)
+
+-------------------------------------------------------------------------------
+categorical-S |
+ource relies  |
+most on for   |
+news about    |
+coronavirus   |                    Categorical race variable                   
+outbreak      |       White        Black        Asian     Hispanic  Other/mixed
+--------------+----------------------------------------------------------------
+    Intl/Natl |    .9204521     .8668256     .8856421     .8853471     .9136578
+              |     .944665     .9757908     .9911891     .9701285       .99479
+              |    .8962392     .7578605      .780095     .8005657     .8325256
+              | 
+        Local |    .7647668     .6464947     .6851341     .6845061     .7483112
+              |    .8314819      .867573     .9166569     .8702198     .9467593
+              |    .6980516     .4254164     .4536113     .4987924      .549863
+              | 
+  Politicians |    .8466316     .7564099     .7869936     .7865054     .8346648
+              |    .8936379     .9354817     .9669459     .9310958     .9803847
+              |    .7996254      .577338     .6070412      .641915     .6889448
+              | 
+Public Health |    .8262696     .7279189     .7609493     .7604196     .8130648
+              |    .8786858     .9198891         .956     .9173241      .973331
+              |    .7738534     .5359488     .5658985     .6035151     .6527985
+              | 
+     Informal |    .6194428     .4779785     .5214014     .5206753     .5981627
+              |    .7191328     .7273303     .7947678     .7440251     .8588275
+              |    .5197527     .2286267      .248035     .2973255     .3374979
+-------------------------------------------------------------------------------
+(note:  named style small not found in class linewidth, default attributes
+    used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes
+    used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes
+    used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes
+    used)
+(note:  linewidth not found in scheme, default attributes used)
+(file /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_knowled
+> ge_news/figures/pp_fauci_inc_news.jpg written in JPG format)
+
+-------------------------------------------------------------------------------
+categorical-S |
+ource relies  |
+most on for   |
+news about    |
+coronavirus   |                    Categorical race variable                   
+outbreak      |       White        Black        Asian     Hispanic  Other/mixed
+--------------+----------------------------------------------------------------
+    Intl/Natl |    .6689196     .5622624     .6066298     .6054342     .6080354
+              |    .7092523     .6874337     .7445466     .7117342     .7458804
+              |    .6285868     .4370911     .4687131     .4991342     .4701904
+              | 
+        Local |    .5212788     .4090759     .4538894     .4526483     .4553507
+              |    .5745791     .5347611     .6003036     .5660175     .6017414
+              |    .4679784     .2833907     .3074752     .3392792       .30896
+              | 
+  Politicians |    .6046956     .4930293     .5386564     .5374116     .5401207
+              |    .6519025     .6228012     .6845576     .6502195     .6855687
+              |    .5574887     .3632574     .3927551     .4246036     .3946726
+              | 
+Public Health |    .6092516     .4978034     .5433987     .5421559     .5448607
+              |    .6574941     .6275533     .6893663      .654981     .6903787
+              |     .561009     .3680536      .397431     .4293308     .3993426
+              | 
+     Informal |    .5308892     .4184257     .4634601     .4622151      .464926
+              |    .6033289     .5555475     .6190706     .5878902     .6213598
+              |    .4584494     .2813039     .3078497       .33654     .3084922
+-------------------------------------------------------------------------------
+(note:  named style small not found in class linewidth, default attributes
+    used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes
+    used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes
+    used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes
+    used)
+(note:  linewidth not found in scheme, default attributes used)
+(file /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_knowled
+> ge_news/figures/pp_stateresponse_inc_news.jpg written in JPG format)
+
+. 
+. 
+. ***-----------------------------***
+. // # INCOME
+. ***-----------------------------***
+. /*
+> foreach v in  fauci antibody stateresponse  { // unemploy 
+> 
+>         drop if `v'_c == 99 // Refused
+>         drop if `v'_c == 98 // Did not receive question
+>         drop if covidnewsrel == 98 | covidnewsrel == 99 // refused or Did not 
+> receive question 
+> 
+> svy: logit `v'_c  i.dG_age  dB_fem i.dG_edu   ///
+>         dB_bipoc ///
+>         c.`income_var'##i.dG_cnews /// ## includes both main effects and inter
+> actions
+>         , or baselevels // report Odds Ratios
+> 
+> } // close loop through fauci antibody stateresponse    
+> */
+. ***--------------------------***
+. 
+. log close ckn`category'`dataset'
+      name:  ckn08_prob01_PewJune2020
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
+> knowledge_news/stata/ckn08_prob01_PewJune2020.log
+  log type:  text
+ closed on:  16 Mar 2021, 18:34:42
+--------------------------------------------------------------------------------
