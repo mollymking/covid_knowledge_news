@@ -38,7 +38,7 @@ import spss using "Pathways June 2020 (ATP W68).sav", case(lower)
 ***-----------------------------***
 
 // Pew uses probability sampling: http://www.pewresearch.org/methodology/u-s-survey-research/sampling/
-svyset _n [pweight=weight]
+svyset _n [pweight=weight_w68]
 
 ***--------------------------***
 // # SAVE DATA

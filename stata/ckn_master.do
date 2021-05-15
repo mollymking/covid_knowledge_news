@@ -88,12 +88,20 @@ do $stata/ckn05_news01_PewJune2020.do
 do $stata/ckn06_desc01_PewJune2020.do
 
 ***--------------------------***
-// 07 REGRESSION
+// 07 REGRESSION & PREDICTED PROBABILITIES
+// 08 WITHOUT INTERACTIONS
 ***--------------------------***
 
 do $stata/ckn07_regr01_PewJune2020.do
+do $stata/ckn08_prob01_PewJune2020.do
 
+***--------------------------***
+// 09 REGRESSION & PREDICTED PROBABILITIES
+// 10 WITH INTERACTIONS
+***--------------------------***
 
+do $stata/ckn09_rint01_PewJune2020.do
+do $stata/ckn10_pint01_PewJune2020.do
 
 ***--------------------------***
 log close master
