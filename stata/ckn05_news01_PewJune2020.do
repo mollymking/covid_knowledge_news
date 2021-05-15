@@ -196,6 +196,47 @@ label val dG_cnews dG_cnews
 
 
 ***-----------------------------***
+// COVIDFOL = HOW CLOSELY FOLLOW NEWS ABOUT COVID
+***-----------------------------***
+
+*How closely have you been following news about the outbreak of the coronavirus strain known as COVID-19?
+	// 1 Very closely
+	// 2 Fairly closely
+	// 3 Not too closely
+	// 4 Not at all closely
+	
+tab covidfol_w68, m
+tab covidfol_w68, m nolabel
+
+label define dG_newsfol ///
+	 1 "Very closely" ///
+	 2 "Fairly closely" ///
+	 3 "Not too / at all closely"
+	 
+gen dG_newsfol = .
+	replace dG_newsfol = 1 if covidfol_w68 == 1
+	replace dG_newsfol = 2 if covidfol_w68 == 2
+	replace dG_newsfol = 3 if covidfol_w68 == 3 | covidfol_w68 == 4
+label val dG_newsfol dG_newsfol
+label var dG_newsfol "How closely following news about COVID-19?"
+
+
+gen dB_newsfol_vc = 0
+	replace dB_newsfol_vc = 1 	if covidfol_w68  == 1
+	replace dB_newsfol_vc = .n 	if covidfol_w68  == 99
+label var dB_newsfol_vc "Very Closely - How closely following news about COVID-19?"
+	
+gen dB_newsfol_fc = 0
+	replace dB_newsfol_fc = 1 	if covidfol_w68  == 2
+	replace dB_newsfol_fc = .n 	if covidfol_w68  == 99
+label var dB_newsfol_fc "Fairly Closely -  How closely following news about COVID-19?"
+
+gen dB_newsfol_n = 0
+	replace dB_newsfol_n = 1 	if covidfol_w68  == 3 |  covidfol_w68  == 4
+	replace dB_newsfol_n = .n 	if covidfol_w68  == 99
+label var dB_newsfol_n "Not too / at all closely - How closely following news about COVID-19?"
+
+***-----------------------------***
 // COVIDNEWSCHNG
 ***-----------------------------***
 
