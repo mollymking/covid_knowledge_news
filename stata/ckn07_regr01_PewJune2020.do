@@ -25,172 +25,340 @@ set linesize 80
 clear all
 set more off
 
-capt ssc install estout, replace
-capt ssc install outreg2, replace
-
-use $deriv/ckn05_news`dataset'.dta, clear
+*use $deriv/ckn05_news`dataset'.dta, clear
+use $deriv/ckn06_desc`dataset'.dta, clear
 save $deriv/ckn`category'`dataset'.dta, replace // data that results at end
 
 cd $deriv
 
-*Details on generating LaTeX tables using est and esttab thanks to the following websites:
-	*http://repec.sowi.unibe.ch/stata/estout/esttab.html#h-12
-	*https://lukestein.github.io/stata-latex-workflows/
-	*https://www.jwe.cc/2012/03/stata-latex-tables-estout/
+***-----------------------------***
+// # CREATE ANALYTICAL DATASET
+***-----------------------------***
 
-	
+save $deriv/ckn`category'`dataset'.dta, replace // data that results at end
+
+***-----------------------------***
+// # NOTES / COMMANDS
+***-----------------------------***
+
+capt ssc install outreg2, replace
+
+*svylogitgof
+*https://journals.sagepub.com/doi/10.1177/1536867X0600600106
+
+*use of linktest
+*https://stats.idre.ucla.edu/stata/webbooks/logistic/chapter3/lesson-3-logistic-regression-diagnostics/
+
 ***-----------------------------***
 // # MODELS w CATEGORICAL RACE VARIABLE & ALL NEWS VARIABLEs
 ***-----------------------------***
-/*
+
 // STORE BASE LEVELS for INTERACTIONS
 
-fvset base 1 dG_cnews // ref: dB_cnews_news 
-fvset base 2 dG_edu  // ref: HHS
+local income_var "i.dG_finc" 	// 
+fvset base 1 dG_finc 		// ref: less than $30,000
 
-local income_var  dV_finc_ln // 
+fvset base 1 dG_cnews 		// ref: dB_cnews_news 
+
+local edu_var "i.dG_edu3"
+fvset base 1 dG_edu  		// ref: less than HS
+
+*set base to international/national or public health
+*fvset base 1 dG_cnews		// ref: National / International news outlets
+fvset base 4 dG_cnews		// ref: public health
+fvset base 7.00  dG_crely 		// ref: public health
+
+fvset base 3 dG_newsfol 	// ref: How closely following news? not too / at all closely
 
 
-foreach v in antibody fauci stateresponse   { // unemploy
+rename stateresponse_c stater_c // shorten variable
 
-	drop if `v'_c == 99 // Refused
-	drop if `v'_c == 98 // Did not receive question
-	drop if covidnewsrel == 98 | covidnewsrel == 99 // refused or Did not receive question 
-		// only 48 people
+foreach v in antibody fauci stater   { // 
 
-// # BASIC MODEL - CONTROLS ONLY
-	svy: logit `v'_c dB_fem i.dG_age `income_var' i.dG_race ///
+
+drop if antibody_c == 99 // Refused
+drop if `v'_c == 98 // Did not receive question
+drop if covidnewsrel == 98 | covidnewsrel == 99 // refused or Did not receive question 
+	// only 48 people	
+
+
+		
+***-----------------------------***
+// # MODEL A for ONLINE APPENDIX: NEWS SOURCE (ORIGINAL EXTENDED VARIABLE)
+***-----------------------------***
+
+// # BASIC MODEL A -  EXTENDED NEWS SOURCE
+
+	svy: logit `v'_c  ///	
+		i.dG_crely ///
 		, or baselevels // report Odds Ratios
 	
-	
-	est store `v'_controls
+	est store `v'_ex
 
-// # MODEL - ADD IN EDUCATION
-	svy: logit `v'_c  dB_fem i.dG_age `income_var' i.dG_race ///
-	i.dG_edu ///
+	
+// # A -  EXTENDED NEWS SOURCE + RACE + INCOME + EDUCATION
+
+	svy: logit `v'_c  ///	
+		i.dG_crely ///
+		i.dG_race  `income_var' i.dG_edu  ///
 		, or baselevels // report Odds Ratios
-			
-	est store `v'_edu
-
-// # MODEL - ADD IN NEWS
-		
-	svy: logit `v'_c  dB_fem i.dG_age `income_var' i.dG_race ///
-	i.dG_edu  ///
-	dB_crely_international dB_crely_local dB_crely_trump dB_crely_biden /// comparison: crely_national 
-	dB_crely_politicians dB_crely_ph dB_crely_friends dB_crely_neighbor dB_crely_online ///
-	, or baselevels // report Odds Ratios
 	
-	estat gof  //https://www.statalist.org/forums/forum/general-stata-discussion/general/389818-goodness-of-fit-test-for-logistic-regression-on-survey-data
-	linktest
+	est store `v'_ex_class
+
 	
-	est store `v'_edu_news	
+// # A -  EXTENDED NEWS SOURCE + CONTROLS + EDUCATION + RELIGION
+
+	svy: logit `v'_c  ///	
+		i.dG_crely	///
+		i.dG_race  `income_var' i.dG_edu  ///
+		dG_newsfol ///
+		i.dG_age dB_fem  ///
+		, or baselevels // report Odds Ratios
+	
+	est store `v'_ex_class_ctrl
 
 
-// # MODEL - NEWS SHORT ALTERNATIVE
+***-----------------------------***
+// # MODEL B: COMPRESSED NEWS SOURCE
+***-----------------------------***
+
+// # BASIC MODEL B -  NEWS SOURCE ONLY
+
+	svy: logit `v'_c  ///
+		i.dG_cnews /// comparison: cnews_news
+		, or baselevels // report Odds Ratios
+	
+	est store `v'_cn
+	
+// # MODEL B + CONTROLS 
+	svy: logit `v'_c ///
+		i.dG_cnews /// comparison: international/national
+		dB_fem i.dG_age `income_var' i.dG_race ///
+		, or baselevels // report Odds Ratios
+	
+		estat gof 
+		linktest
+	
+	est store `v'_cn_ct
+
+// # MODEL B + CONTROLS + ADD IN EDUCATION
+	svy: logit `v'_c  ///
+		i.dG_cnews /// comparison: international/national
+		dB_fem i.dG_age `income_var' i.dG_race ///
+		i.dG_edu ///
+		, or baselevels // report Odds Ratios
 		
-	svy: logit `v'_c  dB_fem i.dG_age `income_var' i.dG_race ///
-	i.dG_edu  ///
-	i.dG_cnews /// comparison: cnews_news
-	, or baselevels // report Odds Ratios
-			
-	est store `v'_short
-
-			
-// # MODEL - ADD IN NEWS DIFFICULT
+		estat gof 
+		linktest
 		
-	svy: logit `v'_c  i.dG_race i.dG_age  `income_var' dB_fem  i.dG_edu  ///
-	dB_crely_international dB_crely_national dB_crely_trump dB_crely_biden /// comparison: crely_local
-	dB_crely_politicians dB_crely_ph dB_crely_friends dB_crely_neighbor dB_crely_online ///
-	dB_cinfodiff, ///
-		or // report Odds Ratios
-
-	est store `v'_edu_news_difficult	
-
-
-// # CREATE LATEX TABLE
-
-	esttab `v'_controls `v'_edu `v'_edu_news `v'_short ///
-	using $results/`v'LOs.tex, ///
-		replace f ///
-		label booktabs b(3) p(3) eqlabels(none) alignment(S S) ///
-		collabels("\multicolumn{1}{c}{$\beta$ / SE}") ///
-		star(* 0.05 ** 0.01 *** 0.001) ///
-		cells("b(fmt(3)star)" "se(fmt(3)par)") ///
-		stats(N aic pr, fmt(0 3) layout("\multicolumn{1}{c}{@}") ///
-			labels(`"Observations"' `"AIC"' `"Baseline predicted probability"'))
-		*refcat(dB_bipoc "\emph{BIPOC}" dB_fem "\emph{Gender}" dG_age "\emph{Age}" ///
-			*dV_finc_ln "\emph{Family Income (Ln)}"  ///
-			*dG_edu "\emph{Education}" dG_cnews "\emph{News Outlet}") ///
-
-} // Close loop through variables
+	est store `v'_cn_ct_ed
 
 */
-
+	
 ***-----------------------------***
+// # MODEL C: NEWS SOURCE + HOW CLOSELY FOLLOW NEWS
 ***-----------------------------***
 
+// # BASIC MODEL B -  NEWS SOURCE ONLY
 
+	svy: logit `v'_c  ///
+		i.dG_cnews /// comparison: cnews_news
+		, or baselevels // report Odds Ratios
+	
+	est store `v'_cn
 
-	drop if `v'_c == 99 // Refused
-	drop if `v'_c == 98 // Did not receive question
-	drop if covidnewsrel == 98 | covidnewsrel == 99 // refused or Did not receive question 
-		// only 48 people
+// # BASIC MODEL C -  NEWS SOURCE + HOW CLOSELY FOLLOW NEWS
+
+	svy: logit `v'_c  ///
+		i.dG_cnews /// comparison: international/national
+		i.dG_newsfol /// comparison: do not closely follow
+		, or baselevels // report Odds Ratios
+
+		estat gof 
+		linktest
+	
+	est store `v'_cn_nf
+
+	
+// # C - NEWS SOURCE + HOW CLOSELY FOLLOW NEWS + CONTROLS + EDUCATION		
+
+	svy: logit `v'_c  ///
+		i.dG_cnews /// comparison: international/national
+		i.dG_newsfol /// comparison: do not closely follow
+		i.dG_age  dB_fem i.dG_race  `income_var'  ///
+		`edu_var'  ///
+		, or baselevels // report Odds Ratios
+		
+		estat gof 
+		linktest
+	
+	est store `v'_cn_nf_ct_ed
 /*
-// # BASIC MODEL - CONTROLS ONLY
-	svy: logit `v'_c  dB_fem i.dG_age `income_var'  ///
-	dB_bipoc ///
-	, or baselevels // report Odds Ratios
+// # C - NEWS SOURCE + HOW CLOSELY FOLLOW NEWS + CONTROLS + EDUCATION + POLITICAL PARTY	+ RELIGION	
+
+	svy: logit `v'_c  ///
+		i.dG_cnews /// comparison: international/national
+		i.dG_newsfol /// comparison: do not closely follow
+		i.dG_race i.dG_age  `income_var' dB_fem  ///
+		`edu_var'  ///
+		i.dG_pol ///
+		i.dG_rel ///
+		, or baselevels // report Odds Ratios
+		
+		estat gof 
+		linktest
 	
-	est store `v'_controls
+	est store `v'_cn_nf_ct_ed_pr
+*/
+// # C - NEWS SOURCE + HOW CLOSELY FOLLOW NEWS + CONTROLS + EDUCATION + RELIGION	
 
-// # MODEL - ADD IN EDUCATION
-	svy: logit `v'_c  dB_fem i.dG_age `income_var'  i.dG_edu ///
-	dB_bipoc ///
-	, or baselevels // report Odds Ratios
+	svy: logit `v'_c  ///
+		i.dG_cnews /// comparison: international/national
+		i.dG_race  `income_var'   ///
+		`edu_var'  ///
+		, or baselevels // report Odds Ratios
 		
-	est store `v'_edu
-
-
-// # MODEL - ADD IN NEWS
-		
-	svy: logit `v'_c    dB_bipoc i.dG_age  dV_finc_1k dB_fem  `edu_vars'  ///
-	dB_crely_international dB_crely_local dB_crely_trump dB_crely_biden /// comparison: crely_national 
-	dB_crely_politicians dB_crely_ph dB_crely_friends dB_crely_neighbor dB_crely_online, ///
-	or // report Odds Ratios
-
-	est store `v'_edu_news	
-
-
-// # MODEL - NEWS SHORT ALTERNATIVE
-		
-	svy: logit `v'_c  dB_fem  i.dG_age  `income_var'  i.dG_edu ///
-	dB_bipoc ///
-	i.dG_cnews /// comparison: cnews_news
-	, or baselevels // report Odds Ratios
-		
-	est store `v'_edu_news
-			
-// # MODEL - ADD IN NEWS DIFFICULT
-		
-	svy: logit `v'_c   dB_bipoc i.dG_age  dV_finc_1k dB_fem  `edu_vars'  ///
-	dB_crely_international dB_crely_national dB_crely_trump dB_crely_biden /// comparison: crely_local
-	dB_crely_politicians dB_crely_ph dB_crely_friends dB_crely_neighbor dB_crely_online ///
-	dB_cinfodiff, ///
-		or // report Odds Ratios
-
-
-
-
-
-		
-		
+		estat gof 
+		linktest
+	
+	est store `v'_cn_race_ed_inc
 	
 
+// # C - NEWS SOURCE + HOW CLOSELY FOLLOW NEWS + CONTROLS + EDUCATION + RELIGION	
+
+	svy: logit `v'_c  ///
+		i.dG_cnews /// comparison: international/national
+		i.dG_newsfol /// comparison: do not closely follow
+		i.dG_age dB_fem i.dG_race  `income_var'   ///
+		`edu_var'  ///
+		i.dG_rel ///
+		, or baselevels // report Odds Ratios
+		
+		estat gof 
+		linktest
+	
+	est store `v'_cn_nf_ct_ed_rl
+	
+/*			
+***-----------------------------***			
+// # MODEL D: NEWS SOURCE + HOW CLOSELY FOLLOW NEWS +  NEWS DIFFICULTY
+***-----------------------------***
+
+// # D - NEWS SOURCE + HOW CLOSELY FOLLOW NEWS + NEWS DIFFICULTY 
+
+	svy: logit `v'_c  ///
+		i.dG_cnews /// comparison: international/national
+		i.dG_newsfol /// comparison: do not closely follow
+		dB_cinfodiff ///
+		, or baselevels // report Odds Ratios
+		
+		estat gof 
+		linktest
+	
+	est store `v'_cn_nf_df
+
+// # D - NEWS SOURCE + HOW CLOSELY FOLLOW NEWS + NEWS DIFFICULTY + CONTROLS + EDUCATION
+
+	svy: logit `v'_c  ///
+		i.dG_cnews /// comparison: international/national
+		i.dG_newsfol /// comparison: do not closely follow
+		dB_cinfodiff ///
+		i.dG_race i.dG_age  `income_var' dB_fem  ///
+		`edu_var' ///
+		, or baselevels // report Odds Ratios
+		
+		estat gof 
+		linktest
+	
+	est store `v'_cn_nf_df_ct_ed
+
+// # D - NEWS SOURCE + HOW CLOSELY FOLLOW NEWS + NEWS DIFFICULTY + CONTROLS + EDUCATION + POLITICAL PARTY+ RELIGION
+
+	svy: logit `v'_c  ///
+		i.dG_cnews /// comparison: international/national
+		i.dG_newsfol /// comparison: do not closely follow
+		dB_cinfodiff ///
+		i.dG_race i.dG_age  `income_var' dB_fem  ///
+		`edu_var' ///
+		i.dG_pol ///
+		i.dG_rel ///
+		, or baselevels // report Odds Ratios
+		
+		estat gof 
+		linktest
+	
+	est store `v'_cn_nf_df_ct_ed_pr
+
+	*/
+} // Close loop through variables	
+
+***-----------------------------***
+// # CREATE  TABLES
+***-----------------------------***
+/*
+foreach v in antibody fauci stater   { // 
+	
+	
+	*Model A
+	outreg2 [`v'_cn  `v'_cr	`v'_cr_ct_ed] ///
+		using $results/`v'_modelA_ORs.doc, ///
+		stats(coef se) ///
+		level(95) symbol(***, **, *) alpha(0.001, 0.01, 0.05) ///
+		replace
+	
+	*Model B
+	outreg2 [`v'_cn  `v'_cn_ct `v'_cn_ct_ed]  ///
+	using $results/`v'_modelA_ORs.doc, ///
+		stats(coef se) ///
+		level(95) symbol(***, **, *) alpha(0.001, 0.01, 0.05) ///
+		replace
+
+	
+	*Model C
+	outreg2 [`v'_cn  `v'_cn_nf  `v'_cn_nf_ct_ed  `v'_cn_nf_ct_ed_rl] ///
+		stats(coef se)  ///
+		 eform /// odds ratios
+		level(95) symbol(***, **, *) alpha(0.001, 0.01, 0.05) ///
+		replace
+ 
+	*Model D
+	outreg2 [`v'_cn `v'_cn_nf_df `v'_cn_nf_df_ct_ed `v'_cn_nf_df_ct_ed_rl] ///
+		using $results/`v'_modelD_ORs.doc, ///
+		stats(coef se) ///
+		level(95) symbol(***, **, *) alpha(0.001, 0.01, 0.05) ///
+		replace	
+
+	
+} // Close loop through variables	
+*/	
+
+*Output table of all variables
+outreg2 ///
+	[fauci_cn fauci_cn_race_ed_inc fauci_cn_nf_ct_ed_rl ///
+	stater_cn stater_cn_race_ed_inc stater_cn_nf_ct_ed_rl ///
+	antibody_cn antibody_cn_race_ed_inc antibody_cn_nf_ct_ed_rl ] ///
+		using $results/allvars_modelC_ORs.doc, ///
+		stats(coef se) ///
+		eform /// odds ratios
+		level(95) symbol(***, **, *) alpha(0.001, 0.01, 0.05) ///
+		replace
+	
+*Extended Online Appendix
+outreg2 ///
+	[fauci_ex_class_ctrl  ///
+	 stater_ex_class_ctrl ///
+	 antibody_ex_class_ctrl] ///
+		using $results/allvars_extended_news_online_appendix.doc, ///
+		stats(coef se) ///
+		eform /// odds ratios
+		level(95) symbol(***, **, *) alpha(0.001, 0.01, 0.05) ///
+		replace
+	
 		
 *LIKELIHOOD RATIO TESTs
 *https://www.stata.com/support/faqs/statistics/likelihood-ratio-test/
-
 /*
+
 foreach v in antibody  fauci  stateresponse { // unemploy
 		
 	test [`v'_controls = `v'_edu], common nosvyadjust // for use with svy estimation commands
@@ -200,21 +368,7 @@ foreach v in antibody  fauci  stateresponse { // unemploy
 	test [`v'_edu_news = `v'_int_fem], common nosvyadjust // for use with svy estimation commands
 }
 */
-***--------------------------***
-// # MEDIATION ANALYSIS
-***--------------------------***
 
-/*
-foreach v in antibody   { // fauci  stateresponse
-
-	medeff ///
-		(logit `v'_c    dB_bipoc i.dG_age  dV_finc_1k dB_fem  `edu_vars') ///
-		(logit `v'_c    dB_bipoc i.dG_age  dV_finc_1k dB_fem  `edu_vars' i.dG_crely) ///
-		[pweight=weight] ///
-		, mediate(dG_crely) treat(dB_bipoc)
-
-}
-*/
 
 
 ***--------------------------***
