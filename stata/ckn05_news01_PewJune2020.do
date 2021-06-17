@@ -134,7 +134,7 @@ include $stata/ckn05_news00_crely.doi
 	*9 Community or neighborhood newsletter or Listserv
 	*10 Online forums or discussion groups
 
-local short "news"
+local short "natl"
 gen dB_cnews_`short' = 0
 replace dB_cnews_`short' = 1 if covidnewsrely_w66 == 1 |  covidnewsrely_w66 == 2
 replace dB_cnews_`short' = . if covidnewsrely_w66 == 98 | /// Did not receive question
@@ -178,7 +178,7 @@ gen dG_cnews = 0
 replace dG_cnews = . if covidnewsrely_w66 == 98 | /// Did not receive question
 	covidnewsrely_w66 == 99 | /// Refused
 	covidnewsrely_w66 == . // Missing
-replace dG_cnews = 1 if dB_cnews_news == 1 // International or national
+replace dG_cnews = 1 if dB_cnews_natl == 1 // International or national
 replace dG_cnews = 2 if dB_cnews_local == 1 // Local news
 replace dG_cnews = 3 if dB_cnews_politicians == 1 // politicians
 replace dG_cnews = 4 if dB_cnews_pubhealth == 1 // public heatlh
@@ -236,6 +236,24 @@ gen dB_newsfol_n = 0
 	replace dB_newsfol_n = .n 	if covidfol_w68  == 99
 label var dB_newsfol_n "Not too / at all closely - How closely following news about COVID-19?"
 
+
+
+***-----------------------------***
+// COVIDINFODIFF
+***-----------------------------***
+
+*When you get news and information about the coronavirus outbreak, do you generally find it… [RANDOMIZE]
+	*1 Difficult to determine what is true and what is not
+	*2 Easy to determine what is true and what is not
+
+tab covidinfodiff, m
+tab covidinfodiff, m nolabel
+
+gen dB_cinfodiff = .
+replace dB_cinfodiff = 1 if covidinfodiff == 2
+replace dB_cinfodiff = 0 if covidinfodiff == 1
+label var dB_cinfodiff "When get news about COVID, difficult to determine what is true"
+
 ***-----------------------------***
 // COVIDNEWSCHNG
 ***-----------------------------***
@@ -255,21 +273,32 @@ label var dB_newsfol_n "Not too / at all closely - How closely following news ab
 	*2 Finding it EASIER to identify what is true and what is false about the outbreak
 	*3 No change
 
+
+
 ***-----------------------------***
-// COVIDINFODIFF
+// CR_PARTYNEWSUSE_W57
 ***-----------------------------***
+/* From https://www.journalism.org/wp-content/uploads/sites/8/2017/09/PJ_2017.10.02_Trump-First-100-Days_FINAL.pdf
+Each news outlet was placed in one of three groups based on the profile of its audience: outlets whose
+audience leans to the left politically, outlets whose audience leans to the right politically, and outlets
+appealing to a more mixed audience. The audience data came from one of two recent Pew Research
+Center surveys in which U.S. adults were asked if they regularly got news about the election or politics from
+each outlet. An outlet was classified as left-leaning if its audience included at least two-thirds more liberal
+Democrats than conservative Republicans. Conversely, if the audience had two-thirds more conservative
+Republicans than liberal Democrats, the outlet was categorized as right-leaning. If neither liberal
+Democrats nor conservative Republicans made up at least two-thirds more of the audience than the other,
+the outlet was included in the mixed-audience group. This resulted in 12 outlets with a left-leaning
+audience, five with a right-leaning audience and seven with a more mixed audience.
+Details on the inclusion process, content sampled and the full list of outlets can be found in the
+Methodology.
+*/
 
-*When you get news and information about the coronavirus outbreak, do you generally find it… [RANDOMIZE]
-	*1 Difficult to determine what is true and what is not
-	*2 Easy to determine what is true and what is not
 
-tab covidinfodiff, m
-tab covidinfodiff, m nolabel
+*tab cr_partynewsuse_w57, m
+*tab cr_partynewsuse_w57, m nolabel
 
-gen dB_cinfodiff = .
-replace dB_cinfodiff = 1 if covidinfodiff == 2
-replace dB_cinfodiff = 0 if covidinfodiff == 1
-label var dB_cinfodiff "When get news about COVID, difficult to determine what is true"
+*gen dG_news_dem = .
+
 
 ***-----------------------------***
 // SAVE DATA	

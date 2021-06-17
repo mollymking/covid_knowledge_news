@@ -3,7 +3,7 @@
        log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
 > knowledge_news/stata/ckn05_news01_PewJune2020.log
   log type:  text
- opened on:   9 Dec 2020, 15:55:04
+ opened on:  26 May 2021, 17:04:45
 
 . ***-----------------------------***
 . 
@@ -19,7 +19,7 @@
 . //  author:     Molly King
 . 
 . display "$S_DATE  $S_TIME"
- 9 Dec 2020  15:55:04
+26 May 2021  17:04:45
 
 . 
 . ***--------------------------***
@@ -36,9 +36,11 @@
 
 . 
 . use $deriv/ckn04_inc`dataset'.dta, clear
-(01_PewJune2020 data with continuous family income measures)
+(01_PewJune2020 Knowledge variables)
 
 . save $deriv/ki`category'`dataset'.dta, replace // data that results at end
+(note: file /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/data/da
+> ta_derv/ki05_news01_PewJune2020.dta not found)
 file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ki05_news01_Pew
 > June2020.dta saved
 
@@ -66,21 +68,21 @@ file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ki05_news01_Pew
    sources do you RELY ON MOST for news |
                                   about |      Freq.     Percent        Cum.
 ----------------------------------------+-----------------------------------
-             International news outlets |        369        3.99        3.99
-                  National news outlets |      2,801       30.29       34.28
-                     Local news outlets |      1,263       13.66       47.93
-Donald Trump and his coronavirus task f |      1,293       13.98       61.92
-             Joe Biden and his campaign |         16        0.17       62.09
-State and local elected officials and t |        849        9.18       71.27
-Public health organizations and officia |      1,842       19.92       91.19
-          Friends, family and neighbors |        204        2.21       93.39
-Community or neighborhood newsletter or |         30        0.32       93.72
-     Online forums or discussion groups |        218        2.36       96.07
-               Did not receive question |         14        0.15       96.23
-                                Refused |         36        0.39       96.62
-                                      . |        313        3.38      100.00
+             International news outlets |        379        3.93        3.93
+                  National news outlets |      2,914       30.18       34.11
+                     Local news outlets |      1,318       13.65       47.76
+Donald Trump and his coronavirus task f |      1,374       14.23       62.00
+             Joe Biden and his campaign |         16        0.17       62.16
+State and local elected officials and t |        886        9.18       71.34
+Public health organizations and officia |      1,916       19.85       91.19
+          Friends, family and neighbors |        214        2.22       93.40
+Community or neighborhood newsletter or |         31        0.32       93.72
+     Online forums or discussion groups |        223        2.31       96.03
+               Did not receive question |         15        0.16       96.19
+                                Refused |         39        0.40       96.59
+                                      . |        329        3.41      100.00
 ----------------------------------------+-----------------------------------
-                                  Total |      9,248      100.00
+                                  Total |      9,654      100.00
 
 . tab covidnewsrely_w66, m nolabel
 
@@ -93,31 +95,31 @@ you RELY ON |
    MOST for |
  news about |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-       1.00 |        369        3.99        3.99
-       2.00 |      2,801       30.29       34.28
-       3.00 |      1,263       13.66       47.93
-       4.00 |      1,293       13.98       61.92
-       5.00 |         16        0.17       62.09
-       6.00 |        849        9.18       71.27
-       7.00 |      1,842       19.92       91.19
-       8.00 |        204        2.21       93.39
-       9.00 |         30        0.32       93.72
-      10.00 |        218        2.36       96.07
-      98.00 |         14        0.15       96.23
-      99.00 |         36        0.39       96.62
-          . |        313        3.38      100.00
+       1.00 |        379        3.93        3.93
+       2.00 |      2,914       30.18       34.11
+       3.00 |      1,318       13.65       47.76
+       4.00 |      1,374       14.23       62.00
+       5.00 |         16        0.17       62.16
+       6.00 |        886        9.18       71.34
+       7.00 |      1,916       19.85       91.19
+       8.00 |        214        2.22       93.40
+       9.00 |         31        0.32       93.72
+      10.00 |        223        2.31       96.03
+      98.00 |         15        0.16       96.19
+      99.00 |         39        0.40       96.59
+          . |        329        3.41      100.00
 ------------+-----------------------------------
-      Total |      9,248      100.00
+      Total |      9,654      100.00
 
 . 
 . clonevar dG_crely = covidnewsrely_w66 
-(313 missing values generated)
+(329 missing values generated)
 
 .         replace dG_crely = . if covidnewsrely_w66 == 98 | /// Did not receive 
 > question
 >         covidnewsrely_w66 == 99 | /// Refused
 >         covidnewsrely_w66 == . // Missing
-(50 real changes made, 50 to missing)
+(54 real changes made, 54 to missing)
 
 . 
 . label define dB_source 0 "0_Not source" 1 "1_Main source"
@@ -148,13 +150,13 @@ you RELY ON |
 . gen dB_crely_`source' = 0
 
 . replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
-(369 real changes made)
+(379 real changes made)
 
 . replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
 >  question
 >         covidnewsrely_w66 == 99 | /// Refused
 >         covidnewsrely_w66 == . // Missing
-(363 real changes made, 363 to missing)
+(383 real changes made, 383 to missing)
 
 . label var dB_crely_`source' "`source_long' - Source relies most on for news ab
 > out coronavirus outbreak"
@@ -190,13 +192,13 @@ note: label truncated to 80 characters
 . gen dB_crely_`source' = 0
 
 . replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
-(2,801 real changes made)
+(2,914 real changes made)
 
 . replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
 >  question
 >         covidnewsrely_w66 == 99 | /// Refused
 >         covidnewsrely_w66 == . // Missing
-(363 real changes made, 363 to missing)
+(383 real changes made, 383 to missing)
 
 . label var dB_crely_`source' "`source_long' - Source relies most on for news ab
 > out coronavirus outbreak"
@@ -232,13 +234,13 @@ note: label truncated to 80 characters
 . gen dB_crely_`source' = 0
 
 . replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
-(1,263 real changes made)
+(1,318 real changes made)
 
 . replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
 >  question
 >         covidnewsrely_w66 == 99 | /// Refused
 >         covidnewsrely_w66 == . // Missing
-(363 real changes made, 363 to missing)
+(383 real changes made, 383 to missing)
 
 . label var dB_crely_`source' "`source_long' - Source relies most on for news ab
 > out coronavirus outbreak"
@@ -273,13 +275,13 @@ note: label truncated to 80 characters
 . gen dB_crely_`source' = 0
 
 . replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
-(1,293 real changes made)
+(1,374 real changes made)
 
 . replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
 >  question
 >         covidnewsrely_w66 == 99 | /// Refused
 >         covidnewsrely_w66 == . // Missing
-(363 real changes made, 363 to missing)
+(383 real changes made, 383 to missing)
 
 . label var dB_crely_`source' "`source_long' - Source relies most on for news ab
 > out coronavirus outbreak"
@@ -321,7 +323,7 @@ note: label truncated to 80 characters
 >  question
 >         covidnewsrely_w66 == 99 | /// Refused
 >         covidnewsrely_w66 == . // Missing
-(363 real changes made, 363 to missing)
+(383 real changes made, 383 to missing)
 
 . label var dB_crely_`source' "`source_long' - Source relies most on for news ab
 > out coronavirus outbreak"
@@ -357,13 +359,13 @@ note: label truncated to 80 characters
 . gen dB_crely_`source' = 0
 
 . replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
-(849 real changes made)
+(886 real changes made)
 
 . replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
 >  question
 >         covidnewsrely_w66 == 99 | /// Refused
 >         covidnewsrely_w66 == . // Missing
-(363 real changes made, 363 to missing)
+(383 real changes made, 383 to missing)
 
 . label var dB_crely_`source' "`source_long' - Source relies most on for news ab
 > out coronavirus outbreak"
@@ -399,13 +401,13 @@ note: label truncated to 80 characters
 . gen dB_crely_`source' = 0
 
 . replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
-(1,842 real changes made)
+(1,916 real changes made)
 
 . replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
 >  question
 >         covidnewsrely_w66 == 99 | /// Refused
 >         covidnewsrely_w66 == . // Missing
-(363 real changes made, 363 to missing)
+(383 real changes made, 383 to missing)
 
 . label var dB_crely_`source' "`source_long' - Source relies most on for news ab
 > out coronavirus outbreak"
@@ -441,13 +443,13 @@ note: label truncated to 80 characters
 . gen dB_crely_`source' = 0
 
 . replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
-(204 real changes made)
+(214 real changes made)
 
 . replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
 >  question
 >         covidnewsrely_w66 == 99 | /// Refused
 >         covidnewsrely_w66 == . // Missing
-(363 real changes made, 363 to missing)
+(383 real changes made, 383 to missing)
 
 . label var dB_crely_`source' "`source_long' - Source relies most on for news ab
 > out coronavirus outbreak"
@@ -483,13 +485,13 @@ note: label truncated to 80 characters
 . gen dB_crely_`source' = 0
 
 . replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
-(30 real changes made)
+(31 real changes made)
 
 . replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
 >  question
 >         covidnewsrely_w66 == 99 | /// Refused
 >         covidnewsrely_w66 == . // Missing
-(363 real changes made, 363 to missing)
+(383 real changes made, 383 to missing)
 
 . label var dB_crely_`source' "`source_long' - Source relies most on for news ab
 > out coronavirus outbreak"
@@ -525,13 +527,13 @@ note: label truncated to 80 characters
 . gen dB_crely_`source' = 0
 
 . replace dB_crely_`source' = 1 if covidnewsrely_w66 == `source_code'
-(218 real changes made)
+(223 real changes made)
 
 . replace dB_crely_`source' = . if covidnewsrely_w66 == 98 | /// Did not receive
 >  question
 >         covidnewsrely_w66 == 99 | /// Refused
 >         covidnewsrely_w66 == . // Missing
-(363 real changes made, 363 to missing)
+(383 real changes made, 383 to missing)
 
 . label var dB_crely_`source' "`source_long' - Source relies most on for news ab
 > out coronavirus outbreak"
@@ -562,19 +564,19 @@ note: label truncated to 80 characters
 .         *9 Community or neighborhood newsletter or Listserv
 .         *10 Online forums or discussion groups
 . 
-. local short "news"
+. local short "natl"
 
 . gen dB_cnews_`short' = 0
 
 . replace dB_cnews_`short' = 1 if covidnewsrely_w66 == 1 |  covidnewsrely_w66 ==
 >  2
-(3,170 real changes made)
+(3,293 real changes made)
 
 . replace dB_cnews_`short' = . if covidnewsrely_w66 == 98 | /// Did not receive 
 > question
 >         covidnewsrely_w66 == 99 | /// Refused
 >         covidnewsrely_w66 == . // Missing
-(363 real changes made, 363 to missing)
+(383 real changes made, 383 to missing)
 
 . label var dB_cnews_`short' "International / national news- Source relies most 
 > on for news about coronavirus outbreak"
@@ -586,13 +588,13 @@ note: label truncated to 80 characters
 . gen dB_cnews_`short' = 0
 
 . replace dB_cnews_`short' = 1 if covidnewsrely_w66 == 3
-(1,263 real changes made)
+(1,318 real changes made)
 
 . replace dB_cnews_`short' = . if covidnewsrely_w66 == 98 | /// Did not receive 
 > question
 >         covidnewsrely_w66 == 99 | /// Refused
 >         covidnewsrely_w66 == . // Missing
-(363 real changes made, 363 to missing)
+(383 real changes made, 383 to missing)
 
 . label var dB_cnews_`short' "`short' - Source relies most on for news about cor
 > onavirus outbreak"
@@ -604,13 +606,13 @@ note: label truncated to 80 characters
 
 . replace dB_cnews_`short' = 1 if covidnewsrely_w66 == 4 |  covidnewsrely_w66 ==
 >  5 |  covidnewsrely_w66 == 6
-(2,158 real changes made)
+(2,276 real changes made)
 
 . replace dB_cnews_`short' = . if covidnewsrely_w66 == 98 | /// Did not receive 
 > question
 >         covidnewsrely_w66 == 99 | /// Refused
 >         covidnewsrely_w66 == . // Missing
-(363 real changes made, 363 to missing)
+(383 real changes made, 383 to missing)
 
 . label var dB_cnews_`short' "`short' - Source relies most on for news about cor
 > onavirus outbreak"
@@ -621,13 +623,13 @@ note: label truncated to 80 characters
 . gen dB_cnews_`short' = 0
 
 . replace dB_cnews_`short' = 1 if covidnewsrely_w66 == 7
-(1,842 real changes made)
+(1,916 real changes made)
 
 . replace dB_cnews_`short' = . if covidnewsrely_w66 == 98 | /// Did not receive 
 > question
 >         covidnewsrely_w66 == 99 | /// Refused
 >         covidnewsrely_w66 == . // Missing
-(363 real changes made, 363 to missing)
+(383 real changes made, 383 to missing)
 
 . label var dB_cnews_`short' "`short' - Source relies most on for news about cor
 > onavirus outbreak"
@@ -639,13 +641,13 @@ note: label truncated to 80 characters
 
 . replace dB_cnews_`short' = 1 if covidnewsrely_w66 == 8 |  covidnewsrely_w66 ==
 >  9 |  covidnewsrely_w66 == 10
-(452 real changes made)
+(468 real changes made)
 
 . replace dB_cnews_`short' = . if covidnewsrely_w66 == 98 | /// Did not receive 
 > question
 >         covidnewsrely_w66 == 99 | /// Refused
 >         covidnewsrely_w66 == . // Missing
-(363 real changes made, 363 to missing)
+(383 real changes made, 383 to missing)
 
 . label var dB_cnews_`short' "`short' - Source relies most on for news about cor
 > onavirus outbreak"
@@ -656,22 +658,22 @@ note: label truncated to 80 characters
 . replace dG_cnews = . if covidnewsrely_w66 == 98 | /// Did not receive question
 >         covidnewsrely_w66 == 99 | /// Refused
 >         covidnewsrely_w66 == . // Missing
-(363 real changes made, 363 to missing)
+(383 real changes made, 383 to missing)
 
-. replace dG_cnews = 1 if dB_cnews_news == 1 // International or national
-(3,170 real changes made)
+. replace dG_cnews = 1 if dB_cnews_natl == 1 // International or national
+(3,293 real changes made)
 
 . replace dG_cnews = 2 if dB_cnews_local == 1 // Local news
-(1,263 real changes made)
+(1,318 real changes made)
 
 . replace dG_cnews = 3 if dB_cnews_politicians == 1 // politicians
-(2,158 real changes made)
+(2,276 real changes made)
 
 . replace dG_cnews = 4 if dB_cnews_pubhealth == 1 // public heatlh
-(1,842 real changes made)
+(1,916 real changes made)
 
 . replace dG_cnews = 5 if dB_cnews_informal == 1 // informal
-(452 real changes made)
+(468 real changes made)
 
 . label var dG_cnews "categorical-Source relies most on for news about coronavir
 > us outbreak"
@@ -688,6 +690,171 @@ note: label truncated to 80 characters
 . label val dG_cnews dG_cnews
 
 . 
+. 
+. ***-----------------------------***
+. // COVIDFOL = HOW CLOSELY FOLLOW NEWS ABOUT COVID
+. ***-----------------------------***
+. 
+. *How closely have you been following news about the outbreak of the coronaviru
+> s strain known as COVID-19?
+.         // 1 Very closely
+.         // 2 Fairly closely
+.         // 3 Not too closely
+.         // 4 Not at all closely
+.         
+. tab covidfol_w68, m
+
+ COVIDFOL_W68. How |
+  closely have you |
+    been following |
+    news about the |
+   outbreak of the |      Freq.     Percent        Cum.
+-------------------+-----------------------------------
+      Very closely |      4,616       47.81       47.81
+    Fairly closely |      4,205       43.56       91.37
+   Not too closely |        693        7.18       98.55
+Not at all closely |        108        1.12       99.67
+           Refused |         32        0.33      100.00
+-------------------+-----------------------------------
+             Total |      9,654      100.00
+
+. tab covidfol_w68, m nolabel
+
+COVIDFOL_W6 |
+     8. How |
+    closely |
+   have you |
+       been |
+  following |
+ news about |
+        the |
+outbreak of |
+        the |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      4,616       47.81       47.81
+          2 |      4,205       43.56       91.37
+          3 |        693        7.18       98.55
+          4 |        108        1.12       99.67
+         99 |         32        0.33      100.00
+------------+-----------------------------------
+      Total |      9,654      100.00
+
+. 
+. label define dG_newsfol ///
+>          1 "Very closely" ///
+>          2 "Fairly closely" ///
+>          3 "Not too / at all closely"
+
+.          
+. gen dG_newsfol = .
+(9,654 missing values generated)
+
+.         replace dG_newsfol = 1 if covidfol_w68 == 1
+(4,616 real changes made)
+
+.         replace dG_newsfol = 2 if covidfol_w68 == 2
+(4,205 real changes made)
+
+.         replace dG_newsfol = 3 if covidfol_w68 == 3 | covidfol_w68 == 4
+(801 real changes made)
+
+. label val dG_newsfol dG_newsfol
+
+. label var dG_newsfol "How closely following news about COVID-19?"
+
+. 
+. 
+. gen dB_newsfol_vc = 0
+
+.         replace dB_newsfol_vc = 1       if covidfol_w68  == 1
+(4,616 real changes made)
+
+.         replace dB_newsfol_vc = .n      if covidfol_w68  == 99
+(32 real changes made, 32 to missing)
+
+. label var dB_newsfol_vc "Very Closely - How closely following news about COVID
+> -19?"
+
+.         
+. gen dB_newsfol_fc = 0
+
+.         replace dB_newsfol_fc = 1       if covidfol_w68  == 2
+(4,205 real changes made)
+
+.         replace dB_newsfol_fc = .n      if covidfol_w68  == 99
+(32 real changes made, 32 to missing)
+
+. label var dB_newsfol_fc "Fairly Closely -  How closely following news about CO
+> VID-19?"
+
+. 
+. gen dB_newsfol_n = 0
+
+.         replace dB_newsfol_n = 1        if covidfol_w68  == 3 |  covidfol_w68 
+>  == 4
+(801 real changes made)
+
+.         replace dB_newsfol_n = .n       if covidfol_w68  == 99
+(32 real changes made, 32 to missing)
+
+. label var dB_newsfol_n "Not too / at all closely - How closely following news 
+> about COVID-19?"
+
+. 
+. 
+. 
+. ***-----------------------------***
+. // COVIDINFODIFF
+. ***-----------------------------***
+. 
+. *When you get news and information about the coronavirus outbreak, do you gene
+> rally find it… [RANDOMIZE]
+.         *1 Difficult to determine what is true and what is not
+.         *2 Easy to determine what is true and what is not
+. 
+. tab covidinfodiff, m
+
+   COVIDINFODIFF_W68. When you get news |
+  and information about the coronavirus |
+                                  outbr |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+Difficult to determine what is true and |      4,841       50.15       50.15
+Easy to determine what is true and what |      4,652       48.19       98.33
+                                Refused |        161        1.67      100.00
+----------------------------------------+-----------------------------------
+                                  Total |      9,654      100.00
+
+. tab covidinfodiff, m nolabel
+
+COVIDINFODI |
+    FF_W68. |
+   When you |
+   get news |
+        and |
+information |
+  about the |
+coronavirus |
+      outbr |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      4,841       50.15       50.15
+          2 |      4,652       48.19       98.33
+         99 |        161        1.67      100.00
+------------+-----------------------------------
+      Total |      9,654      100.00
+
+. 
+. gen dB_cinfodiff = .
+(9,654 missing values generated)
+
+. replace dB_cinfodiff = 1 if covidinfodiff == 2
+(4,652 real changes made)
+
+. replace dB_cinfodiff = 0 if covidinfodiff == 1
+(4,841 real changes made)
+
+. label var dB_cinfodiff "When get news about COVID, difficult to determine what
+>  is true"
+
 . 
 . ***-----------------------------***
 . // COVIDNEWSCHNG
@@ -710,58 +877,44 @@ note: label truncated to 80 characters
 > the outbreak
 .         *3 No change
 . 
+. 
+. 
 . ***-----------------------------***
-. // COVIDINFODIFF
+. // CR_PARTYNEWSUSE_W57
 . ***-----------------------------***
+. /* From https://www.journalism.org/wp-content/uploads/sites/8/2017/09/PJ_2017.
+> 10.02_Trump-First-100-Days_FINAL.pdf
+> Each news outlet was placed in one of three groups based on the profile of its
+>  audience: outlets whose
+> audience leans to the left politically, outlets whose audience leans to the ri
+> ght politically, and outlets
+> appealing to a more mixed audience. The audience data came from one of two rec
+> ent Pew Research
+> Center surveys in which U.S. adults were asked if they regularly got news abou
+> t the election or politics from
+> each outlet. An outlet was classified as left-leaning if its audience included
+>  at least two-thirds more liberal
+> Democrats than conservative Republicans. Conversely, if the audience had two-t
+> hirds more conservative
+> Republicans than liberal Democrats, the outlet was categorized as right-leanin
+> g. If neither liberal
+> Democrats nor conservative Republicans made up at least two-thirds more of the
+>  audience than the other,
+> the outlet was included in the mixed-audience group. This resulted in 12 outle
+> ts with a left-leaning
+> audience, five with a right-leaning audience and seven with a more mixed audie
+> nce.
+> Details on the inclusion process, content sampled and the full list of outlets
+>  can be found in the
+> Methodology.
+> */
 . 
-. *When you get news and information about the coronavirus outbreak, do you gene
-> rally find it… [RANDOMIZE]
-.         *1 Difficult to determine what is true and what is not
-.         *2 Easy to determine what is true and what is not
 . 
-. tab covidinfodiff, m
-
-   COVIDINFODIFF_W68. When you get news |
-  and information about the coronavirus |
-                                  outbr |      Freq.     Percent        Cum.
-----------------------------------------+-----------------------------------
-Difficult to determine what is true and |      4,606       49.81       49.81
-Easy to determine what is true and what |      4,508       48.75       98.55
-                                Refused |        134        1.45      100.00
-----------------------------------------+-----------------------------------
-                                  Total |      9,248      100.00
-
-. tab covidinfodiff, m nolabel
-
-COVIDINFODI |
-    FF_W68. |
-   When you |
-   get news |
-        and |
-information |
-  about the |
-coronavirus |
-      outbr |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          1 |      4,606       49.81       49.81
-          2 |      4,508       48.75       98.55
-         99 |        134        1.45      100.00
-------------+-----------------------------------
-      Total |      9,248      100.00
-
+. *tab cr_partynewsuse_w57, m
+. *tab cr_partynewsuse_w57, m nolabel
 . 
-. gen dB_cinfodiff = .
-(9,248 missing values generated)
-
-. replace dB_cinfodiff = 1 if covidinfodiff == 2
-(4,508 real changes made)
-
-. replace dB_cinfodiff = 0 if covidinfodiff == 1
-(4,606 real changes made)
-
-. label var dB_cinfodiff "When get news about COVID, difficult to determine what
->  is true"
-
+. *gen dG_news_dem = .
+. 
 . 
 . ***-----------------------------***
 . // SAVE DATA    
@@ -773,6 +926,13 @@ coronavirus |
 >  \ ckn`category'`dataset'.do mmk $$_DATE
 
 . compress
+  variable dG_finc was float now byte
+  variable dB_inc_l30k was float now byte
+  variable dB_inc_30_50k was float now byte
+  variable dB_inc_50_75k was float now byte
+  variable dB_inc_75_100k was float now byte
+  variable dB_inc_100_150k was float now byte
+  variable dB_inc_150kp was float now byte
   variable dB_crely_international was float now byte
   variable dB_crely_national was float now byte
   variable dB_crely_local was float now byte
@@ -783,17 +943,21 @@ coronavirus |
   variable dB_crely_friends was float now byte
   variable dB_crely_neighbor was float now byte
   variable dB_crely_online was float now byte
-  variable dB_cnews_news was float now byte
+  variable dB_cnews_natl was float now byte
   variable dB_cnews_local was float now byte
   variable dB_cnews_politicians was float now byte
   variable dB_cnews_pubhealth was float now byte
   variable dB_cnews_informal was float now byte
   variable dG_cnews was float now byte
+  variable dG_newsfol was float now byte
+  variable dB_newsfol_vc was float now byte
+  variable dB_newsfol_fc was float now byte
+  variable dB_newsfol_n was float now byte
   variable dB_cinfodiff was float now byte
-  (471,648 bytes saved)
+  (810,936 bytes saved)
 
 . datasignature set, reset
-  9248:158(55014):880653184:1497752934       (data signature reset)
+  9654:166(28918):2614586683:4163876378       (data signature reset)
 
 . save $deriv/ckn`category'`dataset'.dta, replace
 file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn05_news01_Pe
@@ -807,5 +971,5 @@ file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn05_news01_Pe
        log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
 > knowledge_news/stata/ckn05_news01_PewJune2020.log
   log type:  text
- closed on:   9 Dec 2020, 15:55:04
+ closed on:  26 May 2021, 17:04:45
 --------------------------------------------------------------------------------
