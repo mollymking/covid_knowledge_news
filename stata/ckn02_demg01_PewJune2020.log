@@ -1,9 +1,9 @@
 --------------------------------------------------------------------------------
       name:  ckn02_demg01_PewJune2020
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/stata/
-> ckn02_demg01_PewJune2020.log
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
+> knowledge_news/stata/ckn02_demg01_PewJune2020.log
   log type:  text
- opened on:  23 Nov 2020, 13:58:10
+ opened on:  26 May 2021, 17:04:15
 
 . ***-----------------------------***
 . 
@@ -19,7 +19,7 @@
 . //  author:     Molly King
 . 
 . display "$S_DATE  $S_TIME"
-23 Nov 2020  13:58:10
+26 May 2021  17:04:15
 
 . 
 . ***--------------------------***
@@ -1103,6 +1103,72 @@ College graduate/some |         0          0 |     2,844
 .         
 . 
 . 
+. *3-category Education Variable
+. gen dG_edu3 = .
+(9,654 missing values generated)
+
+. label var dG_edu3 "Categorical education variable"
+
+. label define edu_3categ 1 "HS or less" 2 "some college" 3 "college+"
+
+.         label val dG_edu3 edu_3categ
+
+. notes dG_edu3: Education 3-categorical variable, created from `edu_var' variab
+> le in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
+
+. 
+. *High school or less
+. gen dB_edu_HSl = 0
+
+.         // Replace each with . for missing edu. if there is a edu. missing con
+> dition: 
+. replace dB_edu_HSl = . if `edu_missing_condition'
+(18 real changes made, 18 to missing)
+
+. label var dB_edu_HSl "HS or less"
+
+. label define dB_edu_HSl 0 "0_>HS" 1 "1_HSless"
+
+.         label val dB_edu_HSl dB_edu_HlS
+
+. notes dB_edu_HSl: HS or less edu. created from `edu_var' variable in `dataset'
+>  \ ki`category'`dataset'.do mmk $S_DATE
+
+.                 
+. replace dB_edu_HSl = 1 if `edu_var' == 1 |      `edu_var' == 2
+(1,328 real changes made)
+
+. replace dG_edu3    = 1 if `edu_var' == 1 |      `edu_var' == 2
+(1,328 real changes made)
+
+.         
+. *some college
+. replace dG_edu3    = 2 if `sCol_condition'
+(2,876 real changes made)
+
+. 
+. *college plus
+. *dB_edu_colp
+. replace dG_edu3    = 3 if `col_condition' | `grad_condition'
+(5,432 real changes made)
+
+.         
+.         
+. tab dG_edu dG_edu3, m   
+
+ Categorical |
+   education |       Categorical education variable
+    variable | HS or les  some coll   college+          . |     Total
+-------------+--------------------------------------------+----------
+        < HS |       243          0          0          0 |       243 
+          HS |     1,085          0          0          0 |     1,085 
+some college |         0      2,876          0          0 |     2,876 
+     college |         0          0      2,844          0 |     2,844 
+ grad school |         0          0      2,588          0 |     2,588 
+           . |         0          0          0         18 |        18 
+-------------+--------------------------------------------+----------
+       Total |     1,328      2,876      5,432         18 |     9,654 
+
 . 
 . ***-----------------------------***
 . // # AGE
@@ -1189,7 +1255,7 @@ College graduate/some |         0          0 |     2,844
   2.         gen dB_age_`age' = 0
   3.         // Replace each with . for missing 
 .                 if "`age_missing_condition'" != "none" {
-  4.                         replace dB_age_`age' = . if `edu_missing_condition'
+  4.                         replace dB_age_`age' = . if `age_missing_condition'
   5.                 }
   6.         label var dB_age_`age' "Age category `age'"
   7.         label define dB_age_`age' 0 "Not `age'" 1 "`age'"
@@ -1199,13 +1265,13 @@ College graduate/some |         0          0 |     2,844
  10. 
 .         replace dB_age_`age' = 1 if `age`age'_condition'
  11. }
-(18 real changes made, 18 to missing)
+(36 real changes made, 36 to missing)
 (1,034 real changes made)
-(18 real changes made, 18 to missing)
+(36 real changes made, 36 to missing)
 (3,026 real changes made)
-(18 real changes made, 18 to missing)
+(36 real changes made, 36 to missing)
 (2,967 real changes made)
-(18 real changes made, 18 to missing)
+(36 real changes made, 36 to missing)
 (2,591 real changes made)
 
 . 
@@ -1213,6 +1279,454 @@ College graduate/some |         0          0 |     2,844
 . *tab `age_var' dB_age_18_29, m
 . *tab `age_var' dB_age_65p, m
 . 
+.         
+. ***-----------------------------***
+. // # RELIGION   
+. ***-----------------------------***
+. 
+. tab f_relig f_born
+
+                      |     BORN. Would you describe
+                      |   yourself as a born-again or
+                      |   evangelical Christian, or n
+             Religion |       Yes         No  Don't kno |     Total
+----------------------+---------------------------------+----------
+           Protestant |     2,112      1,606         69 |     3,787 
+       Roman Catholic |       190      1,795         31 |     2,016 
+Mormon (Church of Jes |        32        134          2 |       168 
+Orthodox (such as Gre |         4         35          0 |        39 
+                Other |         5         18          7 |        30 
+----------------------+---------------------------------+----------
+                Total |     2,343      3,588        109 |     6,040 
+
+. tab f_born, m nolabel
+
+BORN. Would |
+        you |
+   describe |
+yourself as |
+          a |
+ born-again |
+         or |
+evangelical |
+ Christian, |
+       or n |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      2,343       24.27       24.27
+          2 |      3,588       37.17       61.44
+         99 |        109        1.13       62.56
+          . |      3,614       37.44      100.00
+------------+-----------------------------------
+      Total |      9,654      100.00
+
+. tab f_born, m 
+
+   BORN. Would you |
+ describe yourself |
+as a born-again or |
+       evangelical |
+   Christian, or n |      Freq.     Percent        Cum.
+-------------------+-----------------------------------
+               Yes |      2,343       24.27       24.27
+                No |      3,588       37.17       61.44
+Don't know/refused |        109        1.13       62.56
+                 . |      3,614       37.44      100.00
+-------------------+-----------------------------------
+             Total |      9,654      100.00
+
+. tab f_relig, nolabel
+
+   Religion |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      3,787       39.23       39.23
+          2 |      2,016       20.88       60.11
+          3 |        168        1.74       61.85
+          4 |         39        0.40       62.25
+          5 |        261        2.70       64.96
+          6 |         52        0.54       65.50
+          7 |         70        0.73       66.22
+          8 |         50        0.52       66.74
+          9 |        633        6.56       73.30
+         10 |        625        6.47       79.77
+         11 |        233        2.41       82.18
+         12 |      1,675       17.35       99.53
+         99 |         45        0.47      100.00
+------------+-----------------------------------
+      Total |      9,654      100.00
+
+. tab f_relig
+
+                               Religion |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+                             Protestant |      3,787       39.23       39.23
+                         Roman Catholic |      2,016       20.88       60.11
+Mormon (Church of Jesus Christ of Latte |        168        1.74       61.85
+Orthodox (such as Greek, Russian, or so |         39        0.40       62.25
+                                 Jewish |        261        2.70       64.96
+                                 Muslim |         52        0.54       65.50
+                               Buddhist |         70        0.73       66.22
+                                  Hindu |         50        0.52       66.74
+                                Atheist |        633        6.56       73.30
+                               Agnostic |        625        6.47       79.77
+                                  Other |        233        2.41       82.18
+                  Nothing in particular |      1,675       17.35       99.53
+                                Refused |         45        0.47      100.00
+----------------------------------------+-----------------------------------
+                                  Total |      9,654      100.00
+
+. 
+. // Conservative Protestant
+. *following Evans & Hargittai 2020, assign those describing themselves as evang
+> elical to conservative dummy variable
+. 
+. gen dB_rel_conP = 0
+
+. replace dB_rel_conP = . if f_relig == 99 // refused
+(45 real changes made, 45 to missing)
+
+. replace dB_rel_conP = 1 if f_born == 1 & f_relig == 1 // protestant and "evang
+> elical / born again"
+(2,112 real changes made)
+
+. 
+. label define relig_conP ///
+>         0       "Other"  ///
+>         1       "Conservative Protestant"
+
+. label val dB_rel_conP relig_conP
+
+. 
+. notes dB_rel_conP: Conservative Protestant, created from f_born variable in `d
+> ataset' \ ckn`category'`dataset'.do mmk $S_DATE
+
+.         
+.         
+. // Liberal Christian
+. 
+. gen dB_rel_libP = 0
+
+. replace  dB_rel_libP = . if f_relig == 99 // refused
+(45 real changes made, 45 to missing)
+
+. replace  dB_rel_libP = 1 if f_born == 2 & f_relig == 1 // protestant and  NOT 
+> "evangelical / born again"
+(1,606 real changes made)
+
+. label define relig_libP ///
+>         0       "Other"  ///
+>         1       "Liberal Protestant"    
+
+. label val  dB_rel_libP relig_libP
+
+. 
+. notes  dB_rel_libP: Liberal Protestant, created from f_born variable in `datas
+> et' \ ckn`category'`dataset'.do mmk $S_DATE
+
+.         
+.         
+. // Catholic
+. 
+. gen dB_rel_cath = 0
+
+. replace  dB_rel_cath = . if f_relig == 99 // refused
+(45 real changes made, 45 to missing)
+
+. replace  dB_rel_cath = 1 if f_relig == 2
+(2,016 real changes made)
+
+. 
+. label define relig_cath ///
+>         0       "Other"  ///
+>         1       "Catholic"
+
+. label val dB_rel_cath relig_cath
+
+. 
+. notes  dB_rel_cath: Catholic, created from f_born variable in `dataset' \ ckn`
+> category'`dataset'.do mmk $S_DATE
+
+.         
+. 
+. // Strong no-identity Christian 
+. *tab f_relig f_attend if f_born !=1 & f_born !=2
+. // Low participation Christian 
+. 
+. 
+. // Other
+. tab f_relig, m
+
+                               Religion |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+                             Protestant |      3,787       39.23       39.23
+                         Roman Catholic |      2,016       20.88       60.11
+Mormon (Church of Jesus Christ of Latte |        168        1.74       61.85
+Orthodox (such as Greek, Russian, or so |         39        0.40       62.25
+                                 Jewish |        261        2.70       64.96
+                                 Muslim |         52        0.54       65.50
+                               Buddhist |         70        0.73       66.22
+                                  Hindu |         50        0.52       66.74
+                                Atheist |        633        6.56       73.30
+                               Agnostic |        625        6.47       79.77
+                                  Other |        233        2.41       82.18
+                  Nothing in particular |      1,675       17.35       99.53
+                                Refused |         45        0.47      100.00
+----------------------------------------+-----------------------------------
+                                  Total |      9,654      100.00
+
+. tab f_relig, m nolab
+
+   Religion |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      3,787       39.23       39.23
+          2 |      2,016       20.88       60.11
+          3 |        168        1.74       61.85
+          4 |         39        0.40       62.25
+          5 |        261        2.70       64.96
+          6 |         52        0.54       65.50
+          7 |         70        0.73       66.22
+          8 |         50        0.52       66.74
+          9 |        633        6.56       73.30
+         10 |        625        6.47       79.77
+         11 |        233        2.41       82.18
+         12 |      1,675       17.35       99.53
+         99 |         45        0.47      100.00
+------------+-----------------------------------
+      Total |      9,654      100.00
+
+. 
+. gen dB_rel_oth = 0
+
+. replace  dB_rel_oth = 1 if f_relig == 3  // mormon
+(168 real changes made)
+
+. replace  dB_rel_oth = 1 if f_relig == 4  // orthodox
+(39 real changes made)
+
+. replace  dB_rel_oth = 1 if f_relig == 5  // jewish
+(261 real changes made)
+
+. replace  dB_rel_oth = 1 if f_relig == 6  // muslim
+(52 real changes made)
+
+. replace  dB_rel_oth = 1 if f_relig == 7  // buddhist
+(70 real changes made)
+
+. replace  dB_rel_oth = 1 if f_relig == 8  // hindu
+(50 real changes made)
+
+. replace  dB_rel_oth = 1 if f_relig == 11 // other       
+(233 real changes made)
+
+. replace  dB_rel_oth = . if f_relig == 99  // refused
+(45 real changes made, 45 to missing)
+
+. 
+. label define relig_other ///
+>         0       "Christian,Catholics, Nones"  ///
+>         1       "Other Religions"       
+
+. label val dB_rel_oth relig_other
+
+. 
+. notes  dB_rel_oth: Other religions, created from f_born variable in `dataset' 
+> \ ckn`category'`dataset'.do mmk $S_DATE
+
+.         
+. 
+. // Nonreligious (Atheist, Agnostic, None)
+. 
+. gen dB_rel_none = 0
+
+. replace dB_rel_none = 1 if f_relig == 9 // atheist
+(633 real changes made)
+
+. replace dB_rel_none = 1 if f_relig == 10 // agnostic
+(625 real changes made)
+
+. replace dB_rel_none = 1 if f_relig == 12 // nothing in particular
+(1,675 real changes made)
+
+. replace  dB_rel_none = . if f_relig == 99 // refused
+(45 real changes made, 45 to missing)
+
+.         
+. label define relig_none ///
+>         0       "Other" ///
+>         1       "Nonreligious - Atheist / Agnostic / Nothing in particular"
+
+. label val dB_rel_none relig_none
+
+. 
+. notes  dB_rel_none: Nonreligious, created from f_born variable in `dataset' \ 
+> ckn`category'`dataset'.do mmk $S_DATE
+
+. 
+. 
+. // Categorical
+. 
+. gen dG_relig = .
+(9,654 missing values generated)
+
+. replace  dG_rel = 1 if dB_rel_conP == 1 // Conservative Protestant
+(2,112 real changes made)
+
+. replace  dG_rel = 2 if dB_rel_libP == 1 // Liberal Protestant
+(1,606 real changes made)
+
+. replace  dG_rel = 3 if dB_rel_cath == 1 // Catholic
+(2,016 real changes made)
+
+. replace  dG_rel = 4 if dB_rel_oth == 1 // Other
+(873 real changes made)
+
+. replace  dG_rel = 5 if dB_rel_none == 1 // Nonreligious
+(2,933 real changes made)
+
+. replace  dG_rel = . if f_relig == 99  // refused
+(0 real changes made)
+
+. 
+. 
+. label define relig ///
+>         1       "Conservative Protestant"       ///
+>         2       "Liberal Protestant"            ///
+>         3       "Catholic"                                      ///
+>         4       "Other"                                         ///
+>         5       "Nonreligious"  
+
+. label val dG_rel relig
+
+. 
+. notes  dG_rel: Categorical religion, created from f_born variable in `dataset'
+>  \ ckn`category'`dataset'.do mmk $S_DATE
+
+. 
+. tab  f_relig dG_rel, m
+
+                      |                  dG_relig
+             Religion | Conservat  Liberal P   Catholic      Other |     Total
+----------------------+--------------------------------------------+----------
+           Protestant |     2,112      1,606          0          0 |     3,787 
+       Roman Catholic |         0          0      2,016          0 |     2,016 
+Mormon (Church of Jes |         0          0          0        168 |       168 
+Orthodox (such as Gre |         0          0          0         39 |        39 
+               Jewish |         0          0          0        261 |       261 
+               Muslim |         0          0          0         52 |        52 
+             Buddhist |         0          0          0         70 |        70 
+                Hindu |         0          0          0         50 |        50 
+              Atheist |         0          0          0          0 |       633 
+             Agnostic |         0          0          0          0 |       625 
+                Other |         0          0          0        233 |       233 
+Nothing in particular |         0          0          0          0 |     1,675 
+              Refused |         0          0          0          0 |        45 
+----------------------+--------------------------------------------+----------
+                Total |     2,112      1,606      2,016        873 |     9,654 
+
+
+                      |       dG_relig
+             Religion | Nonreligi          . |     Total
+----------------------+----------------------+----------
+           Protestant |         0         69 |     3,787 
+       Roman Catholic |         0          0 |     2,016 
+Mormon (Church of Jes |         0          0 |       168 
+Orthodox (such as Gre |         0          0 |        39 
+               Jewish |         0          0 |       261 
+               Muslim |         0          0 |        52 
+             Buddhist |         0          0 |        70 
+                Hindu |         0          0 |        50 
+              Atheist |       633          0 |       633 
+             Agnostic |       625          0 |       625 
+                Other |         0          0 |       233 
+Nothing in particular |     1,675          0 |     1,675 
+              Refused |         0         45 |        45 
+----------------------+----------------------+----------
+                Total |     2,933        114 |     9,654 
+
+. 
+. 
+. /*
+> 
+> ***-----------------------------***
+> // # PARTY / IDEOLOGY
+> ***-----------------------------***
+> tab f_partysum_final, m
+> tab f_partysum_final, m nolab
+> tab f_party_final
+> 
+> *F_PARTYSUM_FINAL
+> *Party summary recoded off F_PARTY_FINAL and F_PARTYLN_FINAL.
+>         // 1 Rep/Rep Lean
+>         // 2 Dem/Dem Lean
+>         // 3 Independent/No Lean
+>         // 99 DK/Ref
+>         
+> // Political Party
+> label define pol_party ///
+>         0       "Republican"  ///
+>         1       "Democrat" ///
+>         2       "Independent"
+> 
+> gen dG_pol = .
+>         replace dG_pol = 0 if f_party_final == 1        // Republican
+>         replace dG_pol = 1 if f_party_final == 2        // Democrat
+>         replace dG_pol = 2 if f_party_final == 3        // Independent
+> label var  dG_pol "Political Party"
+> 
+> label val dG_pol pol_party
+> notes  dG_pol: Political party, created from f_party_final variable in `datase
+> t' \ ckn`category'`dataset'.do mmk $S_DATE
+>         
+> tab f_party_final dG_pol, m
+> 
+> // Democratic Party - dB_dem - use with dB_ind
+> label define dem_party ///
+>         0       "Other"  ///  omitted "something else"
+>         1       "Democrat"
+> 
+> gen dB_pol_dem  = .
+>         replace  dB_pol_dem  = 0 if f_party_final == 1  // Repubs
+>         replace  dB_pol_dem = 1 if f_party_final == 2   // Dems
+>         replace  dB_pol_dem = 0 if f_party_final == 3   // Ind
+> label var dB_pol_dem  "Democratic Party"
+> 
+> label val dB_pol_dem dem_party
+> notes dB_pol_dem : Binary Democratic, created from f_party_final variable in `
+> dataset' \ ckn`category'`dataset'.do mmk $S_DATE
+> 
+> tab dB_pol_dem f_party_final, m
+> 
+> // Independent - dB_ind - use with dB_dem
+> label define ind_party ///
+>         0       "Other"  /// omitted "something else"
+>         1       "Independent"
+> 
+> gen dB_pol_ind = .
+>         replace   dB_pol_ind = 0 if f_party_final == 1  // Rep
+>         replace   dB_pol_ind = 1 if f_party_final == 3  // Ind
+>         replace   dB_pol_ind = 0 if f_party_final == 2  // Dem
+> label var  dB_pol_ind "Independent"
+> 
+> label val  dB_pol_ind ind_party
+> notes  dB_pol_ind: Binary Independent, created from f_party_final variable in 
+> `dataset' \ ckn`category'`dataset'.do mmk $S_DATE
+>         
+> tab dB_pol_ind f_party_final, m
+> 
+>         
+> // Democratic Party / lean - Binary
+> label define partylean ///
+>         0       "Republican / Rep lean"  ///
+>         1       "Democrat / Dem lean"
+> 
+> gen dB_demlean = .
+>         replace  dB_demlean = 0 if f_partysum_final == 1        
+>         replace  dB_demlean = 1 if f_partysum_final == 2
+> label var dB_demlean "Democratic Party / lean"
+> 
+> label val dB_demlean partylean
+> notes dB_demlean: Binary Democratic / Dem lean, created from f_partysum_final 
+> variable in `dataset' \ ckn`category'`dataset'.do mmk $S_DATE
+> */
 . 
 . ***-----------------------------***
 . // SAVE DATA    
@@ -1241,15 +1755,23 @@ College graduate/some |         0          0 |     2,844
   variable dB_edu_col was float now byte
   variable dB_edu_grad was float now byte
   variable dB_edu_colp was float now byte
+  variable dG_edu3 was float now byte
+  variable dB_edu_HSl was float now byte
   variable dG_age was float now byte
   variable dB_age_18_29 was float now byte
   variable dB_age_30_49 was float now byte
   variable dB_age_50_64 was float now byte
   variable dB_age_65p was float now byte
-  (617,856 bytes saved)
+  variable dB_rel_conP was float now byte
+  variable dB_rel_libP was float now byte
+  variable dB_rel_cath was float now byte
+  variable dB_rel_oth was float now byte
+  variable dB_rel_none was float now byte
+  variable dG_relig was float now byte
+  (849,552 bytes saved)
 
 . datasignature set, reset
-  9654:119(86564):1520496462:982518389       (data signature reset)
+  9654:127(107068):1708236611:301277409       (data signature reset)
 
 . save $deriv/ckn`category'`dataset'.dta, replace
 file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn02_demg01_Pe
@@ -1261,8 +1783,8 @@ file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn02_demg01_Pe
 . 
 . log close ckn`category'`dataset'
       name:  ckn02_demg01_PewJune2020
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/stata/
-> ckn02_demg01_PewJune2020.log
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
+> knowledge_news/stata/ckn02_demg01_PewJune2020.log
   log type:  text
- closed on:  23 Nov 2020, 13:58:11
+ closed on:  26 May 2021, 17:04:15
 --------------------------------------------------------------------------------
