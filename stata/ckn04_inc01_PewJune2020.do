@@ -96,7 +96,7 @@ replace dG_finc = 3 if dL_finc == 6
 replace dG_finc = 4 if dL_finc == 7
 replace dG_finc = 5 if dL_finc == 8
 replace dG_finc = 6 if dL_finc == 9
-replace dG_finc = .n if dL_finc == .n
+replace dG_finc = . if dL_finc == .n
 
 
 label var dG_finc "family Income - categories more than 1000 respondents"
