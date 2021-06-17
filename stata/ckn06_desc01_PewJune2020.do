@@ -71,6 +71,10 @@ local dem_categories  "dG_cnews  dG_newsfol dG_age dB_fem  dG_race `income_var' 
 		filename($results/ckn`category'`dataset') ///
 		sheetname(all)
 
+foreach dem_var of local demographics {
+	svy: mean `dem_var'
+}
+
 
 // Going to use the command postfile to create a record for each variable 
 // and its corresponding mean value of correct for each question					

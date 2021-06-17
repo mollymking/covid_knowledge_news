@@ -3,7 +3,7 @@
        log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
 > knowledge_news/stata/ckn06_desc01_PewJune2020.log
   log type:  text
- opened on:  17 Jun 2021, 12:11:43
+ opened on:  17 Jun 2021, 12:52:07
 
 . ***-----------------------------***
 . 
@@ -19,7 +19,7 @@
 . //  author:     Molly King
 . 
 . display "$S_DATE  $S_TIME"
-17 Jun 2021  12:11:43
+17 Jun 2021  12:52:07
 
 . 
 . ***--------------------------***
@@ -128,1104 +128,459 @@ Descriptive statistics table has been saved in the folder:
 /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/data/data_derv
 
 . 
-. 
-. // Going to use the command postfile to create a record for each variable 
-. // and its corresponding mean value of correct for each question              
->                           
-. //percentage of people within each demographic who got question correct:
-. cd $temp/
-/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/data/data_temp
+. foreach dem_var of local demographics {
+  2.         svy: mean `dem_var'
+  3. }
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+   dB_rwhite |   .6607084   .0085199      .6440072    .6774095
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+   dB_rblack |   .1059587   .0057816      .0946253     .117292
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+   dB_rasian |   .0528812   .0044968      .0440663     .061696
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+    dB_rhisp |   .1532438   .0066693      .1401705    .1663172
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+   dB_rother |    .027208    .002727      .0218625    .0325535
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+dB_age_18_29 |   .1887407   .0079509       .173155    .2043265
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+dB_age_30_49 |   .3426739   .0080138      .3269649    .3583829
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+dB_age_50_64 |   .2608853   .0070472      .2470711    .2746994
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+  dB_age_65p |   .2077001   .0063125      .1953262     .220074
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+ dB_inc_l30k |   .2907089   .0087277      .2736006    .3078172
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1         Number of obs   =      8,668
+Number of PSUs   =   8,668         Population size = 8,450.6293
+                                   Design df       =      8,667
+
+---------------------------------------------------------------
+              |             Linearized
+              |       Mean   Std. Err.     [95% Conf. Interval]
+--------------+------------------------------------------------
+dB_inc_30_50k |   .1963304   .0070484      .1825139    .2101469
+---------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1         Number of obs   =      8,668
+Number of PSUs   =   8,668         Population size = 8,450.6293
+                                   Design df       =      8,667
+
+---------------------------------------------------------------
+              |             Linearized
+              |       Mean   Std. Err.     [95% Conf. Interval]
+--------------+------------------------------------------------
+dB_inc_50_75k |   .1657044   .0059321      .1540762    .1773327
+---------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1          Number of obs   =      8,668
+Number of PSUs   =   8,668          Population size = 8,450.6293
+                                    Design df       =      8,667
+
+----------------------------------------------------------------
+               |             Linearized
+               |       Mean   Std. Err.     [95% Conf. Interval]
+---------------+------------------------------------------------
+dB_inc_75_100k |    .123689   .0048616      .1141592    .1332188
+----------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1           Number of obs   =      8,668
+Number of PSUs   =   8,668           Population size = 8,450.6293
+                                     Design df       =      8,667
+
+-----------------------------------------------------------------
+                |             Linearized
+                |       Mean   Std. Err.     [95% Conf. Interval]
+----------------+------------------------------------------------
+dB_inc_100_150k |   .1242732   .0045113        .11543    .1331163
+-----------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+dB_inc_150kp |   .0992942   .0039567      .0915382    .1070502
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+      dB_fem |   .5175273   .0085421      .5007828    .5342718
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+  dB_edu_HSl |   .3489663   .0093342      .3306691    .3672635
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+ dB_edu_sCol |   .3169804   .0076553      .3019741    .3319867
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+ dB_edu_colp |   .3340533   .0067108      .3208986    .3472081
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1         Number of obs   =      8,668
+Number of PSUs   =   8,668         Population size = 8,450.6293
+                                   Design df       =      8,667
+
+---------------------------------------------------------------
+              |             Linearized
+              |       Mean   Std. Err.     [95% Conf. Interval]
+--------------+------------------------------------------------
+dB_cnews_natl |   .3109951   .0076112      .2960754    .3259148
+---------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1          Number of obs   =      8,668
+Number of PSUs   =   8,668          Population size = 8,450.6293
+                                    Design df       =      8,667
+
+----------------------------------------------------------------
+               |             Linearized
+               |       Mean   Std. Err.     [95% Conf. Interval]
+---------------+------------------------------------------------
+dB_cnews_local |   .1733296   .0068587       .159885    .1867742
+----------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1                Number of obs   =      8,668
+Number of PSUs   =   8,668                Population size = 8,450.6293
+                                          Design df       =      8,667
+
+----------------------------------------------------------------------
+                     |             Linearized
+                     |       Mean   Std. Err.     [95% Conf. Interval]
+---------------------+------------------------------------------------
+dB_cnews_politicians |   .2499629   .0072582      .2357351    .2641907
+----------------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1              Number of obs   =      8,668
+Number of PSUs   =   8,668              Population size = 8,450.6293
+                                        Design df       =      8,667
+
+--------------------------------------------------------------------
+                   |             Linearized
+                   |       Mean   Std. Err.     [95% Conf. Interval]
+-------------------+------------------------------------------------
+dB_cnews_pubhealth |   .1807644   .0062003      .1686102    .1929185
+--------------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1             Number of obs   =      8,668
+Number of PSUs   =   8,668             Population size = 8,450.6293
+                                       Design df       =      8,667
+
+-------------------------------------------------------------------
+                  |             Linearized
+                  |       Mean   Std. Err.     [95% Conf. Interval]
+------------------+------------------------------------------------
+dB_cnews_informal |    .084948   .0057962       .073586      .09631
+-------------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1         Number of obs   =      8,668
+Number of PSUs   =   8,668         Population size = 8,450.6293
+                                   Design df       =      8,667
+
+---------------------------------------------------------------
+              |             Linearized
+              |       Mean   Std. Err.     [95% Conf. Interval]
+--------------+------------------------------------------------
+dB_newsfol_vc |   .4043329   .0081352      .3883861    .4202798
+---------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1         Number of obs   =      8,668
+Number of PSUs   =   8,668         Population size = 8,450.6293
+                                   Design df       =      8,667
+
+---------------------------------------------------------------
+              |             Linearized
+              |       Mean   Std. Err.     [95% Conf. Interval]
+--------------+------------------------------------------------
+dB_newsfol_fc |   .4629934   .0085022      .4463271    .4796597
+---------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+dB_newsfol_n |   .1326737   .0067805      .1193824     .145965
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+ dB_rel_conP |    .229144   .0071231      .2151811    .2431069
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+ dB_rel_libP |   .1520762   .0057276      .1408487    .1633037
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+ dB_rel_cath |   .1881236   .0064621      .1754564    .2007907
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+  dB_rel_oth |   .0795118   .0043846      .0709169    .0881067
+--------------------------------------------------------------
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =       1        Number of obs   =      8,668
+Number of PSUs   =   8,668        Population size = 8,450.6293
+                                  Design df       =      8,667
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+ dB_rel_none |   .3511444   .0083828      .3347121    .3675768
+--------------------------------------------------------------
 
 . 
-. foreach covid_v in   stateresponse_c  antibody_c fauci_c  { // 
-  2. 
-.         foreach dem_var of local demographics {
-  3.                 use $deriv/ckn`category'`dataset'.dta, clear
-  4.                 
-.                 di in red "Current variable being described is `dem_var'"
-  5.         
-.                 tempname `dem_var'_memhold
-  6.                 tempfile `dem_var'_results
-  7.         
-.                 postfile ``dem_var'_memhold' str16 var_name `covid_v'_mean `co
-> vid_v'_sd ///
->                         using ``dem_var'_results'
-  8. 
-.                 quietly svy: mean `covid_v' if  `dem_var' == 1
-  9.                 estat sd
- 10.                 
-.                 cap loc mean_var = r(mean)[1,1]
- 11.                 cap loc sd_var = r(sd)[1,1]
- 12.                 
-.                 post ``dem_var'_memhold' ("`dem_var'") (`mean_var') (`sd_var')
- 13.                 
-.                 postclose ``dem_var'_memhold'
- 14.                 
-.                 clear matrix
- 15.                 
-.         } // end of demographics loop
- 16.         
-. 
-. *save blank dataset
-.         clear all
- 17.         generate str16 var_name = ""
- 18.         save $temp/ckn`category'`dataset'_`covid_v'.dta, replace
- 19. 
-. 
-. // APPEND & MERGE
-. 
-. di in red "Now we are appending tables together for all demographic variables 
-> within `covid_v'"
- 20. 
-.         *tempname `covid_v'_append_memhold
-.         *tempfile `covid_v'_append_results
-.         
-.         *postfile ``covid_v'_append_memhold' str16 var_name `covid_v'mean `cov
-> id_v'sd ///
->         *       using ``covid_v'_append_results'
-. 
-.         foreach dem_var of local demographics {
- 21.                 
-.                 *use ``covid_v'_append_results', clear
-.                 use $temp/ckn`category'`dataset'_`covid_v', clear
- 22.                 append using ``dem_var'_results',
- 23.                 *save ``covid_v'_append_results', replace
-.                 save $temp/ckn`category'`dataset'_`covid_v'.dta, replace
- 24.                         
-.         } // end of demographics loop   
- 25. 
-. } // end of covid knowledge variable loop
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rwhite
+end of do-file
 
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .5892434    .4920117
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rblack
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .3778393    .4852306
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rasian
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .5722045     .495732
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rhisp
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .4607925    .4986285
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rother
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .5153704    .5008259
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_age_18_29
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .4726077    .4995215
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_age_30_49
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .5564591    .4968911
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_age_50_64
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .5419119    .4983332
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_age_65p
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .5921367    .4915455
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_l30k
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .4074984    .4915306
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_30_50k
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |    .520924    .4997389
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_50_75k
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |    .597096    .4906403
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_75_100k
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .6066023    .4886892
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_100_150k
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .6499414    .4771453
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_150kp
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .6925852    .4615936
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_fem
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .5247705    .4994394
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_edu_HSl
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .4236035    .4943462
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_edu_sCol
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .5548357    .4970814
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_edu_colp
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |    .660232    .4736779
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_cnews_natl
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .5989728    .4901854
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_cnews_local
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .4327284    .4956552
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_cnews_politicians
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .5744338    .4945462
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_cnews_pubhealth
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .5695922    .4952711
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_cnews_informal
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .4286937    .4954657
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_newsfol_vc
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .6004287    .4898688
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_newsfol_fc
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .5359367    .4987726
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_newsfol_n
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .4020376    .4906657
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rel_conP
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .5071776    .5000819
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rel_libP
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .5699978    .4952466
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rel_cath
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .5500768    .4976221
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rel_oth
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .6386448    .4806968
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rel_none
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-stateresp~_c |   .5327893    .4990154
--------------------------------------
-(note: dataset contains 0 observations)
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-Now we are appending tables together for all demographic variables within stater
-> esponse_c
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_stateresponse_c.dta saved
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rwhite
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .6978064    .4592466
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rblack
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .3468179    .4763336
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rasian
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .5600246    .4973601
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rhisp
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .4221572    .4940699
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rother
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .5213183    .5006071
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_age_18_29
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |    .497545    .5002668
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_age_30_49
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .6249065    .4842337
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_age_50_64
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .6190204    .4857182
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_age_65p
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .6583878    .4743545
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_l30k
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .3863221     .487066
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_30_50k
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .5501928    .4976504
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_50_75k
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .6500326    .4771135
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_75_100k
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .7547683    .4303878
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_100_150k
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .8001301    .4000342
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_150kp
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .8606278    .3464628
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_fem
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .5872642    .4923787
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_edu_HSl
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .4304712    .4953596
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_edu_sCol
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .5958748    .4908182
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_edu_colp
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .7998308    .4001671
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_cnews_natl
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .6747093    .4685588
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_cnews_local
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .4514833    .4978428
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_cnews_politicians
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .6441964      .47887
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_cnews_pubhealth
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .6706073    .4701235
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_cnews_informal
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .4232335    .4946473
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_newsfol_vc
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |    .706675    .4553406
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_newsfol_fc
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .5954216    .4908749
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_newsfol_n
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .3382618    .4734618
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rel_conP
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .5453344    .4980735
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rel_libP
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .6094242    .4880475
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rel_cath
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .6069271    .4885665
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rel_oth
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .6444984    .4789675
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rel_none
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-  antibody_c |   .6357075    .4813196
--------------------------------------
-(note: dataset contains 0 observations)
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-Now we are appending tables together for all demographic variables within antibo
-> dy_c
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_antibody_c.dta saved
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rwhite
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .7785556    .4152532
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rblack
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .5237878    .4998288
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rasian
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .7352102    .4420889
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rhisp
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .5261186    .4994858
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rother
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .6540255    .4766959
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_age_18_29
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .5007986    .5002722
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_age_30_49
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .6970552    .4596138
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_age_50_64
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |     .76266    .4255317
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_age_65p
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .8418171    .3649926
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_l30k
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .4932158    .5001184
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_30_50k
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .6654905    .4719857
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_50_75k
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .7776613    .4159519
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_75_100k
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |    .827894    .3776158
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_100_150k
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .8884844    .3148733
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_inc_150kp
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .9212996    .2693704
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_fem
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .6458508    .4783058
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_edu_HSl
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .5486185    .4978492
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_edu_sCol
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .6920523    .4617353
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_edu_colp
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .8872224    .3163525
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_cnews_natl
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .8036346     .397312
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_cnews_local
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .5717799    .4950219
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_cnews_politicians
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .7694908    .4212589
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_cnews_pubhealth
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .7145563    .4517512
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_cnews_informal
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |    .431472    .4958586
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_newsfol_vc
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .8124787    .3903761
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_newsfol_fc
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .7048898    .4561524
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_newsfol_n
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .3943869    .4890737
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rel_conP
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .6572751    .4747471
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rel_libP
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .6998003    .4585026
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rel_cath
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .7426225    .4373088
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rel_oth
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |    .776511    .4168466
--------------------------------------
-(01_PewJune2020 Knowledge variables)
-Current variable being described is dB_rel_none
-
--------------------------------------
-             |       Mean   Std. Dev.
--------------+-----------------------
-     fauci_c |   .7083005    .4546282
--------------------------------------
-(note: dataset contains 0 observations)
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-Now we are appending tables together for all demographic variables within fauci_
-> c
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp/ckn06_desc01_Pe
-> wJune2020_fauci_c.dta saved
-
-.         
-. 
-.         
-. di in red "Now we are merging tables together across all knowledge variables"
-Now we are merging tables together across all knowledge variables
-
-.         
-. *use `fauci_c_append_results', clear
-. use $temp/ckn06_desc01_PewJune2020_fauci_c.dta, clear
-
-. *merge 1:1 var_name using `stateresponse_c_append_results'
-. merge 1:1 var_name using $temp/ckn06_desc01_PewJune2020_stateresponse_c.dta
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                             0
-    matched                                32  (_merge==3)
-    -----------------------------------------
-
-. 
-. 
-. tab _merge
-
-                 _merge |      Freq.     Percent        Cum.
-------------------------+-----------------------------------
-            matched (3) |         32      100.00      100.00
-------------------------+-----------------------------------
-                  Total |         32      100.00
-
-. drop _merge
-
-. 
-. *merge 1:1 var_name using `antibody_c_append_results'
-. merge 1:1 var_name using $temp/ckn`category'`dataset'_antibody_c.dta
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                             0
-    matched                                32  (_merge==3)
-    -----------------------------------------
-
-.         
-. save $results/ckn`category'`dataset'.dta, replace
-file ~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/stata/res
-> ults/ckn06_desc01_PewJune2020.dta saved
-
-.         
-.         
-. 
-. ***--------------------------***
-. 
-. log close ckn`category'`dataset'
-      name:  ckn06_desc01_PewJune2020
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
-> knowledge_news/stata/ckn06_desc01_PewJune2020.log
-  log type:  text
- closed on:  17 Jun 2021, 12:11:56
---------------------------------------------------------------------------------
+. exit
