@@ -58,6 +58,7 @@ label var `new_var'_ac "correct, given attempted: How did states in the U.S. res
 label var `new_var'_dk "Not sure -  how did states in the U.S. respond during the coronavirus outbreak?"
 
 
+/*
 // COVIDUNEMPLOY
 *Is the national unemployment rate as reported by the government currently
 local var_repl  covidunemploy_w68
@@ -73,7 +74,7 @@ include $stata/ckn03_know00_include_IC.doi
 label var `new_var'_c "correct, including don't knows: National unemployment rate as reported by the government currently around 15%"
 label var `new_var'_ac "correct, given attempted: National unemployment rate as reported by the government currently around 15%"
 label var `new_var'_dk "Not sure -  national unemployment rate as reported by the government currently ~15%"
-
+*/
 
 // COVIDANTIBODIES
 *As far as you know, are antibody tests for the coronavirus (also known as serology tests) intended to detect…
