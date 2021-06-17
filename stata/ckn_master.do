@@ -34,6 +34,7 @@ display "$S_DATE  $S_TIME"
 *Data
 global source	"~/Documents/SocResearch/COVID_Knowledge_News/data/data_sorc"  	// original datasets
 global deriv	"~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv"  	// derived datasets
+global temp		"~/Documents/SocResearch/COVID_Knowledge_News/data/data_temp"  	// temp datasets
 
 *Code
 global stata  	"~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/stata"
