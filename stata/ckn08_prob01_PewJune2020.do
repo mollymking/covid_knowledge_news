@@ -25,7 +25,7 @@ set linesize 80
 clear all
 set more off
 
-use $deriv/ckn05_news`dataset'.dta, clear
+use $deriv/ckn06_desc`dataset'.dta, clear
 save $deriv/ckn`category'`dataset'.dta, replace // data that results at end
 
 cd $deriv
@@ -47,6 +47,8 @@ if "`CD'" == "D" {
 	local answer "Don't Know"
 }
 
+set scheme reportcool
+
 // Color locals
 local Teal "57 118 104"
 local Gold "188 121 18"
@@ -65,98 +67,233 @@ graph set window /*echo back preferences*/
 // STORE BASE LEVELS
 
 fvset base 0 dB_bipoc
-fvset base 1 dG_cnews // ref: dB_cnews_news 
-fvset base 2 dG_edu  // ref: HS
 fvset base 1 dG_age	 // ref: 18-29
 
-local income_var  dL_finc_cat // 
+local income_var "i.dG_finc" 	// 
+fvset base 1 dG_finc 		// ref: less than $30,000
+
+fvset base 1 dG_cnews 		// ref: dB_cnews_news 
+
+local edu_var "i.dG_edu3"
+fvset base 1 dG_edu3  		// ref: less than HS
+
+*set base to international/national or public health
+fvset base 4 dG_cnews		// ref: public health
+fvset base 3 dG_newsfol 	// ref: How closely following news? not too / at all closely
+
 
 
 ***-----------------------------***
-// # NO INTERACTIONS - HISTOGRAM OF RACE AND NEWS
+// # NO INTERACTIONS - HISTOGRAM OF RACE 
 ***-----------------------------***
 *https://journals.sagepub.com/doi/pdf/10.1177/1536867X0500500111
 
-foreach v in  antibody fauci stateresponse  { //   unemploy 
+foreach v in  antibody fauci stateresponse  { //   
 
-	drop if `v'_c == 99 // Refused
-	drop if `v'_c == 98 // Did not receive question
-	drop if covidnewsrel == 98 | covidnewsrel == 99 // refused or Did not receive question 
-
-svy: logit `v'_c  dB_fem ///
-	dB_age_30_49 dB_age_50_64 dB_age_65p ///
-	`income_var' ///
-	dB_rwhite dB_rblack dB_rasian dB_rhisp dB_rother ///
-	dB_edu_lHS dB_edu_sCol dB_edu_col dB_edu_grad  ///
-	dB_cnews_local dB_cnews_politicians dB_cnews_pubhealth dB_cnews_informal /// comparison: cnews_news
-	, baselevels 
-
-*this command does not work for some reason:
-*prtab dB_rblack dB_rasian dB_rhisp dB_rother, rest(mean)
-
-gen  `v'_race_news = .
-gen  `v'_race_news_cilo = .
-gen  `v'_race_news_cihi = .
-
-foreach racevar of varlist dB_rwhite dB_rblack dB_rasian dB_rhisp dB_rother {
-	foreach newsvar of varlist dB_cnews_local dB_cnews_politicians dB_cnews_pubhealth dB_cnews_informal {
-		prvalue, x(`racevar'=1 `newsvar'=1) rest(mean) brief
-				
-		*return list
-		replace  `v'_race_news = r(p1) 			if `racevar' == 1 & `newsvar' == 1
-		replace  `v'_race_news_cilo = r(p1_lo)	if `racevar' == 1 & `newsvar' == 1
-		replace  `v'_race_news_cihi = r(p1_hi)	if `racevar' == 1 & `newsvar' == 1
-	 
-	} // close newsvar loop
+	svy: logit `v'_c  ///
+		i.dG_cnews /// comparison: international/national
+		i.dG_newsfol /// comparison: do not closely follow
+		i.dG_age dB_fem i.dG_race  `income_var'   ///
+		`edu_var'  ///
+		i.dG_rel ///
+		, baselevels // report Odds Ratios
+		
+	margins dG_race
+	return list /// see what is being stored
 	
-	prvalue, x(`racevar'=1 dB_cnews_local=0 dB_cnews_politicians=0 dB_cnews_pubhealth=0 dB_cnews_informal=0) ///
-		rest(mean) brief	
-
-	replace `v'_race_news = r(p1) if `racevar' == 1 & ///
-		dB_cnews_local==0 & dB_cnews_politicians==0 & dB_cnews_pubhealth==0 & dB_cnews_informal==0
-	replace `v'_race_news_cilo = r(p1_lo) if `racevar' == 1 & ///
-		dB_cnews_local==0 & dB_cnews_politicians==0 & dB_cnews_pubhealth==0 & dB_cnews_informal==0
-	replace `v'_race_news_cihi = r(p1_hi) if `racevar' == 1 & ///
-		dB_cnews_local==0 & dB_cnews_politicians==0 & dB_cnews_pubhealth==0 & dB_cnews_informal==0
+	cap loc `v'_white_pp   = r(table)[1,1]
+	cap loc `v'_white_cilo = r(table)[5,1]
+	cap loc `v'_white_cihi = r(table)[6,1]
+	di in red "White PP: " ``v'_white_pp' " CILO "``v'_white_cilo' " CIHI " ``v'_white_cihi' 
 	
-} // close racevar loop
-} // close loop through fauci antibody stateresponse	
+	cap loc `v'_black_pp   = r(table)[1,2]
+	cap loc `v'_black_cilo = r(table)[5,2]
+	cap loc `v'_black_cihi = r(table)[6,2]
 
-**Next step: also store confidence intervals
+	cap loc `v'_asian_pp   = r(table)[1,3]
+	cap loc `v'_asian_cilo = r(table)[5,3]
+	cap loc `v'_asian_cihi = r(table)[6,3]
+	di in red "Asian PP: " ``v'_asian_pp' " CILO "``v'_asian_cilo' " CIHI " ``v'_asian_cihi' 
 
-label define media_source 1 "Intl/Natl" 2 "Local" 3 "Politicians" 4 "Public Health" 5 "Informal"
-lab val dG_cnews media_source
-
-*make table of predicted probability by race and news source, at mean income:
-foreach v in  antibody fauci stateresponse  { //    unemploy 
-	table dG_cnews dG_race , contents(mean `v'_race_news mean `v'_race_news_cihi mean `v'_race_news_cilo)
-
+	cap loc `v'_hisp_pp   = r(table)[1,4]
+	cap loc `v'_hisp_cilo = r(table)[5,4]
+	cap loc `v'_hisp_cihi = r(table)[6,4]
 	
-//HISTOGRAM
+	cap loc `v'_other_pp   = r(table)[1,5]
+	cap loc `v'_other_cilo = r(table)[5,5]
+	cap loc `v'_other_cihi = r(table)[6,5]
+	
 
-*need to add CIs: https://stats.idre.ucla.edu/stata/faq/how-can-i-make-a-bar-graph-with-error-bars/
+	gen `v'_race_pp = .
+	gen `v'_race_cilo = .
+	gen `v'_race_cihi = .
+	
+	foreach racevar in white black asian hisp other {
+		replace  `v'_race_pp   = ``v'_`racevar'_pp'		if dB_r`racevar' == 1 
+		di in red "PP for `racevar ' ``v'_`race'_pp'"
+	
+		replace  `v'_race_cilo = ``v'_`racevar'_cilo'	if dB_r`racevar' == 1 
+		di in red "CILO for `racevar ' ``v'_`race'_cilo'"
+		
+		replace  `v'_race_cihi = ``v'_`racevar'_cihi'	if dB_r`racevar' == 1 
+		di in red "CIHI for `racevar ' ``v'_`race'_cihi'"
+	} // close racevar loop
+} // close loop through fauci antibody stateresponse
 
-graph bar `v'_race_news, ///
+	 	
+// HISTOGRAM Without CIs
+/*
+foreach v in  antibody fauci stateresponse  { //   
+graph bar `v'_race_pp, ///
 	over(dG_race, ///
 		label(labcolor(black) angle(45) labsize(small)) ///  gap (between group bars); group label(color; angle; size; gap between label and graph);
 		axis(outergap(2))) /// axis(line color; gap between label and legend)) 
 		bargap(0) outergap(15) /// gap between within group bars; gap outside first/last group
 	asyvars ///
-	over(dG_cnews) ///
-	bar(1, fcolor("57 118 104") fintensity(inten60) lcolor("57 118 104") lwidth(small)) /// Bar(fill color, fill intensity, line color, line width)
-	bar(2, fcolor("188 121 18") fintensity(inten60) lcolor("188 121 18") lwidth(small)) /// fill intensity = 60%
-	bar(3, fcolor("149 158 74") fintensity(inten60) lcolor("149 158 74") lwidth(small)) ///
-	bar(4, fcolor("93 164 181") fintensity(inten60) lcolor("93 164 181") lwidth(small)) ///
+	bar(1, fcolor(`Teal') fintensity(inten60) lcolor(`Teal') lwidth(small)) /// Bar(fill color, fill intensity, line color, line width)
+	bar(2, fcolor(`Gold') fintensity(inten60) lcolor(`Gold') lwidth(small)) /// fill intensity = 60%
+	bar(3, fcolor(`Green') fintensity(inten60) lcolor(`Green') lwidth(small)) ///
+	bar(4, fcolor(`Blue') fintensity(inten60) lcolor(`Blue') lwidth(small)) ///
+	bar(5, lwidth(small)) ///
 	plotregion(fcolor("233 233 234") lcolor(white)) /// graph plot(fill color; line color)
 	ytitle("Predicted Probability of Answering Correctly" , color("147 149 152")) /// y-axis: title(text; text color) 
 	ylabel(0(.1)1, gmax labcolor("`DkGrey'") tlcolor("`DkGrey'") tlwidth(medium) glcolor(white) glwidth(medium)) yscale(lcolor("`DkGrey'")) /// y-ticks: label(scale, max line, label color, tick color; tick width; grid color; grid width); axis color
-	legend(on order(1 "Non-Hispanic White" 2 "Black" 3 "Asian" 4 "Hispanic" ) nostack rows(1) size(small) color(black) margin(small) nobox region(fcolor(white) lcolor(white)))
+	legend(on order(1 "Non-Hispanic White" 2 "Black" 3 "Asian" 4 "Hispanic" 5 "Other" ) nostack rows(1) size(small) color(black) margin(small) nobox region(fcolor(white) lcolor(white)))
 
-graph export  "/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/figures/pp_`v'_inc_news.jpg", ///
+graph export  "/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/figures/`v'_pp_race.jpg", ///
 	as(jpg) name("Graph") quality(100) replace
 
+} // close loop through fauci antibody stateresponse
+
+*/
+
+
+// HISTOGRAM with CIs
+* https://stats.idre.ucla.edu/stata/faq/how-can-i-make-a-bar-graph-with-error-bars/
+	
+	generate knowrace = dG_race    if fauci_c == 1
+	replace  knowrace = dG_race+5  if stateresponse_c == 1
+	replace  knowrace = dG_race+10 if antibody_c == 1
+	sort knowrace
+	list knowrace dG_race
+	
+	generate race_pp = .
+	replace race_pp = fauci_race_pp if fauci_c == 1
+	replace race_pp = stateresponse_race_pp if stateresponse_c == 1
+	replace race_pp = antibody_race_pp if antibody_c == 1
+	
+	generate race_cihi = .
+	replace race_cihi = fauci_race_cihi if fauci_c == 1
+	replace race_cihi = stateresponse_race_cihi if stateresponse_c == 1
+	replace race_cihi = antibody_race_cihi if antibody_c == 1
+	
+	generate race_cilo = .
+	replace race_cilo = fauci_race_cilo if fauci_c == 1
+	replace race_cilo = stateresponse_race_cilo if stateresponse_c == 1
+	replace race_cilo = antibody_race_cilo if antibody_c == 1	
+	
+drop if dG_race == 5
+	
+twoway (bar race_pp knowrace if dG_race==1) ///
+       (bar race_pp knowrace if dG_race==2) ///
+       (bar race_pp knowrace if dG_race==3) ///
+       (bar race_pp knowrace if dG_race==4) ///
+	   (rcap race_cihi race_cilo  knowrace), ///
+		ylabel(0(.1)1, gmax labcolor("`DkGrey'") tlcolor("`DkGrey'") tlwidth(medium) glcolor(white) glwidth(medium)) yscale(lcolor("`DkGrey'")) /// y-ticks: label(scale, max line, label color, tick color; tick width; grid color; grid width); axis color
+		xlabel( 2.5 "Fauci" 7.5 "State Response" 12.5 "Antibody", noticks) ///
+		xtitle("COVID-19 Knowledge Question") ///
+		ytitle("Predicted Probability of Answering Correctly" , color("147 149 152")) /// y-axis: title(text; text color) 
+       legend(on order(1 "Non-Hispanic White" 2 "Black" 3 "Asian" 4 "Hispanic") nostack rows(1) size(small) color(black) margin(small) nobox region(fcolor(white) lcolor(white))) ///
+		scheme(reportcool)
+	
+	
+graph export  "/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/figures/pp_race.jpg", ///
+	as(jpg) name("Graph") quality(100) replace
+
+***-----------------------------***
+// # NO INTERACTIONS - MARGINS of INCOME and CORRECT ANSWERS
+***-----------------------------***
+
+foreach v in  antibody fauci stateresponse  { //   
+
+	svy: logit `v'_c  ///
+		i.dG_cnews /// comparison: international/national
+		i.dG_newsfol /// comparison: do not closely follow
+		i.dG_age dB_fem i.dG_race  `income_var'   ///
+		`edu_var'  ///
+		i.dG_rel ///
+		, baselevels // report Odds Ratios
+		
+	margins dG_finc, saving($temp/file_pp_`v'_inc.dta, replace)
+	
+	*marginsplot
+	
 } // close loop through fauci antibody stateresponse	
 
+cap ssc install combomarginsplot
+combomarginsplot ///
+	$temp/file_pp_fauci_inc $temp/file_pp_stateresponse_inc $temp/file_pp_antibody_inc, ///
+    labels("Fauci" "State Response" "Antibody") ///
+	file1opts(msymbol(O)) /// formatting for 1st file (fauci)
+	file2opts(msymbol(D)) /// formatting for 2nd file (state response)
+	file3opts(msymbol(S)) ///
+	xtitle("Family Income") ///
+	xlabel(1 "<$30,000" 2 "$30,000-$50,000" 3 "$50,000-$75,000" 4 "$75,000-$100,000" ///
+		5 "$100,000-$150,000" 6 "$150,000+" ///
+		, gmax angle(45)) ///
+	ytitle("Predicted Probability" "of Answering Correctly" , color("147 149 152")) /// y-axis: title(text; text color) 
+	ylabel(.4(.1).9, gmax labcolor("`DkGrey'") tlcolor("`DkGrey'") tlwidth(medium) glcolor(white) glwidth(medium)) yscale(lcolor("`DkGrey'")) /// y-ticks: label(scale, max line, label color, tick color; tick width; grid color; grid width); axis color
+	title("") ///  
+		scheme(reportcool)
+
+	graph export "/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/figures/pp_inc.jpg", ///
+	as(jpg) name("Graph") quality(100) replace
+	
+
+***-----------------------------***
+// # NO INTERACTIONS - MARGINS of EDUCATION and CORRECT ANSWERS
+***-----------------------------***
+
+foreach v in  antibody fauci stateresponse  { //   
+
+	svy: logit `v'_c  ///
+		i.dG_cnews /// comparison: international/national
+		i.dG_newsfol /// comparison: do not closely follow
+		i.dG_age dB_fem i.dG_race  `income_var'   ///
+		`edu_var'  ///
+		i.dG_rel ///
+		, baselevels // report Odds Ratios
+		
+	margins dG_edu3, saving($temp/file_pp_`v'_edu.dta, replace)
+	
+	*marginsplot
+	
+	*graph export "/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/figures/pp_`v'_edu.jpg", as(jpg) name("Graph") quality(100) replace
+	
+} // close loop through fauci antibody stateresponse	
+
+
+
+
+cap ssc install combomarginsplot
+combomarginsplot ///
+	$temp/file_pp_fauci_edu $temp/file_pp_stateresponse_edu $temp/file_pp_antibody_edu, ///
+    labels("Fauci" "State Response" "Antibody") ///
+	file1opts(msymbol(O)) /// formatting for 1st file (fauci)
+	file2opts(msymbol(D)) /// formatting for 2nd file (state response)
+	file3opts(msymbol(S)) ///
+	xtitle("Educational Attainment") ///
+	xlabel(1 "High School or less" 2 "Some College" 3 "College +" ///
+		, gmax) ///
+	ytitle("Predicted Probability" "of Answering Correctly" , color("147 149 152")) /// y-axis: title(text; text color) 
+	ylabel(.4(.1).9, gmax labcolor("`DkGrey'") tlcolor("`DkGrey'") tlwidth(medium) glcolor(white) glwidth(medium)) yscale(lcolor("`DkGrey'")) /// y-ticks: label(scale, max line, label color, tick color; tick width; grid color; grid width); axis color
+	title("") ///  
+		scheme(reportcool)
+
+
+	graph export "/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/figures/pp_edu.jpg", ///
+	as(jpg) name("Graph") quality(100) replace
+	
 
 ***--------------------------***
 
