@@ -3,7 +3,7 @@
        log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
 > knowledge_news/stata/ckn04_inc01_PewJune2020.log
   log type:  text
- opened on:  26 May 2021, 17:04:39
+ opened on:  29 Jun 2021, 11:03:10
 
 . ***--------------------------***
 . 
@@ -17,7 +17,7 @@
 . //  author:     Molly King
 . 
 . display "$S_DATE  $S_TIME"
-26 May 2021  17:04:39
+29 Jun 2021  11:03:10
 
 . 
 . ***-----------------------------***
@@ -879,5 +879,5 @@ file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn04_inc01_Pew
        log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
 > knowledge_news/stata/ckn04_inc01_PewJune2020.log
   log type:  text
- closed on:  26 May 2021, 17:04:39
+ closed on:  29 Jun 2021, 11:03:10
 --------------------------------------------------------------------------------
