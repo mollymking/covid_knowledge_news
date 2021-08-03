@@ -139,7 +139,7 @@ gen dB_edu_HSl = 0
 replace dB_edu_HSl = . if `edu_missing_condition'
 label var dB_edu_HSl "HS or less"
 label define dB_edu_HSl 0 "0_>HS" 1 "1_HSless"
-	label val dB_edu_HSl dB_edu_HlS
+	label val dB_edu_HSl dB_edu_HSl
 notes dB_edu_HSl: HS or less edu. created from `edu_var' variable in `dataset' \ ki`category'`dataset'.do mmk $S_DATE
 		
 replace dB_edu_HSl = 1 if `edu_var' == 1 | 	`edu_var' == 2
@@ -327,7 +327,7 @@ notes  dG_rel: Categorical religion, created from f_born variable in `dataset' \
 tab  f_relig dG_rel, m
 
 
-/*
+
 
 ***-----------------------------***
 // # PARTY / IDEOLOGY
@@ -405,7 +405,7 @@ label var dB_demlean "Democratic Party / lean"
 
 label val dB_demlean partylean
 notes dB_demlean: Binary Democratic / Dem lean, created from f_partysum_final variable in `dataset' \ ckn`category'`dataset'.do mmk $S_DATE
-*/
+
 
 ***-----------------------------***
 // SAVE DATA	
