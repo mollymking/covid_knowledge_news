@@ -69,13 +69,13 @@ graph set window /*echo back preferences*/
 fvset base 0 dB_bipoc
 fvset base 1 dG_age	 // ref: 18-29
 
-local income_var "i.dG_finc" 	// 
+local income_var "dG_finc" 	// 
 fvset base 1 dG_finc 		// ref: less than $30,000
 
 fvset base 1 dG_cnews 		// ref: dB_cnews_news 
 
-local edu_var "i.dG_edu3"
-fvset base 1 dG_edu3  		// ref: less than HS
+local edu_var "dG_edu"
+fvset base 1 dG_edu  		// ref: less than HS
 
 *set base to international/national or public health
 fvset base 4 dG_cnews		// ref: public health
@@ -93,8 +93,8 @@ foreach v in  antibody fauci stateresponse  { //
 	svy: logit `v'_c  ///
 		i.dG_cnews /// comparison: international/national
 		i.dG_newsfol /// comparison: do not closely follow
-		i.dG_age dB_fem i.dG_race  `income_var'   ///
-		`edu_var'  ///
+		i.dG_age dB_fem i.dG_race  i.`income_var'   ///
+		i.`edu_var'  ///
 		i.dG_rel ///
 		, baselevels // report Odds Ratios
 		
@@ -219,12 +219,12 @@ foreach v in  antibody fauci stateresponse  { //
 	svy: logit `v'_c  ///
 		i.dG_cnews /// comparison: international/national
 		i.dG_newsfol /// comparison: do not closely follow
-		i.dG_age dB_fem i.dG_race  `income_var'   ///
-		`edu_var'  ///
+		i.dG_age dB_fem i.dG_race  i.`income_var'   ///
+		i.`edu_var'  ///
 		i.dG_rel ///
 		, baselevels // report Odds Ratios
 		
-	margins dG_finc, saving($temp/file_pp_`v'_inc.dta, replace)
+	margins `income_var', saving($temp/file_pp_`v'_inc.dta, replace)
 	
 	*marginsplot
 	
@@ -259,12 +259,12 @@ foreach v in  antibody fauci stateresponse  { //
 	svy: logit `v'_c  ///
 		i.dG_cnews /// comparison: international/national
 		i.dG_newsfol /// comparison: do not closely follow
-		i.dG_age dB_fem i.dG_race  `income_var'   ///
-		`edu_var'  ///
+		i.dG_age dB_fem i.dG_race  i.`income_var'   ///
+		i.`edu_var'  ///
 		i.dG_rel ///
 		, baselevels // report Odds Ratios
 		
-	margins dG_edu3, saving($temp/file_pp_`v'_edu.dta, replace)
+	margins `edu_var', saving($temp/file_pp_`v'_edu.dta, replace)
 	
 	*marginsplot
 	
@@ -283,7 +283,7 @@ combomarginsplot ///
 	file2opts(msymbol(D)) /// formatting for 2nd file (state response)
 	file3opts(msymbol(S)) ///
 	xtitle("Educational Attainment") ///
-	xlabel(1 "High School or less" 2 "Some College" 3 "College +" ///
+	xlabel(1 "<High School" 2 "High School" 3 "Some College" 4 "College" 5 "Graduate" ///
 		, gmax) ///
 	ytitle("Predicted Probability" "of Answering Correctly" , color("147 149 152")) /// y-axis: title(text; text color) 
 	ylabel(.4(.1).9, gmax labcolor("`DkGrey'") tlcolor("`DkGrey'") tlwidth(medium) glcolor(white) glwidth(medium)) yscale(lcolor("`DkGrey'")) /// y-ticks: label(scale, max line, label color, tick color; tick width; grid color; grid width); axis color
