@@ -43,8 +43,7 @@ drop if dG_cnews == .
 
 drop if dG_race == .
 drop if dG_age == .
-drop if dG_edu3 == .
-*drop if dG_pol == .
+drop if dG_edu == .
 drop if dB_fem == .
 drop if dG_relig == .
 drop if dG_finc == . 
@@ -52,15 +51,18 @@ drop if dG_newsfol == .
 
 save $deriv/ckn`category'`dataset'.dta, replace // data that results at end
 
+
 ***-----------------------------***
 // # DESCRIPTIVES
 ***-----------------------------***
 
-local demographics "dB_rwhite dB_rblack dB_rasian dB_rhisp dB_rother dB_age_18_29 dB_age_30_49 dB_age_50_64 dB_age_65p dB_inc_l30k dB_inc_30_50k dB_inc_50_75k dB_inc_75_100k dB_inc_100_150k dB_inc_150kp dB_fem dB_edu_HSl dB_edu_sCol dB_edu_colp dB_cnews_natl dB_cnews_local dB_cnews_politicians dB_cnews_pubhealth dB_cnews_informal dB_newsfol_vc dB_newsfol_fc dB_newsfol_n dB_rel_conP  dB_rel_libP  dB_rel_cath  dB_rel_oth  dB_rel_none"
+use $deriv/ckn`category'`dataset'.dta, clear
+
+local demographics "dB_rwhite dB_rblack dB_rasian dB_rhisp dB_rother dB_age_18_29 dB_age_30_49 dB_age_50_64 dB_age_65p dB_inc_l30k dB_inc_30_50k dB_inc_50_75k dB_inc_75_100k dB_inc_100_150k dB_inc_150kp dB_fem dB_edu_lHS dB_edu_HS dB_edu_sCol dB_edu_col dB_edu_grad dB_cnews_natl dB_cnews_local dB_cnews_politicians dB_cnews_pubhealth dB_cnews_informal dB_newsfol_vc dB_newsfol_fc dB_newsfol_n dB_rel_conP  dB_rel_libP  dB_rel_cath  dB_rel_oth  dB_rel_none"
 
 
 local income_var "dG_finc" 	
-local edu_var "dG_edu3"
+local edu_var "dG_edu" // dG_edu3
 local dem_categories  "dG_cnews  dG_newsfol dG_age dB_fem  dG_race `income_var'  `edu_var' dG_rel"
 
 * age, gender, race and ethnicity, family income, education, and religion. 
