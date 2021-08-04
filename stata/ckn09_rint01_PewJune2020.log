@@ -1,0 +1,1769 @@
+--------------------------------------------------------------------------------
+      name:  ckn09_rint01_PewJune2020
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
+> knowledge_news/stata/ckn09_rint01_PewJune2020.log
+  log type:  text
+ opened on:   3 Aug 2021, 16:55:34
+
+. ***-----------------------------***
+. 
+. //      project:        Knowledge of COVID & News Sources
+. //  task:               Regression Models with Interactions for Online Appendi
+> x Table A3
+. /*  data:    */ di "`dataset'" /* - June Knowledge Questions */
+01_PewJune2020
+
+. 
+. //  github:     covid_knowledge_news
+. //  OSF:                https://osf.io/qf624/
+. 
+. //  author:     Molly King
+. 
+. display "$S_DATE  $S_TIME"
+ 3 Aug 2021  16:55:34
+
+. 
+. ***-----------------------------***
+. // # PROGRAM SETUP
+. ***-----------------------------***
+. 
+. version 16 // keeps program consistent for future replications
+
+. set linesize 80
+
+. clear all
+
+. set more off
+
+. 
+. capt ssc install estout, replace
+
+. capt ssc install outreg2, replace
+
+. 
+. use $deriv/ckn05_news`dataset'.dta, clear
+(01_PewJune2020 Knowledge variables)
+
+. save $deriv/ckn`category'`dataset'.dta, replace // data that results at end
+file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn09_rint01_Pe
+> wJune2020.dta saved
+
+. 
+. cd $deriv
+/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/data/data_derv
+
+. 
+. *Details on generating LaTeX tables using est and esttab thanks to the followi
+> ng websites:
+.         *http://repec.sowi.unibe.ch/stata/estout/esttab.html#h-12
+.         *https://lukestein.github.io/stata-latex-workflows/
+.         *https://www.jwe.cc/2012/03/stata-latex-tables-estout/
+.         
+. ***-----------------------------***
+. // #  INTERACTION MODELS - APPENDIX
+. ***-----------------------------***
+. 
+. // STORE BASE LEVELS for INTERACTIONS
+. 
+. fvset base 0 dB_bipoc
+
+. fvset base 1 dG_cnews   // ref: dB_cnews_news 
+
+. 
+. local edu_var "dG_edu"
+
+. fvset base 1 dG_edu             // ref: less than HS
+
+. 
+. local income_var "dG_finc"      // 
+
+. fvset base 1 dG_finc            // ref: less than $30,000
+
+. 
+. rename stateresponse_c stater_c // shorten variable
+
+. 
+. 
+. foreach v in  fauci antibody stater { // unemploy 
+  2. 
+.         drop if `v'_c == 99 // Refused
+  3.         drop if `v'_c == 98 // Did not receive question
+  4.         drop if covidnewsrel == 98 | covidnewsrel == 99 // refused or Did n
+> ot receive question 
+  5.                 // only 48 people
+. 
+. 
+. // # NEWS SOURCE ONLY (BASELINE)
+. 
+.         di in red "Running model A for  `v' "
+  6. 
+.         svy: logit `v'_c  ///
+>                 i.dG_cnews /// comparison: cnews_news
+>                 , or baselevels // report Odds Ratios
+  7.         
+.         est store `v'_modA
+  8.         
+.         svylogitgof
+  9. 
+. 
+. // # NEWS SOURCE + MODERATORS
+. 
+.         di in red "Running model B for  `v' with BIPOC race variable"
+ 10. 
+.         svy: logit `v'_c  ///
+>                 i.dG_cnews /// comparison: international/national
+>                 dB_bipoc  `income_var' i.`edu_var'  ///
+>                 , or baselevels // report Odds Ratios
+ 11.                 
+.         est store `v'_modBbipoc
+ 12.         
+.         svylogitgof
+ 13.         
+. 
+. // #  NEWS SOURCE + MODERATORS + CONTROLS (incl. HOW CLOSELY FOLLOW NEWS)
+. 
+.         di in red "Running model C for  `v' with BIPOC race variable"
+ 14. 
+.         svy: logit `v'_c  ///
+>                 i.dG_cnews /// comparison: international/national
+>                 i.dG_newsfol /// comparison: do not closely follow
+>                 i.dG_age dB_fem ///
+>                 i.dG_rel ///
+>                 dB_bipoc i.`income_var'  i.`edu_var'  /// moderators
+>                 , or baselevels // report Odds Ratios
+ 15.         
+.         est store `v'_modCbipoc
+ 16.         
+.         svylogitgof
+ 17.         
+.         
+. // # MODEL - INTERACT: NEWS * BIPOC
+. 
+.         di in red "Running model on `v' for interaction of news and BIPOC stat
+> us"
+ 18.         
+.                 svy: logit `v'_c  ///
+>                 i.dG_newsfol /// comparison: do not closely follow
+>                 i.dG_age dB_fem ///
+>                 i.dG_rel ///
+>                 i.`income_var'  i.`edu_var'  /// moderators
+>                 dB_bipoc##i.dG_cnews /// ## includes both main effects and int
+> eractions
+>                 , or baselevels // report Odds Ratios
+ 19. 
+.         est store `v'_int_NewsBIPOC
+ 20.                 
+.         svylogitgof
+ 21.         
+. *       margins, over(dB_bipoc dG_cnews) expression(exp(xb())) noatlegend
+. 
+. *       margins dB_bipoc, dydx(dG_cnews)
+. 
+. 
+. // # MODEL - INTERACT: NEWS * INCOME
+. 
+.         di in red "Running model on `v' for interaction of news and income"
+ 22.         
+.                 svy: logit `v'_c  ///
+>                 i.dG_newsfol /// comparison: do not closely follow
+>                 i.dG_age dB_fem ///
+>                 i.dG_rel ///
+>                 dB_bipoc   i.`edu_var'  /// moderators
+>                 i.`income_var'##i.dG_cnews /// ## includes both main effects a
+> nd interactions
+>                 , or baselevels // report Odds Ratios
+ 23. 
+.         est store `v'_int_NewsIncome
+ 24.                 
+.         svylogitgof
+ 25.         
+. 
+. // # MODEL - INTERACT: NEWS * EDU
+. 
+.         di in red "Running model on `v' for interaction of news and education"
+ 26.         
+.                 svy: logit `v'_c  ///
+>                 i.dG_newsfol /// comparison: do not closely follow
+>                 i.dG_age dB_fem ///
+>                 i.dG_rel ///
+>                 dB_bipoc  i.`income_var'  /// moderators
+>                 i.`edu_var'##i.dG_cnews /// ## includes both main effects and 
+> interactions
+>                 , or baselevels // report Odds Ratios
+ 27. 
+.         est store `v'_int_NewsEdu
+ 28.                 
+.         svylogitgof
+ 29.         
+.                 
+. // # MODEL - INTERACT: NEWS * GENDER
+. 
+.         di in red "Running model on `v' for interaction of news and gender"
+ 30.         
+.                 svy: logit `v'_c  ///
+>                 i.dG_newsfol /// comparison: do not closely follow
+>                 i.dG_age  ///
+>                 i.dG_rel ///
+>                 dB_bipoc  i.`income_var' i.`edu_var' /// moderators
+>                 dB_fem##dG_cnews /// ## includes both main effects and interac
+> tions
+>                 , or baselevels // report Odds Ratios
+ 31. 
+.         est store `v'_int_NewsGender
+ 32.                 
+.         svylogitgof
+ 33.         
+. /*
+> *Output table of all variables
+>         outreg2 ///
+>         [`v'_modCbipoc `v'_int_NewsBIPOC `v'_int_NewsIncome `v'_int_NewsEdu `v
+> '_int_NewsGender] ///
+>                 using $results/`v'_interactions.doc, ///
+>                 stats(coef se) ///
+>                 eform /// odds ratios
+>                 level(95) symbol(***, **, *) alpha(0.001, 0.01, 0.05) ///
+>                 replace
+> */                      
+. } // Close loop through variables
+(0 observations deleted)
+(0 observations deleted)
+(54 observations deleted)
+Running model A for  fauci 
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      9,271
+Number of PSUs     =     9,271                  Population size   = 9,100.2041
+                                                Design df         =      9,270
+                                                F(   4,   9267)   =      40.89
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+      fauci_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .3081762   .0385046    -9.42   0.000      .241231    .3936996
+3_Politici~s  |   .7954133   .0979973    -1.86   0.063     .6247533    1.012692
+4_Pub Health  |   .5840687    .074261    -4.23   0.000     .4552232    .7493823
+  5_Informal  |   .1981067   .0321542    -9.97   0.000     .1441201    .2723164
+              |
+        _cons |   4.142253   .3648282    16.14   0.000     3.485438    4.922841
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(329 missing values generated)
+(329 missing values generated)
+F-adjusted test statistic = 6.989e-13
+p-value                   = 1
+Running model B for  fauci with BIPOC race variable
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,727
+Number of PSUs     =     8,727                  Population size   =   8,463.49
+                                                Design df         =      8,726
+                                                F(  10,   8717)   =      54.32
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+      fauci_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |    .424047    .058548    -6.21   0.000     .3234989     .555847
+3_Politici~s  |   .8657939   .1129155    -1.10   0.269     .6704813    1.118001
+4_Pub Health  |   .5162232   .0715188    -4.77   0.000     .3934537    .6773006
+  5_Informal  |   .2189625   .0380903    -8.73   0.000     .1556954    .3079383
+              |
+     dB_bipoc |   .5318761   .0564207    -5.95   0.000     .4320197     .654813
+      dG_finc |   1.430931   .0460436    11.14   0.000     1.343462    1.524095
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |   2.011451   .4252691     3.31   0.001     1.328985     3.04438
+some college  |   2.613026   .5336611     4.70   0.000     1.750966    3.899506
+     college  |   5.243172   1.116482     7.78   0.000     3.453934    7.959289
+ grad school  |   7.975365   1.811659     9.14   0.000     5.109372    12.44898
+              |
+        _cons |   .6718528   .1459108    -1.83   0.067      .438922    1.028397
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(873 missing values generated)
+(873 missing values generated)
+F-adjusted test statistic = .37050669
+p-value                   = .94950841
+Running model C for  fauci with BIPOC race variable
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,605
+Number of PSUs     =     8,605                  Population size   = 8,334.5887
+                                                Design df         =      8,604
+                                                F(  24,   8581)   =      27.42
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+      fauci_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .5421605   .0798652    -4.16   0.000     .4061818    .7236613
+3_Politici~s  |   .8896448   .1248015    -0.83   0.405      .675758     1.17123
+4_Pub Health  |   .6355574   .0915756    -3.15   0.002     .4791709    .8429837
+  5_Informal  |   .3615177   .0685133    -5.37   0.000     .2493394    .5241654
+              |
+   dG_newsfol |
+Very closely  |          1  (base)
+Fairly clo..  |   .6536385   .0694815    -4.00   0.000      .530692    .8050683
+Not too / ..  |   .2710546   .0418542    -8.45   0.000     .2002637    .3668693
+              |
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |    1.60602   .2279218     3.34   0.001     1.216001    2.121134
+       50-64  |   2.723341   .4268873     6.39   0.000     2.002887     3.70295
+      65plus  |   3.723538   .6618145     7.40   0.000      2.62811    5.275553
+              |
+       dB_fem |   .5143155   .0525671    -6.51   0.000     .4209377    .6284076
+              |
+     dG_relig |
+Conservati..  |          1  (base)
+Liberal Pr..  |   .8979683     .12561    -0.77   0.442     .6826154    1.181261
+    Catholic  |    1.24347   .1737644     1.56   0.119     .9455191    1.635311
+       Other  |   1.475697   .3219812     1.78   0.075     .9621613    2.263322
+Nonreligious  |    1.57188    .204618     3.47   0.001     1.217866      2.0288
+              |
+     dB_bipoc |   .5733417   .0645494    -4.94   0.000     .4597988    .7149229
+              |
+      dG_finc |
+Less than ..  |          1  (base)
+30,000 to ..  |   1.592789   .2079304     3.57   0.000     1.233169    2.057282
+50,000 to ..  |   2.349636   .3306264     6.07   0.000     1.783232    3.095946
+75,000 to ..  |   2.685869    .444713     5.97   0.000     1.941454    3.715715
+100,000 to..  |   3.616571   .6465925     7.19   0.000     2.547374    5.134538
+150,000 or..  |   4.500811    1.00997     6.70   0.000     2.899055    6.987552
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |   2.163793    .514579     3.25   0.001     1.357563    3.448826
+some college  |   3.176562   .7320653     5.02   0.000     2.021916    4.990585
+     college  |   6.594001   1.590539     7.82   0.000     4.109621    10.58026
+ grad school  |   9.349077   2.408169     8.68   0.000      5.64264    15.49013
+              |
+        _cons |   .6576862   .1966728    -1.40   0.161     .3659668    1.181941
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(995 missing values generated)
+(995 missing values generated)
+F-adjusted test statistic = 1.3382157
+p-value                   = .21104069
+Running model on fauci for interaction of news and BIPOC status
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,605
+Number of PSUs     =     8,605                  Population size   = 8,334.5887
+                                                Design df         =      8,604
+                                                F(  28,   8577)   =      24.11
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+      fauci_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+   dG_newsfol |
+Very closely  |          1  (base)
+Fairly clo..  |   .6492887   .0688995    -4.07   0.000     .5273508     .799422
+Not too / ..  |   .2681815   .0414102    -8.52   0.000     .1981414    .3629797
+              |
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |   1.594937   .2268068     3.28   0.001      1.20693    2.107682
+       50-64  |   2.686161   .4178865     6.35   0.000     1.980122    3.643949
+      65plus  |   3.645731   .6471995     7.29   0.000      2.57428    5.163133
+              |
+       dB_fem |    .514944   .0524739    -6.51   0.000     .4217048    .6287984
+              |
+     dG_relig |
+Conservati..  |          1  (base)
+Liberal Pr..  |   .8942076   .1251083    -0.80   0.424     .6797203    1.176377
+    Catholic  |   1.241149   .1741849     1.54   0.124      .942645     1.63418
+       Other  |   1.490599   .3239341     1.84   0.066     .9735386    2.282276
+Nonreligious  |   1.554623   .2021426     3.39   0.001     1.204843    2.005948
+              |
+      dG_finc |
+Less than ..  |          1  (base)
+30,000 to ..  |   1.612283    .209494     3.68   0.000     1.249752    2.079978
+50,000 to ..  |   2.354207   .3288022     6.13   0.000     1.790376    3.095602
+75,000 to ..  |   2.694797   .4494561     5.94   0.000     1.943288    3.736931
+100,000 to..  |   3.646684   .6529198     7.23   0.000     2.567281    5.179917
+150,000 or..  |   4.520128   .9958484     6.85   0.000     2.934895    6.961597
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |   2.175326   .5095358     3.32   0.001     1.374408    3.442967
+some college  |    3.16093   .7156373     5.08   0.000     2.028033    4.926685
+     college  |   6.532737   1.549253     7.91   0.000     4.103954    10.39891
+ grad school  |     9.4312   2.391118     8.85   0.000     5.737586    15.50261
+              |
+     dB_bipoc |
+     0_White  |          1  (base)
+     1_BIPOC  |   .4138103   .0824306    -4.43   0.000     .2800392     .611482
+              |
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .4543106   .0811347    -4.42   0.000     .3201227    .6447469
+3_Politici~s  |   .8162096   .1353883    -1.22   0.221     .5896432    1.129833
+4_Pub Health  |   .5039834   .0882084    -3.91   0.000     .3576152    .7102587
+  5_Informal  |   .3014243   .0686701    -5.26   0.000     .1928551    .4711132
+              |
+     dB_bipoc#|
+     dG_cnews |
+     1_BIPOC #|
+2_Local news  |   1.621458    .503094     1.56   0.119     .8825999    2.978841
+     1_BIPOC #|
+3_Politici~s  |   1.141585   .3773521     0.40   0.689     .5971767    2.182294
+     1_BIPOC #|
+4_Pub Health  |   2.053993   .6345232     2.33   0.020     1.121004    3.763489
+     1_BIPOC #|
+  5_Informal  |   1.648168   .6707976     1.23   0.220     .7421934    3.660039
+              |
+        _cons |   .7566911   .2286989    -0.92   0.356     .4184264    1.368416
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(995 missing values generated)
+(995 missing values generated)
+F-adjusted test statistic = 1.8831785
+p-value                   = .04968284
+Running model on fauci for interaction of news and income
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,605
+Number of PSUs     =     8,605                  Population size   = 8,334.5887
+                                                Design df         =      8,604
+                                                F(  44,   8561)   =      15.70
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+      fauci_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+   dG_newsfol |
+Very closely  |          1  (base)
+Fairly clo..  |   .6547919   .0693266    -4.00   0.000     .5320703    .8058193
+Not too / ..  |   .2719512   .0422015    -8.39   0.000     .2006238    .3686374
+              |
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |   1.622908   .2303779     3.41   0.001     1.228699    2.143592
+       50-64  |   2.777107   .4369862     6.49   0.000     2.040021    3.780511
+      65plus  |   3.838964   .6837359     7.55   0.000     2.707635    5.442996
+              |
+       dB_fem |   .5196023   .0532123    -6.39   0.000     .4250964    .6351183
+              |
+     dG_relig |
+Conservati..  |          1  (base)
+Liberal Pr..  |   .8896453   .1235483    -0.84   0.400      .677627    1.168001
+    Catholic  |   1.225214   .1720422     1.45   0.148     .9304028     1.61344
+       Other  |   1.402422   .3061931     1.55   0.121     .9141304    2.151538
+Nonreligious  |   1.543363   .2006161     3.34   0.001     1.196211    1.991261
+              |
+     dB_bipoc |   .5666045   .0637136    -5.05   0.000     .4545174     .706333
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |   2.150717   .5084506     3.24   0.001     1.353078    3.418567
+some college  |   3.138689    .719452     4.99   0.000     2.002664    4.919134
+     college  |   6.677758   1.603388     7.91   0.000     4.170815    10.69154
+ grad school  |   9.249271   2.377761     8.65   0.000     5.587965    15.30951
+              |
+      dG_finc |
+Less than ..  |          1  (base)
+30,000 to ..  |   2.355945   .6197188     3.26   0.001     1.406791    3.945487
+50,000 to ..  |   3.198662    .963979     3.86   0.000     1.771765    5.774715
+75,000 to ..  |   3.346796   1.182783     3.42   0.001      1.67404    6.691023
+100,000 to..  |   4.068076   1.346541     4.24   0.000      2.12618    7.783557
+150,000 or..  |   7.491548    2.73439     5.52   0.000     3.663044    15.32149
+              |
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .7607275   .1911027    -1.09   0.276     .4649094    1.244772
+3_Politici~s  |   .9676871   .2346832    -0.14   0.892     .6015514    1.556672
+4_Pub Health  |   .9425291   .2484099    -0.22   0.822      .562242    1.580033
+  5_Informal  |   .4590486   .1537544    -2.32   0.020     .2380761    .8851186
+              |
+      dG_finc#|
+     dG_cnews |
+30,000 to .. #|
+2_Local news  |   .4106621   .1539494    -2.37   0.018      .196943    .8563054
+30,000 to .. #|
+3_Politici~s  |   .9222549   .3456194    -0.22   0.829     .4423991    1.922594
+30,000 to .. #|
+4_Pub Health  |   .4890128   .1946565    -1.80   0.072     .2241006    1.067081
+30,000 to .. #|
+  5_Informal  |   .6100814   .3157036    -0.95   0.340      .221232    1.682394
+50,000 to .. #|
+2_Local news  |   .6490862   .2782011    -1.01   0.313     .2801705    1.503773
+50,000 to .. #|
+3_Politici~s  |   .7328047   .2993117    -0.76   0.447     .3290553    1.631953
+50,000 to .. #|
+4_Pub Health  |   .7281565   .3084624    -0.75   0.454     .3173855    1.670561
+50,000 to .. #|
+  5_Informal  |   .4367427   .2324336    -1.56   0.120     .1538701    1.239645
+75,000 to .. #|
+2_Local news  |    .901904    .484273    -0.19   0.848     .3148092    2.583885
+75,000 to .. #|
+3_Politici~s  |   .8372673   .3906411    -0.38   0.703     .3354794    2.089596
+75,000 to .. #|
+4_Pub Health  |   .4568897   .2129138    -1.68   0.093     .1832693    1.139024
+75,000 to .. #|
+  5_Informal  |   1.016989   .6465213     0.03   0.979     .2924919    3.536056
+100,000 to.. #|
+2_Local news  |   .7411099   .3679936    -0.60   0.546      .280004    1.961557
+100,000 to.. #|
+3_Politici~s  |   1.360819   .6580137     0.64   0.524     .5274122    3.511157
+100,000 to.. #|
+4_Pub Health  |   .5764175   .2898891    -1.10   0.273     .2150773    1.544826
+100,000 to.. #|
+  5_Informal  |   .8567259   .5400453    -0.25   0.806     .2490024     2.94768
+150,000 or.. #|
+2_Local news  |   .2901051   .1585625    -2.26   0.024     .0993687    .8469569
+150,000 or.. #|
+3_Politici~s  |     .54035   .2878804    -1.16   0.248     .1901602    1.535432
+150,000 or.. #|
+4_Pub Health  |   .4736951   .2992459    -1.18   0.237     .1373082    1.634186
+150,000 or.. #|
+  5_Informal  |   1.250576   1.125426     0.25   0.804     .2142811    7.298547
+              |
+        _cons |   .5462305   .1753247    -1.88   0.060     .2911559     1.02477
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(995 missing values generated)
+(995 missing values generated)
+F-adjusted test statistic = 1.3635922
+p-value                   = .19858859
+Running model on fauci for interaction of news and education
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,605
+Number of PSUs     =     8,605                  Population size   = 8,334.5887
+                                                Design df         =      8,604
+                                                F(  40,   8565)   =      17.69
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+      fauci_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+   dG_newsfol |
+Very closely  |          1  (base)
+Fairly clo..  |   .6429711   .0681084    -4.17   0.000     .5224118    .7913524
+Not too / ..  |   .2688857   .0414534    -8.52   0.000     .1987567    .3637589
+              |
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |   1.615224   .2305227     3.36   0.001      1.22105    2.136645
+       50-64  |   2.695619    .420651     6.35   0.000     1.985226    3.660219
+      65plus  |   3.740595    .670394     7.36   0.000     2.632485     5.31515
+              |
+       dB_fem |   .5029151   .0521569    -6.63   0.000     .4103977     .616289
+              |
+     dG_relig |
+Conservati..  |          1  (base)
+Liberal Pr..  |   .8983739   .1259677    -0.76   0.445     .6824754    1.182571
+    Catholic  |   1.222309   .1697614     1.45   0.148     .9309887    1.604787
+       Other  |       1.45    .302933     1.78   0.075     .9627432    2.183863
+Nonreligious  |   1.541764    .200646     3.33   0.001     1.194611      1.9898
+              |
+     dB_bipoc |   .5642986   .0629834    -5.13   0.000     .4534087    .7023086
+              |
+      dG_finc |
+Less than ..  |          1  (base)
+30,000 to ..  |   1.620479   .2111032     3.71   0.000     1.255278    2.091928
+50,000 to ..  |   2.382848   .3338173     6.20   0.000     1.810644     3.13588
+75,000 to ..  |   2.698661   .4481958     5.98   0.000     1.948768    3.737115
+100,000 to..  |   3.620243   .6457408     7.21   0.000     2.552043    5.135556
+150,000 or..  |   4.445712   .9995444     6.64   0.000     2.861119    6.907911
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |   3.299056   1.628613     2.42   0.016     1.253506    8.682667
+some college  |     4.7557   2.290712     3.24   0.001     1.849918    12.22578
+     college  |   12.02403   5.983719     5.00   0.000     4.533076    31.89388
+ grad school  |    21.6702   11.20958     5.95   0.000     7.861234    59.73588
+              |
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   2.012896   1.224467     1.15   0.250     .6108761    6.632689
+3_Politici~s  |   .9620034   .5417858    -0.07   0.945      .318952    2.901536
+4_Pub Health  |   .9745228   .7200296    -0.03   0.972     .2289762     4.14757
+  5_Informal  |   .5167163   .4215648    -0.81   0.418     .1043995    2.557441
+              |
+       dG_edu#|
+     dG_cnews |
+          HS #|
+2_Local news  |   .2043706   .1355291    -2.39   0.017     .0557008    .7498515
+          HS #|
+3_Politici~s  |   1.107234   .6899404     0.16   0.870     .3264102    3.755911
+          HS #|
+4_Pub Health  |   .6766633   .5459593    -0.48   0.628     .1391529    3.290433
+          HS #|
+  5_Informal  |   .8504144   .7578241    -0.18   0.856     .1482512    4.878237
+some college #|
+2_Local news  |   .3053112    .197485    -1.83   0.067     .0859174    1.084937
+some college #|
+3_Politici~s  |    .990069   .5917276    -0.02   0.987     .3068048    3.194984
+some college #|
+4_Pub Health  |   .6401561   .4937814    -0.58   0.563     .1411313    2.903679
+some college #|
+  5_Informal  |   .6712263   .5829421    -0.46   0.646     .1223261    3.683145
+     college #|
+2_Local news  |   .2265131   .1522273    -2.21   0.027     .0606689    .8457082
+     college #|
+3_Politici~s  |   .6720391   .4214522    -0.63   0.526     .1965667    2.297625
+     college #|
+4_Pub Health  |   .5785134   .4524567    -0.70   0.484       .12488    2.679994
+     college #|
+  5_Informal  |   .4732937   .4143376    -0.85   0.393     .0850853    2.632732
+ grad school #|
+2_Local news  |   .1583796   .1162007    -2.51   0.012     .0375922    .6672683
+ grad school #|
+3_Politici~s  |   .3738105   .2486632    -1.48   0.139     .1014712    1.377084
+ grad school #|
+4_Pub Health  |   .4857364   .3900102    -0.90   0.369     .1006591    2.343949
+ grad school #|
+  5_Informal  |   .3850477   .3577022    -1.03   0.304     .0623236    2.378901
+              |
+        _cons |    .439557    .214111    -1.69   0.092      .169173    1.142087
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(995 missing values generated)
+(995 missing values generated)
+F-adjusted test statistic = 1.103773
+p-value                   = .3559967
+Running model on fauci for interaction of news and gender
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,605
+Number of PSUs     =     8,605                  Population size   = 8,334.5887
+                                                Design df         =      8,604
+                                                F(  28,   8577)   =      23.61
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+      fauci_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+   dG_newsfol |
+Very closely  |          1  (base)
+Fairly clo..  |   .6506945   .0691506    -4.04   0.000     .5283303    .8013988
+Not too / ..  |   .2716782   .0418414    -8.46   0.000     .2008825     .367424
+              |
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |   1.617503   .2285708     3.40   0.001     1.226152    2.133763
+       50-64  |     2.7698   .4301426     6.56   0.000     2.042868    3.755401
+      65plus  |   3.757247   .6654428     7.47   0.000     2.655174    5.316754
+              |
+     dG_relig |
+Conservati..  |          1  (base)
+Liberal Pr..  |   .8937807   .1252282    -0.80   0.423     .6791282    1.176278
+    Catholic  |   1.245519    .174811     1.56   0.118     .9459446    1.639966
+       Other  |   1.479651   .3202885     1.81   0.070     .9680117    2.261717
+Nonreligious  |    1.57246   .2043487     3.48   0.000     1.218839    2.028677
+              |
+     dB_bipoc |   .5725819   .0646871    -4.94   0.000     .4588387    .7145213
+              |
+      dG_finc |
+Less than ..  |          1  (base)
+30,000 to ..  |   1.622971   .2120213     3.71   0.000     1.256307    2.096647
+50,000 to ..  |   2.382692    .334979     6.18   0.000     1.808764    3.138729
+75,000 to ..  |   2.704534   .4490267     5.99   0.000     1.953214    3.744855
+100,000 to..  |   3.649523   .6485317     7.29   0.000     2.576046    5.170333
+150,000 or..  |   4.516828   .9937992     6.85   0.000     2.934435    6.952524
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |   2.104888   .4938472     3.17   0.002     1.328901    3.333998
+some college  |   3.083986   .7006299     4.96   0.000     1.975634    4.814136
+     college  |   6.499054    1.54483     7.87   0.000     4.078406    10.35642
+ grad school  |    9.14515   2.324142     8.71   0.000     5.556952     15.0503
+              |
+       dB_fem |
+      0_Male  |          1  (base)
+    1_Female  |   .7606518    .143308    -1.45   0.147     .5257698    1.100465
+              |
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .7651396   .1947783    -1.05   0.293     .4645404    1.260253
+3_Politici~s  |   1.095171   .2380344     0.42   0.676     .7152341    1.676934
+4_Pub Health  |   .8480142   .1988307    -0.70   0.482     .5355463    1.342794
+  5_Informal  |    .539099   .1449436    -2.30   0.022     .3182586    .9131812
+              |
+       dB_fem#|
+     dG_cnews |
+    1_Female #|
+2_Local news  |   .5535369   .1710799    -1.91   0.056      .302017    1.014523
+    1_Female #|
+3_Politici~s  |   .6847931   .1910187    -1.36   0.175     .3963589    1.183123
+    1_Female #|
+4_Pub Health  |    .602864   .1786016    -1.71   0.088     .3372959    1.077526
+    1_Female #|
+  5_Informal  |   .4535053   .1704376    -2.10   0.035     .2170884    .9473888
+              |
+        _cons |   .5350096   .1613789    -2.07   0.038     .2961906    .9663888
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(995 missing values generated)
+(995 missing values generated)
+F-adjusted test statistic = 1.3442001
+p-value                   = .20804976
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+Running model A for  antibody 
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      9,271
+Number of PSUs     =     9,271                  Population size   = 9,100.2041
+                                                Design df         =      9,270
+                                                F(   4,   9267)   =      31.07
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+   antibody_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .3886652   .0413589    -8.88   0.000     .3154897    .4788132
+3_Politici~s  |   .8296392   .0799228    -1.94   0.053     .6868764    1.002074
+4_Pub Health  |   .9636667   .1026675    -0.35   0.728     .7820407    1.187475
+  5_Informal  |   .3412817   .0521448    -7.04   0.000      .252953    .4604539
+              |
+        _cons |   2.071773   .1363814    11.07   0.000     1.820965    2.357125
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(329 missing values generated)
+(329 missing values generated)
+F-adjusted test statistic = 1.737e-13
+p-value                   = 1
+Running model B for  antibody with BIPOC race variable
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,727
+Number of PSUs     =     8,727                  Population size   =   8,463.49
+                                                Design df         =      8,726
+                                                F(  10,   8717)   =      59.66
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+   antibody_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .5410213   .0642848    -5.17   0.000     .4286072     .682919
+3_Politici~s  |   .9343453   .0975334    -0.65   0.515      .761449      1.1465
+4_Pub Health  |   .9929413   .1176927    -0.06   0.952      .787077    1.252651
+  5_Informal  |   .4660827   .0797591    -4.46   0.000     .3332572    .6518479
+              |
+     dB_bipoc |   .4150688   .0384478    -9.49   0.000     .3461485    .4977116
+      dG_finc |   1.388763   .0367814    12.40   0.000     1.318503    1.462768
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |   1.138414   .2552568     0.58   0.563     .7335274    1.766788
+some college  |   1.709982   .3721595     2.47   0.014      1.11612    2.619825
+     college  |   2.923114   .6493711     4.83   0.000     1.891144    4.518214
+ grad school  |   3.713755   .8514733     5.72   0.000     2.369335    5.821033
+              |
+        _cons |   .5560441    .122788    -2.66   0.008      .360676    .8572376
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(873 missing values generated)
+(873 missing values generated)
+F-adjusted test statistic = 2.2757823
+p-value                   = .01524333
+Running model C for  antibody with BIPOC race variable
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,605
+Number of PSUs     =     8,605                  Population size   = 8,334.5887
+                                                Design df         =      8,604
+                                                F(  24,   8581)   =      27.34
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+   antibody_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .6312209   .0780176    -3.72   0.000     .4954044     .804272
+3_Politici~s  |   1.022881   .1105509     0.21   0.834     .8275917    1.264254
+4_Pub Health  |     1.0351    .125833     0.28   0.777     .8156253    1.313633
+  5_Informal  |   .6413282   .1153211    -2.47   0.014     .4508158    .9123501
+              |
+   dG_newsfol |
+Very closely  |          1  (base)
+Fairly clo..  |   .6418702   .0561173    -5.07   0.000     .5407768    .7618621
+Not too / ..  |    .285782    .040615    -8.81   0.000     .2162947    .3775927
+              |
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |   1.110026   .1495313     0.77   0.438     .8524164    1.445487
+       50-64  |   1.110299   .1573289     0.74   0.460     .8410234     1.46579
+      65plus  |   1.050767   .1574116     0.33   0.741      .783381    1.409418
+              |
+       dB_fem |   .9966451   .0841686    -0.04   0.968     .8445879    1.176078
+              |
+     dG_relig |
+Conservati..  |          1  (base)
+Liberal Pr..  |   1.056339   .1326156     0.44   0.662     .8258971    1.351078
+    Catholic  |   1.019243   .1199149     0.16   0.871     .8093179     1.28362
+       Other  |   1.121528   .1864985     0.69   0.490     .8095506    1.553731
+Nonreligious  |    1.40188   .1559296     3.04   0.002     1.127247    1.743421
+              |
+     dB_bipoc |   .4001183   .0389072    -9.42   0.000     .3306789    .4841393
+              |
+      dG_finc |
+Less than ..  |          1  (base)
+30,000 to ..  |   1.627728   .1965309     4.04   0.000     1.284677    2.062386
+50,000 to ..  |   2.088189   .2513667     6.12   0.000     1.649269    2.643918
+75,000 to ..  |   3.201516   .4450873     8.37   0.000     2.437821    4.204455
+100,000 to..  |   3.449576   .4828046     8.85   0.000     2.621889     4.53855
+150,000 or..  |   4.527442   .8037931     8.51   0.000     3.196767    6.412018
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |   1.230662   .2927919     0.87   0.383      .771965    1.961915
+some college  |   1.806894   .4176229     2.56   0.010       1.1486    2.842473
+     college  |   2.956915   .6965055     4.60   0.000     1.863412    4.692117
+ grad school  |   3.814292    .927631     5.50   0.000     2.367956    6.144042
+              |
+        _cons |   .7762565   .2118077    -0.93   0.353     .4546901    1.325241
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(995 missing values generated)
+(995 missing values generated)
+F-adjusted test statistic = .35522747
+p-value                   = .95593564
+Running model on antibody for interaction of news and BIPOC status
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,605
+Number of PSUs     =     8,605                  Population size   = 8,334.5887
+                                                Design df         =      8,604
+                                                F(  28,   8577)   =      23.90
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+   antibody_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+   dG_newsfol |
+Very closely  |          1  (base)
+Fairly clo..  |   .6405526   .0560367    -5.09   0.000     .5396096    .7603788
+Not too / ..  |   .2865055   .0408718    -8.76   0.000      .216614    .3789478
+              |
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |   1.104834   .1484108     0.74   0.458     .8490636    1.437652
+       50-64  |   1.097149   .1550289     0.66   0.512     .8317114      1.4473
+      65plus  |   1.039197   .1550986     0.26   0.797     .7756026    1.392375
+              |
+       dB_fem |   .9956432   .0839858    -0.05   0.959     .8439018    1.174669
+              |
+     dG_relig |
+Conservati..  |          1  (base)
+Liberal Pr..  |   1.053573    .132321     0.42   0.678     .8236547    1.347673
+    Catholic  |    1.01935   .1198309     0.16   0.871     .8095525    1.283516
+       Other  |   1.125985    .186839     0.72   0.475     .8133354    1.558819
+Nonreligious  |   1.403392   .1563491     3.04   0.002     1.128068    1.745915
+              |
+      dG_finc |
+Less than ..  |          1  (base)
+30,000 to ..  |   1.631019   .1973365     4.04   0.000     1.286643     2.06757
+50,000 to ..  |   2.080106   .2503413     6.09   0.000     1.642966    2.633554
+75,000 to ..  |   3.205453   .4439391     8.41   0.000      2.44335    4.205263
+100,000 to..  |   3.450743   .4822975     8.86   0.000     2.623776    4.538357
+150,000 or..  |   4.514833   .7995007     8.51   0.000     3.190708    6.388462
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |    1.24681   .2931397     0.94   0.348     .7864023    1.976769
+some college  |   1.830269    .418205     2.65   0.008     1.169481    2.864419
+     college  |    3.00204   .6985239     4.72   0.000     1.902517    4.737013
+ grad school  |   3.898804   .9369402     5.66   0.000     2.434144     6.24477
+              |
+     dB_bipoc |
+     0_White  |          1  (base)
+     1_BIPOC  |   .4231268   .0671909    -5.42   0.000     .3099445    .5776398
+              |
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .6049183   .0859325    -3.54   0.000     .4578899    .7991574
+3_Politici~s  |   1.096669   .1348303     0.75   0.453     .8618066    1.395538
+4_Pub Health  |   1.074253   .1548072     0.50   0.619     .8098887    1.424911
+  5_Informal  |   .6442813   .1356239    -2.09   0.037     .4264508    .9733794
+              |
+     dB_bipoc#|
+     dG_cnews |
+     1_BIPOC #|
+2_Local news  |   1.176413   .3132118     0.61   0.542     .6980738    1.982523
+     1_BIPOC #|
+3_Politici~s  |   .7052939   .1799624    -1.37   0.171      .427708    1.163035
+     1_BIPOC #|
+4_Pub Health  |   .8767754   .2353379    -0.49   0.624     .5180631    1.483864
+     1_BIPOC #|
+  5_Informal  |   .9813795    .397089    -0.05   0.963     .4439893    2.169209
+              |
+        _cons |    .757989   .2088676    -1.01   0.315     .4416489    1.300914
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(995 missing values generated)
+(995 missing values generated)
+F-adjusted test statistic = .5464308
+p-value                   = .8413565
+Running model on antibody for interaction of news and income
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,605
+Number of PSUs     =     8,605                  Population size   = 8,334.5887
+                                                Design df         =      8,604
+                                                F(  44,   8561)   =      16.05
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+   antibody_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+   dG_newsfol |
+Very closely  |          1  (base)
+Fairly clo..  |   .6478865   .0564443    -4.98   0.000     .5461743    .7685403
+Not too / ..  |   .2845315   .0403476    -8.86   0.000     .2154813    .3757084
+              |
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |   1.100218   .1480416     0.71   0.478     .8451382    1.432285
+       50-64  |   1.110597   .1564011     0.74   0.456     .8426903    1.463675
+      65plus  |   1.041865   .1551478     0.28   0.783     .7781051    1.395034
+              |
+       dB_fem |   .9945856   .0834777    -0.06   0.948     .8437018    1.172453
+              |
+     dG_relig |
+Conservati..  |          1  (base)
+Liberal Pr..  |   1.064096   .1335526     0.49   0.621     .8320192    1.360908
+    Catholic  |   1.013782   .1191154     0.12   0.907     .8052262    1.276355
+       Other  |    1.11067   .1840564     0.63   0.526     .8026141    1.536961
+Nonreligious  |   1.396413   .1543145     3.02   0.003      1.12444     1.73417
+              |
+     dB_bipoc |   .3999028   .0386875    -9.47   0.000      .330823    .4834074
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |   1.213513   .2910553     0.81   0.420     .7583315    1.941913
+some college  |   1.801525   .4182632     2.54   0.011     1.142846    2.839835
+     college  |   2.949115    .699202     4.56   0.000     1.852904    4.693863
+ grad school  |   3.813507   .9343691     5.46   0.000     2.359052    6.164696
+              |
+      dG_finc |
+Less than ..  |          1  (base)
+30,000 to ..  |   1.787856   .3959577     2.62   0.009     1.158216    2.759785
+50,000 to ..  |   2.456061    .519431     4.25   0.000     1.622533    3.717788
+75,000 to ..  |   3.622574   .8808922     5.29   0.000     2.249074    5.834867
+100,000 to..  |    4.58895   1.084299     6.45   0.000     2.887747     7.29235
+150,000 or..  |    4.58917   1.082546     6.46   0.000     2.890112    7.287082
+              |
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .6475893   .1462846    -1.92   0.054     .4159047    1.008337
+3_Politici~s  |   1.116434   .2319237     0.53   0.596       .74299     1.67758
+4_Pub Health  |   1.381343   .3368388     1.32   0.185     .8564616    2.227898
+  5_Informal  |   .7857761    .265022    -0.71   0.475     .4056674    1.522045
+              |
+      dG_finc#|
+     dG_cnews |
+30,000 to .. #|
+2_Local news  |   1.212676   .4234703     0.55   0.581     .6115907    2.404523
+30,000 to .. #|
+3_Politici~s  |   1.006441   .3171186     0.02   0.984     .5426834    1.866511
+30,000 to .. #|
+4_Pub Health  |   .6392453   .2309962    -1.24   0.216     .3148009    1.298073
+30,000 to .. #|
+  5_Informal  |    .577134   .3010628    -1.05   0.292     .2075791     1.60461
+50,000 to .. #|
+2_Local news  |   .8829884   .3102555    -0.35   0.723     .4434314    1.758262
+50,000 to .. #|
+3_Politici~s  |   .8568392   .2645417    -0.50   0.617     .4678011    1.569414
+50,000 to .. #|
+4_Pub Health  |    .804812   .2861371    -0.61   0.541     .4008868    1.615724
+50,000 to .. #|
+  5_Informal  |   .4638871   .2290979    -1.56   0.120     .1761871     1.22138
+75,000 to .. #|
+2_Local news  |   .9348112   .3887014    -0.16   0.871     .4137502    2.112076
+75,000 to .. #|
+3_Politici~s  |   .9294844   .3243435    -0.21   0.834     .4690008    1.842089
+75,000 to .. #|
+4_Pub Health  |   .6448132    .254437    -1.11   0.266     .2975163    1.397517
+75,000 to .. #|
+  5_Informal  |   .8542064   .4734778    -0.28   0.776     .2881935     2.53187
+100,000 to.. #|
+2_Local news  |   .5987241   .2301898    -1.33   0.182     .2817873    1.272131
+100,000 to.. #|
+3_Politici~s  |    .647018   .2296537    -1.23   0.220     .3226613    1.297436
+100,000 to.. #|
+4_Pub Health  |   .5766599   .2174743    -1.46   0.144     .2753361    1.207748
+100,000 to.. #|
+  5_Informal  |   1.346651   .8671826     0.46   0.644     .3811032    4.758473
+150,000 or.. #|
+2_Local news  |    1.39472   .6594451     0.70   0.482     .5520387    3.523748
+150,000 or.. #|
+3_Politici~s  |    .892375   .3415516    -0.30   0.766     .4214139     1.88967
+150,000 or.. #|
+4_Pub Health  |   .5922031   .2779085    -1.12   0.264     .2360279     1.48586
+150,000 or.. #|
+  5_Informal  |   2.441535   2.093056     1.04   0.298      .454831    13.10617
+              |
+        _cons |   .7124525   .2026995    -1.19   0.233     .4078937    1.244414
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(995 missing values generated)
+(995 missing values generated)
+F-adjusted test statistic = 1.0975357
+p-value                   = .3606028
+Running model on antibody for interaction of news and education
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,605
+Number of PSUs     =     8,605                  Population size   = 8,334.5887
+                                                Design df         =      8,604
+                                                F(  40,   8565)   =      18.41
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+   antibody_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+   dG_newsfol |
+Very closely  |          1  (base)
+Fairly clo..  |   .6380001   .0564887    -5.08   0.000     .5363454    .7589217
+Not too / ..  |   .2862764   .0403987    -8.86   0.000     .2170946    .3775045
+              |
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |   1.116717   .1486063     0.83   0.407     .8603081    1.449546
+       50-64  |   1.090492   .1542848     0.61   0.540     .8263732    1.439028
+      65plus  |    1.04151   .1557419     0.27   0.786     .7768934    1.396258
+              |
+       dB_fem |    .965636   .0816845    -0.41   0.679      .818086    1.139798
+              |
+     dG_relig |
+Conservati..  |          1  (base)
+Liberal Pr..  |    1.04086   .1308683     0.32   0.750     .8134949    1.331771
+    Catholic  |   .9964981   .1177836    -0.03   0.976       .79041    1.256321
+       Other  |   1.086952    .178471     0.51   0.612     .7878224    1.499658
+Nonreligious  |   1.370365    .152785     2.83   0.005     1.101338    1.705109
+              |
+     dB_bipoc |   .3870739   .0370164    -9.92   0.000     .3209083    .4668817
+              |
+      dG_finc |
+Less than ..  |          1  (base)
+30,000 to ..  |    1.62377   .1966214     4.00   0.000     1.280674    2.058783
+50,000 to ..  |    2.09457   .2502984     6.19   0.000     1.657155    2.647443
+75,000 to ..  |   3.167347   .4419476     8.26   0.000     2.409399    4.163731
+100,000 to..  |   3.426887   .4842257     8.72   0.000     2.597805    4.520569
+150,000 or..  |   4.487263   .8036236     8.38   0.000     3.158773    6.374478
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |   1.777037   .8241796     1.24   0.215     .7159105    4.410973
+some college  |   2.766812   1.226066     2.30   0.022     1.160729    6.595206
+     college  |   4.527511   2.018741     3.39   0.001     1.889164    10.85049
+ grad school  |   6.152831   2.801136     3.99   0.000     2.520592    15.01922
+              |
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   1.999405   1.195771     1.16   0.247      .619094     6.45721
+3_Politici~s  |    .684974   .3850446    -0.67   0.501     .2275729     2.06171
+4_Pub Health  |   2.318303   1.615905     1.21   0.228     .5912647    9.089888
+  5_Informal  |   2.158222   1.766236     0.94   0.347     .4339061    10.73487
+              |
+       dG_edu#|
+     dG_cnews |
+          HS #|
+2_Local news  |   .2675126   .1730375    -2.04   0.042     .0752795    .9506306
+          HS #|
+3_Politici~s  |   1.745998   1.062988     0.92   0.360     .5293559    5.758904
+          HS #|
+4_Pub Health  |   .4880681   .3735087    -0.94   0.349     .1088883    2.187658
+          HS #|
+  5_Informal  |   .2763295   .2477007    -1.43   0.151     .0476767    1.601578
+some college #|
+2_Local news  |   .2936538   .1842465    -1.95   0.051     .0858407    1.004565
+some college #|
+3_Politici~s  |   1.589793   .9282007     0.79   0.427     .5061701    4.993264
+some college #|
+4_Pub Health  |   .3977385   .2875784    -1.28   0.202      .096397    1.641088
+some college #|
+  5_Informal  |   .2564019   .2206993    -1.58   0.114     .0474397    1.385801
+     college #|
+2_Local news  |   .3770093   .2383285    -1.54   0.123     .1091905    1.301726
+     college #|
+3_Politici~s  |   1.173235   .6951353     0.27   0.787     .3672669    3.747902
+     college #|
+4_Pub Health  |    .465992   .3357834    -1.06   0.289     .1134842    1.913469
+     college #|
+  5_Informal  |   .2261788   .1960728    -1.71   0.086     .0413474    1.237246
+ grad school #|
+2_Local news  |   .2103781    .137801    -2.38   0.017     .0582601    .7596779
+ grad school #|
+3_Politici~s  |   1.387974   .8532511     0.53   0.594     .4159441    4.631562
+ grad school #|
+4_Pub Health  |   .3824246   .2800074    -1.31   0.189     .0910368    1.606477
+ grad school #|
+  5_Informal  |    .336155   .3034317    -1.21   0.227     .0572916    1.972369
+              |
+        _cons |   .5536704   .2470171    -1.33   0.185     .2309079    1.327589
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(995 missing values generated)
+(995 missing values generated)
+F-adjusted test statistic = .17683131
+p-value                   = .99640513
+Running model on antibody for interaction of news and gender
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,605
+Number of PSUs     =     8,605                  Population size   = 8,334.5887
+                                                Design df         =      8,604
+                                                F(  28,   8577)   =      23.67
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+   antibody_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+   dG_newsfol |
+Very closely  |          1  (base)
+Fairly clo..  |   .6423857   .0561591    -5.06   0.000     .5412166    .7624663
+Not too / ..  |   .2880257   .0408732    -8.77   0.000     .2180829    .3804003
+              |
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |   1.118762   .1513005     0.83   0.407     .8582341    1.458377
+       50-64  |    1.12345   .1600165     0.82   0.414     .8497625    1.485286
+      65plus  |   1.059415   .1593123     0.38   0.701     .7889443     1.42261
+              |
+     dG_relig |
+Conservati..  |          1  (base)
+Liberal Pr..  |   1.066762   .1338083     0.52   0.606      .834224    1.364119
+    Catholic  |   1.030874   .1209285     0.26   0.795      .819105    1.297392
+       Other  |   1.125791   .1864777     0.72   0.474     .8136609    1.557657
+Nonreligious  |   1.412086   .1568949     3.11   0.002     1.135722      1.7557
+              |
+     dB_bipoc |   .3999058   .0388224    -9.44   0.000     .3306073    .4837299
+              |
+      dG_finc |
+Less than ..  |          1  (base)
+30,000 to ..  |   1.626264   .1962067     4.03   0.000     1.283749    2.060164
+50,000 to ..  |   2.096671   .2513334     6.18   0.000     1.657602    2.652042
+75,000 to ..  |    3.18922   .4445025     8.32   0.000     2.426779    4.191203
+100,000 to..  |   3.462856    .481613     8.93   0.000     2.636531    4.548162
+150,000 or..  |   4.495187   .7881827     8.57   0.000     3.187702    6.338957
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |   1.203148   .2861265     0.78   0.437     .7548525    1.917679
+some college  |   1.764581   .4081208     2.46   0.014     1.121357    2.776766
+     college  |   2.895689   .6818932     4.52   0.000     1.825063    4.594369
+ grad school  |   3.720307   .9046679     5.40   0.000     2.309739    5.992317
+              |
+       dB_fem |
+      0_Male  |          1  (base)
+    1_Female  |   .9587838   .1361758    -0.30   0.767     .7257845    1.266583
+              |
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .5945426    .116502    -2.65   0.008     .4049157    .8729741
+3_Politici~s  |   .9058258   .1404902    -0.64   0.524     .6683561     1.22767
+4_Pub Health  |   1.095258   .2091155     0.48   0.634     .7533131     1.59242
+  5_Informal  |   .7403776   .1877619    -1.19   0.236     .4503557    1.217169
+              |
+       dB_fem#|
+     dG_cnews |
+    1_Female #|
+2_Local news  |   1.109113   .2742696     0.42   0.675     .6830536     1.80093
+    1_Female #|
+3_Politici~s  |   1.268787   .2668727     1.13   0.258     .8400875    1.916254
+    1_Female #|
+4_Pub Health  |   .9113667   .2262274    -0.37   0.708     .5602356    1.482571
+    1_Female #|
+  5_Informal  |   .7374967   .2661324    -0.84   0.399     .3635407    1.496122
+              |
+        _cons |   .7964667   .2214975    -0.82   0.413     .4617587     1.37379
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(995 missing values generated)
+(995 missing values generated)
+F-adjusted test statistic = .48584281
+p-value                   = .88517541
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+Running model A for  stater 
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      9,271
+Number of PSUs     =     9,271                  Population size   = 9,100.2041
+                                                Design df         =      9,270
+                                                F(   4,   9267)   =      13.79
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+     stater_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |    .500282   .0516042    -6.71   0.000     .4086973    .6123898
+3_Politici~s  |   .8624567   .0761143    -1.68   0.094     .7254483     1.02534
+4_Pub Health  |   .8720066   .0832794    -1.43   0.152     .7231305    1.051533
+  5_Informal  |   .5463315   .0822449    -4.02   0.000     .4067236    .7338599
+              |
+        _cons |   1.513269    .089354     7.02   0.000     1.347872    1.698962
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(329 missing values generated)
+(329 missing values generated)
+F-adjusted test statistic = 2.674e-13
+p-value                   = 1
+Running model B for  stater with BIPOC race variable
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,727
+Number of PSUs     =     8,727                  Population size   =   8,463.49
+                                                Design df         =      8,726
+                                                F(  10,   8717)   =      21.68
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+     stater_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .6248092   .0683812    -4.30   0.000      .504169    .7743167
+3_Politici~s  |   .9552146   .0885608    -0.49   0.621     .7964758     1.14559
+4_Pub Health  |   .8755297   .0872946    -1.33   0.183     .7200957    1.064514
+  5_Informal  |   .6508514   .1047944    -2.67   0.008     .4746897    .8923885
+              |
+     dB_bipoc |   .7175114   .0636753    -3.74   0.000     .6029464    .8538446
+      dG_finc |   1.148914   .0254505     6.27   0.000     1.100093    1.199902
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |   1.633791   .3441433     2.33   0.020     1.081119     2.46899
+some college  |   2.253927   .4586707     3.99   0.000     1.512508    3.358784
+     college  |   2.621709   .5387119     4.69   0.000     1.752485    3.922064
+ grad school  |    3.13404   .6583835     5.44   0.000     2.076173    4.730919
+              |
+        _cons |   .4894912   .1009713    -3.46   0.001     .3266904     .733421
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(873 missing values generated)
+(873 missing values generated)
+F-adjusted test statistic = 1.8849154
+p-value                   = .04943239
+Running model C for  stater with BIPOC race variable
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,605
+Number of PSUs     =     8,605                  Population size   = 8,334.5887
+                                                Design df         =      8,604
+                                                F(  24,   8581)   =      10.10
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+     stater_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .6755887   .0755782    -3.51   0.000     .5425565    .8412399
+3_Politici~s  |   .9914683   .0949061    -0.09   0.929     .8218413    1.196106
+4_Pub Health  |   .8980817    .090826    -1.06   0.288     .7365783    1.094997
+  5_Informal  |   .7294827   .1222712    -1.88   0.060     .5251966     1.01323
+              |
+   dG_newsfol |
+Very closely  |          1  (base)
+Fairly clo..  |   .8578313   .0646669    -2.03   0.042     .7399898    .9944388
+Not too / ..  |   .6205288   .0831884    -3.56   0.000     .4771263    .8070315
+              |
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |   1.068034   .1296248     0.54   0.588     .8419031    1.354902
+       50-64  |    1.01876   .1263819     0.15   0.881     .7988434    1.299219
+      65plus  |    1.11709   .1448162     0.85   0.393     .8664138    1.440293
+              |
+       dB_fem |   .9384385   .0690521    -0.86   0.388     .8123888    1.084046
+              |
+     dG_relig |
+Conservati..  |          1  (base)
+Liberal Pr..  |   1.148201   .1290285     1.23   0.219     .9211938    1.431149
+    Catholic  |   1.041043   .1150554     0.36   0.716     .8382643    1.292873
+       Other  |   1.458726   .2219555     2.48   0.013     1.082528    1.965659
+Nonreligious  |   1.074596   .1078813     0.72   0.474     .8826305    1.308312
+              |
+     dB_bipoc |   .7169796    .065493    -3.64   0.000     .5994352    .8575735
+              |
+      dG_finc |
+Less than ..  |          1  (base)
+30,000 to ..  |   1.385957   .1634785     2.77   0.006      1.09985     1.74649
+50,000 to ..  |   1.697485   .1977187     4.54   0.000     1.350972    2.132876
+75,000 to ..  |   1.602201   .1907498     3.96   0.000     1.268712    2.023349
+100,000 to..  |   1.750584   .2082365     4.71   0.000     1.386488    2.210293
+150,000 or..  |   1.957637   .2564342     5.13   0.000     1.514314    2.530744
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |   1.683997   .3602625     2.44   0.015     1.107173    2.561338
+some college  |   2.244217   .4630071     3.92   0.000      1.49771    3.362807
+     college  |   2.597108   .5427273     4.57   0.000     1.724194    3.911955
+ grad school  |   3.003088    .643066     5.14   0.000     1.973652    4.569468
+              |
+        _cons |   .5133972   .1267548    -2.70   0.007     .3164224    .8329899
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(995 missing values generated)
+(995 missing values generated)
+F-adjusted test statistic = 1.3205419
+p-value                   = .22007233
+Running model on stater for interaction of news and BIPOC status
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,605
+Number of PSUs     =     8,605                  Population size   = 8,334.5887
+                                                Design df         =      8,604
+                                                F(  28,   8577)   =       9.21
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+     stater_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+   dG_newsfol |
+Very closely  |          1  (base)
+Fairly clo..  |   .8599758   .0650535    -1.99   0.046     .7414594    .9974361
+Not too / ..  |    .621022   .0830302    -3.56   0.000     .4778438    .8071013
+              |
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |   1.078063   .1302223     0.62   0.534     .8507671    1.366085
+       50-64  |   1.027032   .1272088     0.22   0.830     .8056354    1.309269
+      65plus  |   1.117472   .1445868     0.86   0.391     .8671348    1.440082
+              |
+       dB_fem |   .9385761   .0691257    -0.86   0.389     .8124002    1.084349
+              |
+     dG_relig |
+Conservati..  |          1  (base)
+Liberal Pr..  |   1.146079   .1283167     1.22   0.223     .9202362    1.427348
+    Catholic  |   1.040374   .1147193     0.36   0.720     .8381402    1.291405
+       Other  |   1.448576   .2196358     2.44   0.015     1.076124    1.949935
+Nonreligious  |   1.064697    .106456     0.63   0.531     .8751948    1.295231
+              |
+      dG_finc |
+Less than ..  |          1  (base)
+30,000 to ..  |   1.389664   .1638162     2.79   0.005     1.102946    1.750915
+50,000 to ..  |   1.703906   .1982969     4.58   0.000     1.356347    2.140526
+75,000 to ..  |   1.604281   .1913664     3.96   0.000     1.269787     2.02689
+100,000 to..  |   1.752539   .2084238     4.72   0.000     1.388107    2.212649
+150,000 or..  |   1.962584   .2558581     5.17   0.000     1.519999    2.534039
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |   1.698812   .3598873     2.50   0.012     1.121491    2.573326
+some college  |   2.256735   .4612439     3.98   0.000      1.51176    3.368824
+     college  |   2.607519   .5402128     4.63   0.000      1.73722    3.913812
+ grad school  |    3.00717   .6390389     5.18   0.000     1.982659    4.561084
+              |
+     dB_bipoc |
+     0_White  |          1  (base)
+     1_BIPOC  |   .5884545    .086477    -3.61   0.000     .4411701    .7849098
+              |
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .6545615   .0824015    -3.37   0.001     .5114219    .8377639
+3_Politici~s  |    .914657   .0951589    -0.86   0.391     .7459139    1.121574
+4_Pub Health  |   .8357898   .0946629    -1.58   0.113     .6693836    1.043564
+  5_Informal  |   .5851768   .1122245    -2.79   0.005     .4018109    .8522216
+              |
+     dB_bipoc#|
+     dG_cnews |
+     1_BIPOC #|
+2_Local news  |   1.104998   .2854535     0.39   0.699     .6659478    1.833508
+     1_BIPOC #|
+3_Politici~s  |   1.389301   .3517992     1.30   0.194     .8457162    2.282276
+     1_BIPOC #|
+4_Pub Health  |   1.295766   .3196178     1.05   0.294     .7989822    2.101436
+     1_BIPOC #|
+  5_Informal  |     2.0064   .7363434     1.90   0.058      .977203    4.119553
+              |
+        _cons |   .5391058   .1325566    -2.51   0.012     .3329271    .8729692
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(995 missing values generated)
+(995 missing values generated)
+F-adjusted test statistic = 2.2552274
+p-value                   = .01625316
+Running model on stater for interaction of news and income
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,605
+Number of PSUs     =     8,605                  Population size   = 8,334.5887
+                                                Design df         =      8,604
+                                                F(  44,   8561)   =       6.04
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+     stater_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+   dG_newsfol |
+Very closely  |          1  (base)
+Fairly clo..  |   .8581835   .0643944    -2.04   0.042     .7407995    .9941676
+Not too / ..  |   .6193894   .0841028    -3.53   0.000     .4746445    .8082748
+              |
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |   1.093225   .1325663     0.74   0.462     .8619394    1.386571
+       50-64  |   1.034391   .1282689     0.27   0.785     .8111796    1.319022
+      65plus  |   1.135063   .1462617     0.98   0.326     .8816998    1.461233
+              |
+       dB_fem |   .9393837   .0690864    -0.85   0.395     .8132669    1.085058
+              |
+     dG_relig |
+Conservati..  |          1  (base)
+Liberal Pr..  |   1.156675   .1299171     1.30   0.195     .9280924    1.441555
+    Catholic  |   1.042808   .1162098     0.38   0.707      .838173    1.297403
+       Other  |   1.418021   .2073468     2.39   0.017     1.064633    1.888709
+Nonreligious  |   1.075759   .1079738     0.73   0.467     .8836249     1.30967
+              |
+     dB_bipoc |   .7143241   .0656588    -3.66   0.000     .5965462    .8553553
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |   1.646786   .3504735     2.34   0.019     1.085067    2.499296
+some college  |   2.208426   .4526441     3.87   0.000     1.477727    3.300439
+     college  |   2.595592   .5384498     4.60   0.000      1.72835    3.897994
+ grad school  |   3.041338   .6430953     5.26   0.000     2.009332     4.60339
+              |
+      dG_finc |
+Less than ..  |          1  (base)
+30,000 to ..  |   1.467159   .3153371     1.78   0.075     .9627257    2.235899
+50,000 to ..  |   1.390396    .280014     1.64   0.102     .9368919    2.063419
+75,000 to ..  |   1.935636   .4078305     3.13   0.002     1.280719    2.925456
+100,000 to..  |   1.595716   .3094499     2.41   0.016     1.091096    2.333718
+150,000 or..  |   1.608485   .3092982     2.47   0.013     1.103354    2.344871
+              |
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .5340777   .1229297    -2.72   0.006     .3401373    .8385996
+3_Politici~s  |   .9020432   .1891944    -0.49   0.623     .5979588    1.360766
+4_Pub Health  |   1.224573   .2825627     0.88   0.380     .7790183    1.924961
+  5_Informal  |   .6874091   .2181533    -1.18   0.238     .3690146    1.280522
+              |
+      dG_finc#|
+     dG_cnews |
+30,000 to .. #|
+2_Local news  |    1.02308   .3520992     0.07   0.947     .5211012    2.008616
+30,000 to .. #|
+3_Politici~s  |   1.154261   .3578715     0.46   0.644     .6285754    2.119586
+30,000 to .. #|
+4_Pub Health  |   .4615381   .1576304    -2.26   0.024     .2362944    .9014915
+30,000 to .. #|
+  5_Informal  |   1.367785   .6702503     0.64   0.523     .5234174    3.574271
+50,000 to .. #|
+2_Local news  |   2.625917   .9049581     2.80   0.005     1.336269    5.160219
+50,000 to .. #|
+3_Politici~s  |   1.216369    .355692     0.67   0.503     .6856789    2.157792
+50,000 to .. #|
+4_Pub Health  |   .8282721   .2685172    -0.58   0.561     .4387161    1.563733
+50,000 to .. #|
+  5_Informal  |   .8364746   .4275075    -0.35   0.727     .3071548    2.277971
+75,000 to .. #|
+2_Local news  |   .8126726   .2931118    -0.58   0.565     .4007414    1.648038
+75,000 to .. #|
+3_Politici~s  |   .7853514   .2376278    -0.80   0.425     .4339856    1.421192
+75,000 to .. #|
+4_Pub Health  |   .7060531   .2347705    -1.05   0.295     .3679286    1.354912
+75,000 to .. #|
+  5_Informal  |   .5722276   .2787723    -1.15   0.252     .2202066    1.486987
+100,000 to.. #|
+2_Local news  |   1.338535   .4646907     0.84   0.401     .6777693    2.643489
+100,000 to.. #|
+3_Politici~s  |   1.416943    .421911     1.17   0.242     .7904271    2.540055
+100,000 to.. #|
+4_Pub Health  |   .6180418   .1912895    -1.55   0.120     .3369196     1.13373
+100,000 to.. #|
+  5_Informal  |    1.33035   .6765759     0.56   0.575     .4909183    3.605141
+150,000 or.. #|
+2_Local news  |   2.245382   .8506036     2.14   0.033     1.068538    4.718357
+150,000 or.. #|
+3_Politici~s  |   1.155206   .3495569     0.48   0.634     .6383458    2.090562
+150,000 or.. #|
+4_Pub Health  |   .8997358   .3000595    -0.32   0.751     .4679524    1.729929
+150,000 or.. #|
+  5_Informal  |    1.88456   1.206762     0.99   0.322     .5371228    6.612204
+              |
+        _cons |   .5288874   .1439295    -2.34   0.019     .3102328    .9016515
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(995 missing values generated)
+(995 missing values generated)
+F-adjusted test statistic = .98189083
+p-value                   = .45254172
+Running model on stater for interaction of news and education
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,605
+Number of PSUs     =     8,605                  Population size   = 8,334.5887
+                                                Design df         =      8,604
+                                                F(  40,   8565)   =       7.39
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+     stater_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+   dG_newsfol |
+Very closely  |          1  (base)
+Fairly clo..  |   .8637875   .0651776    -1.94   0.052     .7450235    1.001484
+Not too / ..  |   .6217404   .0832268    -3.55   0.000     .4782448    .8082912
+              |
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |   1.055742   .1270745     0.45   0.652     .8338514     1.33668
+       50-64  |   1.004772   .1241084     0.04   0.969     .7887029    1.280035
+      65plus  |   1.116912   .1450725     0.85   0.395     .8658512     1.44077
+              |
+       dB_fem |   .9250141   .0678623    -1.06   0.288     .8011105    1.068081
+              |
+     dG_relig |
+Conservati..  |          1  (base)
+Liberal Pr..  |   1.145949   .1290831     1.21   0.227     .9189037    1.429094
+    Catholic  |   1.044584   .1151726     0.40   0.692     .8415492    1.296605
+       Other  |   1.438136   .2176825     2.40   0.016     1.068908    1.934905
+Nonreligious  |   1.065753    .107165     0.63   0.527     .8750915    1.297956
+              |
+     dB_bipoc |   .7176085   .0646768    -3.68   0.000     .6013945    .8562797
+              |
+      dG_finc |
+Less than ..  |          1  (base)
+30,000 to ..  |    1.36943   .1605512     2.68   0.007     1.088257     1.72325
+50,000 to ..  |   1.716342   .2003038     4.63   0.000     1.365373    2.157528
+75,000 to ..  |     1.6291   .1954399     4.07   0.000     1.287705    2.061005
+100,000 to..  |   1.772484   .2099125     4.83   0.000     1.405277    2.235646
+150,000 or..  |   1.956168   .2567978     5.11   0.000     1.512335    2.530254
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |   1.525115   .6831306     0.94   0.346     .6338377     3.66967
+some college  |   2.350591   1.003816     2.00   0.045     1.017705    5.429156
+     college  |   2.514355    1.06538     2.18   0.030     1.095735    5.769626
+ grad school  |   2.881403   1.230066     2.48   0.013      1.24789    6.653214
+              |
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |    .673878   .3639797    -0.73   0.465     .2337543    1.942687
+3_Politici~s  |   .6776633   .3565104    -0.74   0.460     .2416263    1.900569
+4_Pub Health  |   1.791304   1.229331     0.85   0.396     .4665809      6.8772
+  5_Informal  |   .9654026    .719937    -0.05   0.962     .2237928    4.164575
+              |
+       dG_edu#|
+     dG_cnews |
+          HS #|
+2_Local news  |   1.225086    .730515     0.34   0.734     .3806503    3.942819
+          HS #|
+3_Politici~s  |   1.697683   .9711162     0.93   0.355     .5531974    5.209946
+          HS #|
+4_Pub Health  |   .4006873    .298636    -1.23   0.220     .0929625    1.727044
+          HS #|
+  5_Informal  |   .8469383   .6938617    -0.20   0.839     .1699806    4.219921
+some college #|
+2_Local news  |   .6994044   .3957831    -0.63   0.528     .2306628    2.120699
+some college #|
+3_Politici~s  |   1.308637    .713914     0.49   0.622     .4491475    3.812845
+some college #|
+4_Pub Health  |   .5621686   .3995204    -0.81   0.418     .1395892    2.264025
+some college #|
+  5_Informal  |   .7314463    .582269    -0.39   0.694     .1536338    3.482396
+     college #|
+2_Local news  |   1.332291   .7550162     0.51   0.613     .4386832    4.046199
+     college #|
+3_Politici~s  |   1.667124   .9081448     0.94   0.348     .5730877    4.849695
+     college #|
+4_Pub Health  |   .4263303   .2988237    -1.22   0.224      .107904    1.684437
+     college #|
+  5_Informal  |   .5343758   .4209441    -0.80   0.426     .1140867    2.502986
+ grad school #|
+2_Local news  |   1.225206   .7121049     0.35   0.727     .3921124    3.828314
+ grad school #|
+3_Politici~s  |   1.376012   .7559733     0.58   0.561     .4687172    4.039554
+ grad school #|
+4_Pub Health  |    .539416   .3794258    -0.88   0.380     .1358637    2.141628
+ grad school #|
+  5_Informal  |   .7081709   .5801452    -0.42   0.674     .1421418     3.52821
+              |
+        _cons |   .5318232   .2347428    -1.43   0.153     .2238723    1.263381
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(995 missing values generated)
+(995 missing values generated)
+F-adjusted test statistic = 1.1584425
+p-value                   = .31726939
+Running model on stater for interaction of news and gender
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata   =         1                  Number of obs     =      8,605
+Number of PSUs     =     8,605                  Population size   = 8,334.5887
+                                                Design df         =      8,604
+                                                F(  28,   8577)   =       8.79
+                                                Prob > F          =     0.0000
+
+-------------------------------------------------------------------------------
+              |             Linearized
+     stater_c | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+   dG_newsfol |
+Very closely  |          1  (base)
+Fairly clo..  |   .8562682   .0644899    -2.06   0.039     .7387415    .9924923
+Not too / ..  |   .6204821   .0827536    -3.58   0.000     .4777368     .805879
+              |
+       dG_age |
+       18-29  |          1  (base)
+       30-49  |    1.06946    .129848     0.55   0.580     .8429502    1.356836
+       50-64  |   1.018703   .1268889     0.15   0.882     .7980087    1.300432
+      65plus  |   1.118058   .1452698     0.86   0.390     .8666661    1.442371
+              |
+     dG_relig |
+Conservati..  |          1  (base)
+Liberal Pr..  |   1.147952    .128908     1.23   0.219     .9211395    1.430612
+    Catholic  |   1.041582   .1149354     0.37   0.712     .8389818    1.293106
+       Other  |   1.460029   .2217497     2.49   0.013     1.084083    1.966349
+Nonreligious  |   1.075857   .1079555     0.73   0.466      .883751    1.309723
+              |
+     dB_bipoc |   .7171902   .0654788    -3.64   0.000      .599666    .8577471
+              |
+      dG_finc |
+Less than ..  |          1  (base)
+30,000 to ..  |   1.384784   .1627529     2.77   0.006     1.099833    1.743562
+50,000 to ..  |   1.694998   .1968139     4.54   0.000     1.349953    2.128237
+75,000 to ..  |   1.599086   .1911111     3.93   0.000      1.26511    2.021229
+100,000 to..  |   1.749231   .2082916     4.70   0.000     1.385081     2.20912
+150,000 or..  |   1.951869   .2546169     5.13   0.000     1.511464    2.520598
+              |
+       dG_edu |
+        < HS  |          1  (base)
+          HS  |   1.677786   .3590382     2.42   0.016     1.102955    2.552203
+some college  |   2.232403   .4614575     3.89   0.000     1.488665    3.347713
+     college  |   2.589387   .5417412     4.55   0.000     1.718252    3.902177
+ grad school  |    2.98898   .6412664     5.10   0.000     1.962807    4.551647
+              |
+       dB_fem |
+      0_Male  |          1  (base)
+    1_Female  |   .9516149   .1165565    -0.40   0.686     .7484951    1.209855
+              |
+     dG_cnews |
+ 1_Intl/Natl  |          1  (base)
+2_Local news  |   .7105535   .1272104    -1.91   0.056     .5002473    1.009273
+3_Politici~s  |   .9950561   .1398719    -0.04   0.972     .7554053    1.310736
+4_Pub Health  |   .8531785   .1310605    -1.03   0.301     .6313421    1.152962
+  5_Informal  |   .7882332   .1819323    -1.03   0.303     .5013731     1.23922
+              |
+       dB_fem#|
+     dG_cnews |
+    1_Female #|
+2_Local news  |   .9168145   .2050386    -0.39   0.698     .5914117    1.421258
+    1_Female #|
+3_Politici~s  |   .9921916   .1833972    -0.04   0.966     .6906164    1.425457
+    1_Female #|
+4_Pub Health  |   1.096469   .2222286     0.45   0.650     .7369763     1.63132
+    1_Female #|
+  5_Informal  |   .8465263   .2805377    -0.50   0.615      .442093    1.620941
+              |
+        _cons |   .5123398   .1295818    -2.64   0.008     .3120617    .8411543
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(995 missing values generated)
+(995 missing values generated)
+F-adjusted test statistic = 1.5250027
+p-value                   = .13265271
+
+. 
+. *Output results for BIPOC Interactions
+. 
+.         outreg2 ///
+>         [fauci_modCbipoc fauci_int_NewsBIPOC ///
+>          stater_modCbipoc stater_int_NewsBIPOC ///
+>          antibody_modCbipoc antibody_int_NewsBIPOC] ///
+>                 using $results/tableA3_all_interactions.doc, ///
+>                 stats(coef se) ///
+>                 eform /// odds ratios
+>                 level(95) symbol(***, **, *) alpha(0.001, 0.01, 0.05) ///
+>                 replace
+~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/results/tableA
+> 3_all_interactions.doc
+dir : seeout
+
+. 
+. ***--------------------------***
+. 
+. log close ckn`category'`dataset'
+      name:  ckn09_rint01_PewJune2020
+       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
+> knowledge_news/stata/ckn09_rint01_PewJune2020.log
+  log type:  text
+ closed on:   3 Aug 2021, 16:56:01
+--------------------------------------------------------------------------------

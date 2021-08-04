@@ -6,7 +6,7 @@ log using $stata/ckn`category'`dataset'.log, name(ckn`category'`dataset') replac
 ***-----------------------------***
 
 // 	project:	Knowledge of COVID & News Sources
-//  task:		Regression Models with Interactions
+//  task:		Regression Models with Interactions for Online Appendix Table A3
 /*  data:    */ di "`dataset'" /* - June Knowledge Questions */
 
 //  github:   	covid_knowledge_news
@@ -37,7 +37,6 @@ cd $deriv
 	*http://repec.sowi.unibe.ch/stata/estout/esttab.html#h-12
 	*https://lukestein.github.io/stata-latex-workflows/
 	*https://www.jwe.cc/2012/03/stata-latex-tables-estout/
-
 	
 ***-----------------------------***
 // #  INTERACTION MODELS - APPENDIX
@@ -46,131 +45,165 @@ cd $deriv
 // STORE BASE LEVELS for INTERACTIONS
 
 fvset base 0 dB_bipoc
-fvset base 1 dG_cnews // ref: dB_cnews_news 
-fvset base 2 dG_edu  // ref: HHS
+fvset base 1 dG_cnews 	// ref: dB_cnews_news 
 
-local income_var  dV_finc_ln // l
+local edu_var "dG_edu"
+fvset base 1 dG_edu  		// ref: less than HS
 
-foreach v in  fauci antibody stateresponse  { // unemploy 
+local income_var "dG_finc" 	// 
+fvset base 1 dG_finc 		// ref: less than $30,000
+
+rename stateresponse_c stater_c // shorten variable
+
+
+foreach v in  fauci antibody stater { // unemploy 
 
 	drop if `v'_c == 99 // Refused
 	drop if `v'_c == 98 // Did not receive question
 	drop if covidnewsrel == 98 | covidnewsrel == 99 // refused or Did not receive question 
 		// only 48 people
-/*
-// # BASIC MODEL - CONTROLS ONLY
-	svy: logit `v'_c  dB_fem i.dG_age `income_var'  ///
-	dB_bipoc ///
-	, or baselevels // report Odds Ratios
+
+
+// # NEWS SOURCE ONLY (BASELINE)
+
+	di in red "Running model A for  `v' "
+
+	svy: logit `v'_c  ///
+		i.dG_cnews /// comparison: cnews_news
+		, or baselevels // report Odds Ratios
 	
-	est store `v'_controls
-
-// # MODEL - ADD IN EDUCATION
-	svy: logit `v'_c  dB_fem i.dG_age `income_var'  i.dG_edu ///
-	dB_bipoc ///
-	, or baselevels // report Odds Ratios
-		
-	est store `v'_edu
-
-
-// # MODEL - ADD IN NEWS
-		
-	svy: logit `v'_c    dB_bipoc i.dG_age  dV_finc_1k dB_fem  `edu_vars'  ///
-	dB_crely_international dB_crely_local dB_crely_trump dB_crely_biden /// comparison: crely_national 
-	dB_crely_politicians dB_crely_ph dB_crely_friends dB_crely_neighbor dB_crely_online, ///
-	or // report Odds Ratios
-
-	est store `v'_edu_news	
-
-
-// # MODEL - NEWS SHORT ALTERNATIVE
-		
-	svy: logit `v'_c  dB_fem  i.dG_age  `income_var'  i.dG_edu ///
-	dB_bipoc ///
-	i.dG_cnews /// comparison: cnews_news
-	, or baselevels // report Odds Ratios
-		
-	est store `v'_edu_news
-			
-// # MODEL - ADD IN NEWS DIFFICULT
-		
-	svy: logit `v'_c   dB_bipoc i.dG_age  dV_finc_1k dB_fem  `edu_vars'  ///
-	dB_crely_international dB_crely_national dB_crely_trump dB_crely_biden /// comparison: crely_local
-	dB_crely_politicians dB_crely_ph dB_crely_friends dB_crely_neighbor dB_crely_online ///
-	dB_cinfodiff, ///
-		or // report Odds Ratios
-
-	est store `v'_edu_news_difficult	
-
-// # MODEL - ADD IN INTERACTIONS BIPOC
+	est store `v'_modA
 	
-	svy: logit `v'_c  i.dG_age  dB_fem  `income_var'  i.dG_edu  ///
-	dB_bipoc##i.dG_cnews /// ## includes both main effects and interactions
-	, or baselevels // report Odds Ratios
+	svylogitgof
+
+
+// # NEWS SOURCE + MODERATORS
+
+	di in red "Running model B for  `v' with BIPOC race variable"
+
+	svy: logit `v'_c  ///
+		i.dG_cnews /// comparison: international/national
+		dB_bipoc  `income_var' i.`edu_var'  ///
+		, or baselevels // report Odds Ratios
+		
+	est store `v'_modBbipoc
+	
+	svylogitgof
 	
 
-	est store `v'_int_bipoc
+// #  NEWS SOURCE + MODERATORS + CONTROLS (incl. HOW CLOSELY FOLLOW NEWS)
+
+	di in red "Running model C for  `v' with BIPOC race variable"
+
+	svy: logit `v'_c  ///
+		i.dG_cnews /// comparison: international/national
+		i.dG_newsfol /// comparison: do not closely follow
+		i.dG_age dB_fem ///
+		i.dG_rel ///
+		dB_bipoc i.`income_var'  i.`edu_var'  /// moderators
+		, or baselevels // report Odds Ratios
 	
-	*test dG_race[2] = , common nosvyadjust 
+	est store `v'_modCbipoc
+	
+	svylogitgof
+	
+	
+// # MODEL - INTERACT: NEWS * BIPOC
+
+	di in red "Running model on `v' for interaction of news and BIPOC status"
+	
+		svy: logit `v'_c  ///
+		i.dG_newsfol /// comparison: do not closely follow
+		i.dG_age dB_fem ///
+		i.dG_rel ///
+		i.`income_var'  i.`edu_var'  /// moderators
+		dB_bipoc##i.dG_cnews /// ## includes both main effects and interactions
+		, or baselevels // report Odds Ratios
+
+	est store `v'_int_NewsBIPOC
+		
+	svylogitgof
 	
 *	margins, over(dB_bipoc dG_cnews) expression(exp(xb())) noatlegend
 
 *	margins dB_bipoc, dydx(dG_cnews)
 
-*/
-// # MODEL - ADD IN INTERACTIONS INCOME
-		
-	svy: logit `v'_c  i.dG_age  dB_fem i.dG_edu   ///
-	dB_bipoc ///
-	c.`income_var'##i.dG_cnews /// ## includes both main effects and interactions
-	, or baselevels // report Odds Ratios
+
+// # MODEL - INTERACT: NEWS * INCOME
+
+	di in red "Running model on `v' for interaction of news and income"
 	
-	est store `v'_int_income
-	
-// # MODEL - test INTERACTIONS INCOME without education
+		svy: logit `v'_c  ///
+		i.dG_newsfol /// comparison: do not closely follow
+		i.dG_age dB_fem ///
+		i.dG_rel ///
+		dB_bipoc   i.`edu_var'  /// moderators
+		i.`income_var'##i.dG_cnews /// ## includes both main effects and interactions
+		, or baselevels // report Odds Ratios
+
+	est store `v'_int_NewsIncome
 		
-	svy: logit `v'_c  i.dG_age  dB_fem   /// i.dG_edu
-	dB_bipoc ///
-	c.`income_var'##i.dG_cnews /// ## includes both main effects and interactions
-	, or baselevels // report Odds Ratios
-	
-	est store `v'_int_inc_noedu
-/*	
-// # MODEL - ADD IN INTERACTIONS EDUCATION
-		
-	svy: logit `v'_c  i.dG_age  dB_fem `income_var'   ///
-	dB_bipoc ///
-	i.dG_edu##i.dG_cnews /// ## includes both main effects and interactions
-	, or baselevels // report Odds Ratios
+	svylogitgof
 	
 
-	est store `v'_int_income
+// # MODEL - INTERACT: NEWS * EDU
+
+	di in red "Running model on `v' for interaction of news and education"
 	
-// # MODEL - ADD IN INTERACTIONS GENDER
+		svy: logit `v'_c  ///
+		i.dG_newsfol /// comparison: do not closely follow
+		i.dG_age dB_fem ///
+		i.dG_rel ///
+		dB_bipoc  i.`income_var'  /// moderators
+		i.`edu_var'##i.dG_cnews /// ## includes both main effects and interactions
+		, or baselevels // report Odds Ratios
+
+	est store `v'_int_NewsEdu
 		
-	svy: logit `v'_c  i.dG_age `income_var'  i.dG_edu  ///
-	dB_bipoc ///
-	dB_fem##i.dG_cnews /// ## includes both main effects and interactions
-	, or baselevels // report Odds Ratios
+	svylogitgof
 	
+		
+// # MODEL - INTERACT: NEWS * GENDER
 
-	est store `v'_int_fem	
+	di in red "Running model on `v' for interaction of news and gender"
+	
+		svy: logit `v'_c  ///
+		i.dG_newsfol /// comparison: do not closely follow
+		i.dG_age  ///
+		i.dG_rel ///
+		dB_bipoc  i.`income_var' i.`edu_var' /// moderators
+		dB_fem##dG_cnews /// ## includes both main effects and interactions
+		, or baselevels // report Odds Ratios
 
-// # CREATE LATEX TABLE
-
-	esttab `v'_controls `v'_edu `v'_edu_news `v'_int_bipoc `v'_int_income `v'_int_fem ///
-		using $results/`v'LOs_interactions.tex, ///
-		replace f ///
-		label booktabs b(3) p(3) eqlabels(none) alignment(S S) ///
-		collabels("\multicolumn{1}{c}{$\beta$ / SE}") ///
-		star(* 0.05 ** 0.01 *** 0.001) ///
-		cells("b(fmt(3)star)" "se(fmt(3)par)") ///
-		stats(N aic pr, fmt(0 3) layout("\multicolumn{1}{c}{@}") ///
-			labels(`"Observations"' `"AIC"' `"Baseline predicted probability"'))
-		*refcat(dB_bipoc "\emph{BIPOC}" dB_fem "\emph{Gender}" dG_age "\emph{Age}" ///
-			*dV_finc_ln "\emph{Family Income (Ln)}"  ///
-			*dG_edu "\emph{Education}" dG_cnews "\emph{News Outlet}") ///
-			
-*/		
+	est store `v'_int_NewsGender
+		
+	svylogitgof
+	
+/*
+*Output table of all variables
+	outreg2 ///
+	[`v'_modCbipoc `v'_int_NewsBIPOC `v'_int_NewsIncome `v'_int_NewsEdu `v'_int_NewsGender] ///
+		using $results/`v'_interactions.doc, ///
+		stats(coef se) ///
+		eform /// odds ratios
+		level(95) symbol(***, **, *) alpha(0.001, 0.01, 0.05) ///
+		replace
+*/			
 } // Close loop through variables
 
+*Output results for BIPOC Interactions
+
+	outreg2 ///
+	[fauci_modCbipoc fauci_int_NewsBIPOC ///
+	 stater_modCbipoc stater_int_NewsBIPOC ///
+	 antibody_modCbipoc antibody_int_NewsBIPOC] ///
+		using $results/tableA3_all_interactions.doc, ///
+		stats(coef se) ///
+		eform /// odds ratios
+		level(95) symbol(***, **, *) alpha(0.001, 0.01, 0.05) ///
+		replace
+
+***--------------------------***
+
+log close ckn`category'`dataset'
+exit
