@@ -242,7 +242,7 @@ foreach v in antibody fauci stater   { //
 } // Close loop through variables	
 
 
-*Output table with political variable A2
+*Output table with political variable A3
 	outreg2 ///
 	[fauci_pol  ///
 	 stater_pol ///

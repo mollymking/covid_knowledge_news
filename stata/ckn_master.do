@@ -42,7 +42,7 @@ global stata  	"~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_new
 *Documentation
 global docs 	"~/Documents/SocResearch/COVID_Knowledge_News/documentation"	// documentation folder
 
-global results	"~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/stata/results"  // tables and figures added to stata folder
+global results	"~/Documents/SocResearch/COVID_Knowledge_News/results"  		// tables and figures added to main project folder
 
 /*
 ***--------------------------***
