@@ -3,7 +3,7 @@
        log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
 > knowledge_news/stata/ckn05_news01_PewJune2020.log
   log type:  text
- opened on:  26 May 2021, 17:04:45
+ opened on:  29 Jun 2021, 11:03:17
 
 . ***-----------------------------***
 . 
@@ -19,7 +19,7 @@
 . //  author:     Molly King
 . 
 . display "$S_DATE  $S_TIME"
-26 May 2021  17:04:45
+29 Jun 2021  11:03:17
 
 . 
 . ***--------------------------***
@@ -39,8 +39,6 @@
 (01_PewJune2020 Knowledge variables)
 
 . save $deriv/ki`category'`dataset'.dta, replace // data that results at end
-(note: file /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/data/da
-> ta_derv/ki05_news01_PewJune2020.dta not found)
 file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ki05_news01_Pew
 > June2020.dta saved
 
@@ -957,7 +955,7 @@ coronavirus |
   (810,936 bytes saved)
 
 . datasignature set, reset
-  9654:166(28918):2614586683:4163876378       (data signature reset)
+  9654:170(78958):2567671820:2899187949       (data signature reset)
 
 . save $deriv/ckn`category'`dataset'.dta, replace
 file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn05_news01_Pe
@@ -971,5 +969,5 @@ file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn05_news01_Pe
        log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
 > knowledge_news/stata/ckn05_news01_PewJune2020.log
   log type:  text
- closed on:  26 May 2021, 17:04:45
+ closed on:  29 Jun 2021, 11:03:17
 --------------------------------------------------------------------------------

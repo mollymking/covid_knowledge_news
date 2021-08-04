@@ -3,7 +3,7 @@
        log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
 > knowledge_news/stata/ckn03_know01_PewJune2020.log
   log type:  text
- opened on:  26 May 2021, 17:04:35
+ opened on:  29 Jun 2021, 11:03:00
 
 . ***-----------------------------***
 . 
@@ -19,7 +19,7 @@
 . //  author:     Molly King
 . 
 . display "$S_DATE  $S_TIME"
-26 May 2021  17:04:35
+29 Jun 2021  11:03:00
 
 . 
 . ***--------------------------***
@@ -1918,7 +1918,7 @@ note: label truncated to 80 characters
   (0 bytes saved)
 
 . datasignature set, reset
-  9654:136(76515):1094978427:538869741       (data signature reset)
+  9654:140(61019):1102315550:2561050502       (data signature reset)
 
 . save $deriv/ckn`category'`dataset'.dta, replace
 file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn03_know01_Pe
@@ -1932,5 +1932,5 @@ file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn03_know01_Pe
        log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
 > knowledge_news/stata/ckn03_know01_PewJune2020.log
   log type:  text
- closed on:  26 May 2021, 17:04:35
+ closed on:  29 Jun 2021, 11:03:01
 --------------------------------------------------------------------------------

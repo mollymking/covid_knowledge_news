@@ -3,7 +3,7 @@
        log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
 > knowledge_news/stata/ckn07_regr01_PewJune2020.log
   log type:  text
- opened on:  30 Jun 2021, 14:27:33
+ opened on:   3 Aug 2021, 15:19:26
 
 . ***-----------------------------***
 . 
@@ -19,7 +19,7 @@
 . //  author:     Molly King
 . 
 . display "$S_DATE  $S_TIME"
-30 Jun 2021  14:27:33
+ 3 Aug 2021  15:19:26
 
 . 
 . ***-----------------------------***
@@ -609,8 +609,8 @@ p-value                   = .81404306
 >                 eform /// odds ratios
 >                 level(95) symbol(***, **, *) alpha(0.001, 0.01, 0.05) ///
 >                 replace
-~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/stata/results/
-> allvars_models_ORs.doc
+~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/results/allvar
+> s_models_ORs.doc
 dir : seeout
 
 .         
@@ -1144,8 +1144,8 @@ Note: _cons estimates baseline odds.
 >                 eform /// odds ratios
 >                 level(95) symbol(***, **, *) alpha(0.001, 0.01, 0.05) ///
 >                 replace
-~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/stata/results/
-> tableA1_extended.doc
+~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/results/tableA
+> 1_extended.doc
 dir : seeout
 
 .         
@@ -1404,7 +1404,7 @@ p-value                   = .97886407
 
 . 
 . 
-. *Output table with political variable A2
+. *Output table with political variable A3
 .         outreg2 ///
 >         [fauci_pol  ///
 >          stater_pol ///
@@ -1414,8 +1414,8 @@ p-value                   = .97886407
 >                 eform /// odds ratios
 >                 level(95) symbol(***, **, *) alpha(0.001, 0.01, 0.05) ///
 >                 replace
-~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/stata/results/
-> tableA2_politics.doc
+~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/results/tableA
+> 2_politics.doc
 dir : seeout
 
 .         
@@ -1426,5 +1426,5 @@ dir : seeout
        log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
 > knowledge_news/stata/ckn07_regr01_PewJune2020.log
   log type:  text
- closed on:  30 Jun 2021, 14:27:56
+ closed on:   3 Aug 2021, 15:19:42
 --------------------------------------------------------------------------------
