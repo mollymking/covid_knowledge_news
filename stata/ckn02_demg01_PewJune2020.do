@@ -75,7 +75,7 @@ if "`hisp_var'" != "none" {
 }
 
 *don't know/refused code(s) for `race_var'
-local race_missing_condition `"`race_var' == 9"'
+local race_missing_condition `"`race_var' == 99"'
 
 local white_race_value = 	1
 local black_race_value = 	2

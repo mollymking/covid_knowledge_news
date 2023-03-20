@@ -1,9 +1,9 @@
 --------------------------------------------------------------------------------
       name:  ckn02_demg01_PewJune2020
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
-> knowledge_news/stata/ckn02_demg01_PewJune2020.log
+       log:  /Users/mmking/Documents/SocResearch/COVID_Knowledge_News/covid_know
+> ledge_news/stata/ckn02_demg01_PewJune2020.log
   log type:  text
- opened on:  29 Jun 2021, 11:02:47
+ opened on:  20 Mar 2023, 13:13:56
 
 . ***-----------------------------***
 . 
@@ -19,7 +19,7 @@
 . //  author:     Molly King
 . 
 . display "$S_DATE  $S_TIME"
-29 Jun 2021  11:02:47
+20 Mar 2023  13:13:56
 
 . 
 . ***--------------------------***
@@ -211,7 +211,7 @@ Asian or Asian-Americ |         7        278          0 |       285
 
 . 
 . *don't know/refused code(s) for `race_var'
-. local race_missing_condition `"`race_var' == 9"'
+. local race_missing_condition `"`race_var' == 99"'
 
 . 
 . local white_race_value =        1
@@ -1883,7 +1883,7 @@ Independent |         0          0      2,858          0          0 |     2,858
   (965,400 bytes saved)
 
 . datasignature set, reset
-  9654:131(91572):1698796774:2323590013       (data signature reset)
+  9654:180(64668):4213815402:3915455950       (data signature reset)
 
 . save $deriv/ckn`category'`dataset'.dta, replace
 file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn02_demg01_Pe
@@ -1895,8 +1895,8 @@ file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn02_demg01_Pe
 . 
 . log close ckn`category'`dataset'
       name:  ckn02_demg01_PewJune2020
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
-> knowledge_news/stata/ckn02_demg01_PewJune2020.log
+       log:  /Users/mmking/Documents/SocResearch/COVID_Knowledge_News/covid_know
+> ledge_news/stata/ckn02_demg01_PewJune2020.log
   log type:  text
- closed on:  29 Jun 2021, 11:02:48
+ closed on:  20 Mar 2023, 13:13:56
 --------------------------------------------------------------------------------
