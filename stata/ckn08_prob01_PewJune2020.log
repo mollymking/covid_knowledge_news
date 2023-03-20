@@ -1,9 +1,9 @@
 --------------------------------------------------------------------------------
       name:  ckn08_prob01_PewJune2020
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
-> knowledge_news/stata/ckn08_prob01_PewJune2020.log
+       log:  /Users/mmking/Documents/SocResearch/COVID_Knowledge_News/covid_know
+> ledge_news/stata/ckn08_prob01_PewJune2020.log
   log type:  text
- opened on:  30 Jun 2021, 17:10:59
+ opened on:  20 Mar 2023, 13:43:08
 
 . ***-----------------------------***
 . 
@@ -19,7 +19,7 @@
 . //  author:     Molly King
 . 
 . display "$S_DATE  $S_TIME"
-30 Jun 2021  17:10:59
+20 Mar 2023  13:43:08
 
 . 
 . ***-----------------------------***
@@ -44,7 +44,7 @@ file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn08_prob01_Pe
 
 . 
 . cd $deriv
-/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/data/data_derv
+/Users/mmking/Documents/SocResearch/COVID_Knowledge_News/data/data_derv
 
 . 
 . ***--------------------------***
@@ -10403,736 +10403,736 @@ CIHI for other
 8056. |       15   Other/mixed |
 8057. |       15   Other/mixed |
 8058. |        .         White |
-8059. |        .      Hispanic |
-8060. |        .      Hispanic |
+8059. |        .         White |
+8060. |        .         White |
       |------------------------|
-8061. |        .         Black |
-8062. |        .         White |
-8063. |        .      Hispanic |
+8061. |        .      Hispanic |
+8062. |        .   Other/mixed |
+8063. |        .         White |
 8064. |        .         Black |
 8065. |        .      Hispanic |
       |------------------------|
-8066. |        .         Black |
-8067. |        .         Black |
-8068. |        .         White |
+8066. |        .         White |
+8067. |        .      Hispanic |
+8068. |        .         Black |
 8069. |        .      Hispanic |
 8070. |        .         White |
       |------------------------|
 8071. |        .         White |
-8072. |        .      Hispanic |
+8072. |        .         White |
 8073. |        .         White |
-8074. |        .         White |
+8074. |        .      Hispanic |
 8075. |        .      Hispanic |
       |------------------------|
-8076. |        .         White |
+8076. |        .      Hispanic |
 8077. |        .         White |
-8078. |        .         Black |
-8079. |        .         White |
-8080. |        .   Other/mixed |
+8078. |        .         White |
+8079. |        .      Hispanic |
+8080. |        .         Black |
       |------------------------|
 8081. |        .         White |
-8082. |        .         White |
-8083. |        .         Asian |
-8084. |        .      Hispanic |
-8085. |        .         White |
+8082. |        .         Black |
+8083. |        .         White |
+8084. |        .         White |
+8085. |        .         Black |
       |------------------------|
-8086. |        .      Hispanic |
-8087. |        .         White |
-8088. |        .         Black |
+8086. |        .         White |
+8087. |        .         Black |
+8088. |        .         White |
 8089. |        .      Hispanic |
-8090. |        .      Hispanic |
+8090. |        .         White |
       |------------------------|
-8091. |        .         White |
-8092. |        .   Other/mixed |
-8093. |        .         Black |
-8094. |        .         Black |
-8095. |        .      Hispanic |
+8091. |        .         Asian |
+8092. |        .         Black |
+8093. |        .         White |
+8094. |        .         White |
+8095. |        .         White |
       |------------------------|
-8096. |        .         White |
-8097. |        .         Asian |
-8098. |        .         White |
-8099. |        .      Hispanic |
-8100. |        .      Hispanic |
+8096. |        .         Black |
+8097. |        .         White |
+8098. |        .      Hispanic |
+8099. |        .         White |
+8100. |        .         Black |
       |------------------------|
-8101. |        .         White |
-8102. |        .         Black |
-8103. |        .      Hispanic |
-8104. |        .      Hispanic |
+8101. |        .      Hispanic |
+8102. |        .   Other/mixed |
+8103. |        .         Black |
+8104. |        .         White |
 8105. |        .      Hispanic |
       |------------------------|
 8106. |        .      Hispanic |
-8107. |        .      Hispanic |
+8107. |        .         White |
 8108. |        .      Hispanic |
 8109. |        .         White |
-8110. |        .         White |
+8110. |        .         Black |
       |------------------------|
 8111. |        .         White |
 8112. |        .         White |
-8113. |        .         Black |
+8113. |        .         White |
 8114. |        .         Black |
 8115. |        .         White |
       |------------------------|
 8116. |        .         White |
-8117. |        .      Hispanic |
-8118. |        .      Hispanic |
-8119. |        .         White |
-8120. |        .         Black |
+8117. |        .         Black |
+8118. |        .         White |
+8119. |        .         Black |
+8120. |        .         Asian |
       |------------------------|
-8121. |        .      Hispanic |
-8122. |        .      Hispanic |
-8123. |        .         White |
-8124. |        .      Hispanic |
-8125. |        .         Asian |
+8121. |        .         Black |
+8122. |        .         White |
+8123. |        .         Black |
+8124. |        .         White |
+8125. |        .         White |
       |------------------------|
-8126. |        .         Black |
-8127. |        .         White |
+8126. |        .         Asian |
+8127. |        .      Hispanic |
 8128. |        .      Hispanic |
-8129. |        .      Hispanic |
+8129. |        .         White |
 8130. |        .         White |
       |------------------------|
-8131. |        .      Hispanic |
-8132. |        .      Hispanic |
-8133. |        .         White |
-8134. |        .         White |
+8131. |        .         White |
+8132. |        .         Black |
+8133. |        .      Hispanic |
+8134. |        .         Black |
 8135. |        .         White |
       |------------------------|
-8136. |        .         White |
-8137. |        .      Hispanic |
+8136. |        .         Black |
+8137. |        .         Black |
 8138. |        .      Hispanic |
-8139. |        .         Black |
+8139. |        .      Hispanic |
 8140. |        .         Black |
       |------------------------|
-8141. |        .         White |
-8142. |        .      Hispanic |
+8141. |        .   Other/mixed |
+8142. |        .         White |
 8143. |        .         White |
-8144. |        .      Hispanic |
+8144. |        .         White |
 8145. |        .      Hispanic |
       |------------------------|
-8146. |        .         Asian |
-8147. |        .      Hispanic |
-8148. |        .         White |
+8146. |        .         White |
+8147. |        .   Other/mixed |
+8148. |        .         Black |
 8149. |        .         White |
-8150. |        .   Other/mixed |
+8150. |        .         White |
       |------------------------|
-8151. |        .         Black |
-8152. |        .         Asian |
-8153. |        .         White |
-8154. |        .      Hispanic |
+8151. |        .         White |
+8152. |        .         Black |
+8153. |        .      Hispanic |
+8154. |        .         Black |
 8155. |        .         White |
       |------------------------|
-8156. |        .      Hispanic |
-8157. |        .         Black |
+8156. |        .         Black |
+8157. |        .         White |
 8158. |        .         Black |
-8159. |        .         White |
-8160. |        .         Asian |
+8159. |        .         Black |
+8160. |        .         White |
       |------------------------|
 8161. |        .      Hispanic |
 8162. |        .         White |
 8163. |        .      Hispanic |
 8164. |        .         White |
-8165. |        .         White |
+8165. |        .      Hispanic |
       |------------------------|
-8166. |        .         White |
-8167. |        .         White |
-8168. |        .         Black |
-8169. |        .         White |
+8166. |        .      Hispanic |
+8167. |        .      Hispanic |
+8168. |        .         White |
+8169. |        .         Black |
 8170. |        .      Hispanic |
       |------------------------|
-8171. |        .         Black |
+8171. |        .         White |
 8172. |        .         Black |
 8173. |        .         White |
 8174. |        .         White |
-8175. |        .      Hispanic |
+8175. |        .         White |
       |------------------------|
-8176. |        .      Hispanic |
-8177. |        .         White |
-8178. |        .         White |
-8179. |        .         Asian |
-8180. |        .      Hispanic |
+8176. |        .         Black |
+8177. |        .      Hispanic |
+8178. |        .   Other/mixed |
+8179. |        .         Black |
+8180. |        .         White |
       |------------------------|
-8181. |        .      Hispanic |
-8182. |        .         White |
+8181. |        .         Black |
+8182. |        .      Hispanic |
 8183. |        .         White |
-8184. |        .   Other/mixed |
-8185. |        .         White |
+8184. |        .      Hispanic |
+8185. |        .         Black |
       |------------------------|
-8186. |        .      Hispanic |
-8187. |        .   Other/mixed |
-8188. |        .         Black |
-8189. |        .         White |
-8190. |        .         Black |
+8186. |        .         White |
+8187. |        .      Hispanic |
+8188. |        .         White |
+8189. |        .      Hispanic |
+8190. |        .         White |
       |------------------------|
 8191. |        .      Hispanic |
 8192. |        .      Hispanic |
-8193. |        .         White |
+8193. |        .      Hispanic |
 8194. |        .         White |
 8195. |        .      Hispanic |
       |------------------------|
 8196. |        .   Other/mixed |
-8197. |        .         White |
-8198. |        .         White |
-8199. |        .      Hispanic |
-8200. |        .      Hispanic |
+8197. |        .      Hispanic |
+8198. |        .         Black |
+8199. |        .   Other/mixed |
+8200. |        .         Black |
       |------------------------|
-8201. |        .         White |
+8201. |        .      Hispanic |
 8202. |        .      Hispanic |
-8203. |        .   Other/mixed |
-8204. |        .      Hispanic |
-8205. |        .         Black |
+8203. |        .         Black |
+8204. |        .         Black |
+8205. |        .         White |
       |------------------------|
-8206. |        .         Black |
-8207. |        .         White |
+8206. |        .         Asian |
+8207. |        .      Hispanic |
 8208. |        .      Hispanic |
-8209. |        .      Hispanic |
-8210. |        .         Black |
+8209. |        .         White |
+8210. |        .      Hispanic |
       |------------------------|
 8211. |        .         White |
-8212. |        .         Black |
-8213. |        .   Other/mixed |
-8214. |        .         White |
-8215. |        .         White |
+8212. |        .         White |
+8213. |        .         Black |
+8214. |        .   Other/mixed |
+8215. |        .         Black |
       |------------------------|
 8216. |        .         Black |
-8217. |        .         Black |
-8218. |        .         White |
-8219. |        .      Hispanic |
-8220. |        .         White |
+8217. |        .      Hispanic |
+8218. |        .         Black |
+8219. |        .         White |
+8220. |        .         Asian |
       |------------------------|
-8221. |        .         Asian |
+8221. |        .      Hispanic |
 8222. |        .      Hispanic |
 8223. |        .      Hispanic |
-8224. |        .         White |
-8225. |        .         White |
+8224. |        .         Black |
+8225. |        .      Hispanic |
       |------------------------|
-8226. |        .         Black |
+8226. |        .      Hispanic |
 8227. |        .         White |
-8228. |        .         White |
+8228. |        .      Hispanic |
 8229. |        .         White |
-8230. |        .         Black |
+8230. |        .      Hispanic |
       |------------------------|
-8231. |        .   Other/mixed |
+8231. |        .         White |
 8232. |        .         White |
-8233. |        .      Hispanic |
-8234. |        .         Black |
+8233. |        .         White |
+8234. |        .   Other/mixed |
 8235. |        .      Hispanic |
       |------------------------|
-8236. |        .         Black |
-8237. |        .   Other/mixed |
+8236. |        .         White |
+8237. |        .         White |
 8238. |        .      Hispanic |
-8239. |        .         Asian |
-8240. |        .      Hispanic |
+8239. |        .      Hispanic |
+8240. |        .         White |
       |------------------------|
 8241. |        .         White |
-8242. |        .         White |
+8242. |        .         Black |
 8243. |        .         White |
-8244. |        .      Hispanic |
+8244. |        .         White |
 8245. |        .         Black |
       |------------------------|
-8246. |        .         Asian |
-8247. |        .   Other/mixed |
-8248. |        .         Black |
-8249. |        .      Hispanic |
-8250. |        .      Hispanic |
+8246. |        .      Hispanic |
+8247. |        .         Black |
+8248. |        .         White |
+8249. |        .   Other/mixed |
+8250. |        .         White |
       |------------------------|
 8251. |        .         Black |
-8252. |        .         White |
-8253. |        .         White |
-8254. |        .         White |
-8255. |        .         White |
+8252. |        .         Asian |
+8253. |        .         Black |
+8254. |        .         Black |
+8255. |        .      Hispanic |
       |------------------------|
-8256. |        .      Hispanic |
+8256. |        .         Black |
 8257. |        .         Black |
-8258. |        .         Black |
+8258. |        .         White |
 8259. |        .         White |
-8260. |        .         Black |
+8260. |        .      Hispanic |
       |------------------------|
-8261. |        .         Black |
-8262. |        .      Hispanic |
-8263. |        .         White |
-8264. |        .         White |
-8265. |        .         White |
+8261. |        .      Hispanic |
+8262. |        .         Asian |
+8263. |        .      Hispanic |
+8264. |        .      Hispanic |
+8265. |        .      Hispanic |
       |------------------------|
 8266. |        .         White |
-8267. |        .         Black |
-8268. |        .      Hispanic |
-8269. |        .         White |
+8267. |        .         White |
+8268. |        .         Black |
+8269. |        .      Hispanic |
 8270. |        .         White |
       |------------------------|
 8271. |        .      Hispanic |
 8272. |        .         Black |
 8273. |        .         White |
-8274. |        .      Hispanic |
-8275. |        .         Black |
+8274. |        .         White |
+8275. |        .      Hispanic |
       |------------------------|
 8276. |        .         White |
-8277. |        .         Asian |
-8278. |        .   Other/mixed |
+8277. |        .         White |
+8278. |        .      Hispanic |
 8279. |        .         Black |
 8280. |        .         Black |
       |------------------------|
-8281. |        .         White |
-8282. |        .         White |
-8283. |        .      Hispanic |
-8284. |        .         Black |
+8281. |        .      Hispanic |
+8282. |        .      Hispanic |
+8283. |        .         Black |
+8284. |        .         White |
 8285. |        .         White |
       |------------------------|
 8286. |        .         White |
-8287. |        .         White |
-8288. |        .         White |
-8289. |        .         Black |
-8290. |        .         White |
+8287. |        .         Black |
+8288. |        .      Hispanic |
+8289. |        .         White |
+8290. |        .      Hispanic |
       |------------------------|
-8291. |        .      Hispanic |
-8292. |        .      Hispanic |
+8291. |        .         White |
+8292. |        .         White |
 8293. |        .      Hispanic |
-8294. |        .      Hispanic |
-8295. |        .         White |
+8294. |        .         White |
+8295. |        .         Black |
       |------------------------|
-8296. |        .         Black |
-8297. |        .      Hispanic |
-8298. |        .         Black |
-8299. |        .   Other/mixed |
-8300. |        .         White |
+8296. |        .         White |
+8297. |        .         White |
+8298. |        .         White |
+8299. |        .      Hispanic |
+8300. |        .         Black |
       |------------------------|
 8301. |        .      Hispanic |
-8302. |        .         Black |
-8303. |        .         White |
+8302. |        .         White |
+8303. |        .   Other/mixed |
 8304. |        .         Black |
-8305. |        .      Hispanic |
+8305. |        .         Black |
       |------------------------|
-8306. |        .      Hispanic |
+8306. |        .         White |
 8307. |        .         White |
 8308. |        .         Black |
-8309. |        .         White |
-8310. |        .         White |
+8309. |        .      Hispanic |
+8310. |        .         Black |
       |------------------------|
-8311. |        .         White |
+8311. |        .         Asian |
 8312. |        .         White |
 8313. |        .      Hispanic |
 8314. |        .         Black |
-8315. |        .         Black |
+8315. |        .         White |
       |------------------------|
-8316. |        .      Hispanic |
+8316. |        .         Black |
 8317. |        .         White |
-8318. |        .      Hispanic |
+8318. |        .         White |
 8319. |        .      Hispanic |
-8320. |        .      Hispanic |
+8320. |        .   Other/mixed |
       |------------------------|
-8321. |        .   Other/mixed |
+8321. |        .         White |
 8322. |        .      Hispanic |
-8323. |        .      Hispanic |
+8323. |        .         White |
 8324. |        .      Hispanic |
 8325. |        .      Hispanic |
       |------------------------|
-8326. |        .      Hispanic |
-8327. |        .   Other/mixed |
-8328. |        .         White |
-8329. |        .         White |
-8330. |        .         White |
+8326. |        .         White |
+8327. |        .         White |
+8328. |        .         Black |
+8329. |        .         Black |
+8330. |        .      Hispanic |
       |------------------------|
-8331. |        .         White |
-8332. |        .         Asian |
+8331. |        .      Hispanic |
+8332. |        .      Hispanic |
 8333. |        .         White |
-8334. |        .      Hispanic |
+8334. |        .         Black |
 8335. |        .         White |
       |------------------------|
-8336. |        .         White |
-8337. |        .         Black |
+8336. |        .      Hispanic |
+8337. |        .      Hispanic |
 8338. |        .         Black |
-8339. |        .   Other/mixed |
+8339. |        .      Hispanic |
 8340. |        .         Black |
       |------------------------|
-8341. |        .      Hispanic |
-8342. |        .      Hispanic |
+8341. |        .         White |
+8342. |        .         White |
 8343. |        .         Black |
-8344. |        .      Hispanic |
-8345. |        .         White |
+8344. |        .         Black |
+8345. |        .      Hispanic |
       |------------------------|
-8346. |        .      Hispanic |
-8347. |        .         Black |
-8348. |        .      Hispanic |
+8346. |        .         White |
+8347. |        .         White |
+8348. |        .         White |
 8349. |        .      Hispanic |
-8350. |        .         Black |
+8350. |        .         White |
       |------------------------|
 8351. |        .         White |
-8352. |        .      Hispanic |
-8353. |        .      Hispanic |
-8354. |        .         Black |
-8355. |        .         White |
+8352. |        .         Black |
+8353. |        .         White |
+8354. |        .      Hispanic |
+8355. |        .         Black |
       |------------------------|
-8356. |        .      Hispanic |
-8357. |        .         Black |
-8358. |        .         White |
-8359. |        .         Black |
-8360. |        .         White |
+8356. |        .         White |
+8357. |        .      Hispanic |
+8358. |        .         Black |
+8359. |        .      Hispanic |
+8360. |        .         Black |
       |------------------------|
-8361. |        .         White |
-8362. |        .         White |
-8363. |        .         Black |
-8364. |        .         White |
-8365. |        .         White |
+8361. |        .      Hispanic |
+8362. |        .      Hispanic |
+8363. |        .      Hispanic |
+8364. |        .      Hispanic |
+8365. |        .      Hispanic |
       |------------------------|
-8366. |        .         White |
-8367. |        .         White |
-8368. |        .      Hispanic |
-8369. |        .         White |
+8366. |        .      Hispanic |
+8367. |        .      Hispanic |
+8368. |        .         White |
+8369. |        .      Hispanic |
 8370. |        .         White |
       |------------------------|
-8371. |        .      Hispanic |
-8372. |        .         Black |
-8373. |        .         Black |
-8374. |        .         White |
-8375. |        .      Hispanic |
+8371. |        .         White |
+8372. |        .         White |
+8373. |        .         White |
+8374. |        .         Black |
+8375. |        .         White |
       |------------------------|
-8376. |        .         Black |
+8376. |        .         White |
 8377. |        .         Black |
-8378. |        .         White |
+8378. |        .         Black |
 8379. |        .         White |
-8380. |        .         White |
+8380. |        .      Hispanic |
       |------------------------|
-8381. |        .      Hispanic |
-8382. |        .         White |
-8383. |        .         Black |
-8384. |        .      Hispanic |
-8385. |        .         White |
+8381. |        .   Other/mixed |
+8382. |        .      Hispanic |
+8383. |        .      Hispanic |
+8384. |        .         Black |
+8385. |        .      Hispanic |
       |------------------------|
 8386. |        .      Hispanic |
-8387. |        .         Black |
-8388. |        .         White |
+8387. |        .      Hispanic |
+8388. |        .      Hispanic |
 8389. |        .      Hispanic |
 8390. |        .         White |
       |------------------------|
-8391. |        .         White |
+8391. |        .         Black |
 8392. |        .         Black |
-8393. |        .         White |
-8394. |        .      Hispanic |
+8393. |        .   Other/mixed |
+8394. |        .   Other/mixed |
 8395. |        .      Hispanic |
       |------------------------|
 8396. |        .         White |
 8397. |        .         Black |
-8398. |        .         Black |
-8399. |        .         White |
-8400. |        .         Black |
+8398. |        .         White |
+8399. |        .         Black |
+8400. |        .      Hispanic |
       |------------------------|
 8401. |        .         White |
-8402. |        .      Hispanic |
-8403. |        .         White |
-8404. |        .         White |
-8405. |        .         Black |
+8402. |        .         White |
+8403. |        .      Hispanic |
+8404. |        .      Hispanic |
+8405. |        .         White |
       |------------------------|
-8406. |        .   Other/mixed |
-8407. |        .         Black |
+8406. |        .      Hispanic |
+8407. |        .         White |
 8408. |        .         White |
-8409. |        .         Black |
+8409. |        .      Hispanic |
 8410. |        .         Black |
       |------------------------|
-8411. |        .         White |
+8411. |        .         Asian |
 8412. |        .         White |
 8413. |        .         Black |
-8414. |        .      Hispanic |
+8414. |        .         White |
 8415. |        .         White |
       |------------------------|
-8416. |        .         Black |
-8417. |        .         White |
+8416. |        .         White |
+8417. |        .      Hispanic |
 8418. |        .      Hispanic |
 8419. |        .         White |
-8420. |        .      Hispanic |
+8420. |        .         White |
       |------------------------|
-8421. |        .         White |
-8422. |        .         White |
-8423. |        .      Hispanic |
+8421. |        .      Hispanic |
+8422. |        .      Hispanic |
+8423. |        .         White |
 8424. |        .      Hispanic |
-8425. |        .         White |
+8425. |        .      Hispanic |
       |------------------------|
 8426. |        .         White |
-8427. |        .         Black |
-8428. |        .         White |
-8429. |        .      Hispanic |
-8430. |        .         White |
+8427. |        .   Other/mixed |
+8428. |        .      Hispanic |
+8429. |        .         White |
+8430. |        .      Hispanic |
       |------------------------|
-8431. |        .         Black |
-8432. |        .         White |
+8431. |        .         White |
+8432. |        .         Black |
 8433. |        .         White |
-8434. |        .      Hispanic |
-8435. |        .      Hispanic |
+8434. |        .         White |
+8435. |        .   Other/mixed |
       |------------------------|
-8436. |        .      Hispanic |
-8437. |        .         White |
-8438. |        .   Other/mixed |
-8439. |        .         Black |
-8440. |        .         White |
+8436. |        .         White |
+8437. |        .         Asian |
+8438. |        .         Black |
+8439. |        .         White |
+8440. |        .      Hispanic |
       |------------------------|
-8441. |        .         Black |
-8442. |        .   Other/mixed |
-8443. |        .         Black |
-8444. |        .      Hispanic |
-8445. |        .      Hispanic |
+8441. |        .         White |
+8442. |        .         White |
+8443. |        .         White |
+8444. |        .   Other/mixed |
+8445. |        .         Black |
       |------------------------|
 8446. |        .         White |
 8447. |        .      Hispanic |
-8448. |        .         White |
+8448. |        .      Hispanic |
 8449. |        .         White |
 8450. |        .         White |
       |------------------------|
-8451. |        .         Black |
-8452. |        .         White |
+8451. |        .      Hispanic |
+8452. |        .      Hispanic |
 8453. |        .         White |
-8454. |        .         White |
+8454. |        .      Hispanic |
 8455. |        .         White |
       |------------------------|
 8456. |        .      Hispanic |
-8457. |        .         White |
-8458. |        .         Black |
-8459. |        .         Asian |
-8460. |        .         White |
+8457. |        .      Hispanic |
+8458. |        .         White |
+8459. |        .      Hispanic |
+8460. |        .         Black |
       |------------------------|
 8461. |        .         White |
 8462. |        .      Hispanic |
-8463. |        .         Black |
-8464. |        .         Black |
-8465. |        .         Black |
+8463. |        .      Hispanic |
+8464. |        .      Hispanic |
+8465. |        .         White |
       |------------------------|
-8466. |        .         Black |
-8467. |        .      Hispanic |
-8468. |        .      Hispanic |
-8469. |        .      Hispanic |
-8470. |        .         Black |
+8466. |        .         White |
+8467. |        .         White |
+8468. |        .         Black |
+8469. |        .         White |
+8470. |        .         White |
       |------------------------|
-8471. |        .      Hispanic |
+8471. |        .         White |
 8472. |        .         White |
-8473. |        .   Other/mixed |
-8474. |        .      Hispanic |
-8475. |        .      Hispanic |
+8473. |        .         White |
+8474. |        .         White |
+8475. |        .         White |
       |------------------------|
-8476. |        .         Black |
-8477. |        .         White |
-8478. |        .         White |
-8479. |        .         White |
-8480. |        .      Hispanic |
+8476. |        .         Asian |
+8477. |        .         Asian |
+8478. |        .      Hispanic |
+8479. |        .      Hispanic |
+8480. |        .         White |
       |------------------------|
-8481. |        .      Hispanic |
+8481. |        .         Asian |
 8482. |        .         White |
 8483. |        .         White |
-8484. |        .         White |
-8485. |        .         White |
+8484. |        .         Black |
+8485. |        .      Hispanic |
       |------------------------|
 8486. |        .         White |
-8487. |        .         White |
-8488. |        .         White |
+8487. |        .      Hispanic |
+8488. |        .      Hispanic |
 8489. |        .      Hispanic |
-8490. |        .         White |
+8490. |        .   Other/mixed |
       |------------------------|
-8491. |        .         Black |
+8491. |        .         White |
 8492. |        .         White |
 8493. |        .         White |
-8494. |        .      Hispanic |
-8495. |        .      Hispanic |
+8494. |        .         White |
+8495. |        .         White |
       |------------------------|
 8496. |        .         White |
-8497. |        .      Hispanic |
-8498. |        .         Black |
-8499. |        .      Hispanic |
-8500. |        .         White |
+8497. |        .         White |
+8498. |        .         White |
+8499. |        .         Black |
+8500. |        .         Black |
       |------------------------|
-8501. |        .         White |
-8502. |        .         Black |
-8503. |        .         White |
-8504. |        .         Black |
-8505. |        .   Other/mixed |
+8501. |        .      Hispanic |
+8502. |        .      Hispanic |
+8503. |        .         Black |
+8504. |        .      Hispanic |
+8505. |        .      Hispanic |
       |------------------------|
-8506. |        .      Hispanic |
-8507. |        .         Black |
-8508. |        .      Hispanic |
-8509. |        .         Black |
-8510. |        .         Black |
+8506. |        .         White |
+8507. |        .      Hispanic |
+8508. |        .         Black |
+8509. |        .         White |
+8510. |        .         White |
       |------------------------|
-8511. |        .         White |
+8511. |        .      Hispanic |
 8512. |        .         White |
-8513. |        .         White |
+8513. |        .   Other/mixed |
 8514. |        .      Hispanic |
-8515. |        .         White |
+8515. |        .      Hispanic |
       |------------------------|
-8516. |        .         White |
-8517. |        .      Hispanic |
-8518. |        .         White |
-8519. |        .         Black |
-8520. |        .      Hispanic |
+8516. |        .      Hispanic |
+8517. |        .         White |
+8518. |        .      Hispanic |
+8519. |        .      Hispanic |
+8520. |        .         White |
       |------------------------|
-8521. |        .      Hispanic |
-8522. |        .         Black |
-8523. |        .         Black |
-8524. |        .         Black |
+8521. |        .         Black |
+8522. |        .         White |
+8523. |        .      Hispanic |
+8524. |        .      Hispanic |
 8525. |        .         White |
       |------------------------|
 8526. |        .         White |
-8527. |        .         White |
-8528. |        .      Hispanic |
-8529. |        .         Black |
-8530. |        .      Hispanic |
+8527. |        .         Black |
+8528. |        .         White |
+8529. |        .      Hispanic |
+8530. |        .         White |
       |------------------------|
 8531. |        .         White |
-8532. |        .         White |
+8532. |        .      Hispanic |
 8533. |        .      Hispanic |
 8534. |        .         White |
-8535. |        .         Black |
+8535. |        .      Hispanic |
       |------------------------|
-8536. |        .         White |
-8537. |        .         White |
+8536. |        .         Black |
+8537. |        .         Black |
 8538. |        .      Hispanic |
 8539. |        .         White |
 8540. |        .      Hispanic |
       |------------------------|
-8541. |        .      Hispanic |
-8542. |        .      Hispanic |
-8543. |        .      Hispanic |
-8544. |        .         White |
-8545. |        .         Black |
+8541. |        .         White |
+8542. |        .   Other/mixed |
+8543. |        .         White |
+8544. |        .         Black |
+8545. |        .         White |
       |------------------------|
-8546. |        .         Black |
-8547. |        .         White |
-8548. |        .      Hispanic |
-8549. |        .         Black |
-8550. |        .         White |
+8546. |        .   Other/mixed |
+8547. |        .         Asian |
+8548. |        .         White |
+8549. |        .         White |
+8550. |        .      Hispanic |
       |------------------------|
-8551. |        .      Hispanic |
-8552. |        .         Black |
-8553. |        .         Black |
-8554. |        .         White |
+8551. |        .         White |
+8552. |        .         White |
+8553. |        .         White |
+8554. |        .         Black |
 8555. |        .         White |
       |------------------------|
-8556. |        .      Hispanic |
+8556. |        .         Black |
 8557. |        .         White |
-8558. |        .      Hispanic |
-8559. |        .         Black |
+8558. |        .         Black |
+8559. |        .         White |
 8560. |        .         White |
       |------------------------|
-8561. |        .         Black |
+8561. |        .      Hispanic |
 8562. |        .         White |
-8563. |        .      Hispanic |
-8564. |        .         White |
-8565. |        .         White |
+8563. |        .         White |
+8564. |        .      Hispanic |
+8565. |        .      Hispanic |
       |------------------------|
-8566. |        .         Black |
-8567. |        .      Hispanic |
-8568. |        .         Asian |
+8566. |        .         White |
+8567. |        .         White |
+8568. |        .         White |
 8569. |        .      Hispanic |
 8570. |        .         White |
       |------------------------|
 8571. |        .      Hispanic |
-8572. |        .      Hispanic |
-8573. |        .      Hispanic |
-8574. |        .         White |
-8575. |        .         Black |
+8572. |        .         White |
+8573. |        .         Black |
+8574. |        .      Hispanic |
+8575. |        .         White |
       |------------------------|
 8576. |        .         White |
-8577. |        .         White |
-8578. |        .         White |
-8579. |        .      Hispanic |
+8577. |        .         Black |
+8578. |        .         Black |
+8579. |        .         White |
 8580. |        .         White |
       |------------------------|
-8581. |        .         White |
+8581. |        .      Hispanic |
 8582. |        .      Hispanic |
 8583. |        .         White |
 8584. |        .         White |
 8585. |        .         White |
       |------------------------|
 8586. |        .      Hispanic |
-8587. |        .         White |
+8587. |        .      Hispanic |
 8588. |        .         White |
-8589. |        .         White |
-8590. |        .      Hispanic |
+8589. |        .         Black |
+8590. |        .         Black |
       |------------------------|
 8591. |        .         White |
-8592. |        .         White |
+8592. |        .         Black |
 8593. |        .         White |
 8594. |        .         White |
-8595. |        .         Black |
+8595. |        .         White |
       |------------------------|
-8596. |        .      Hispanic |
+8596. |        .         White |
 8597. |        .         Black |
 8598. |        .         White |
-8599. |        .      Hispanic |
-8600. |        .         White |
+8599. |        .         White |
+8600. |        .         Black |
       |------------------------|
-8601. |        .      Hispanic |
+8601. |        .         Black |
 8602. |        .         White |
 8603. |        .         White |
 8604. |        .      Hispanic |
-8605. |        .         Black |
+8605. |        .         White |
       |------------------------|
-8606. |        .      Hispanic |
-8607. |        .         Black |
+8606. |        .         Black |
+8607. |        .      Hispanic |
 8608. |        .      Hispanic |
 8609. |        .         White |
 8610. |        .         Black |
       |------------------------|
-8611. |        .      Hispanic |
-8612. |        .         Black |
+8611. |        .         White |
+8612. |        .         White |
 8613. |        .         White |
-8614. |        .         Black |
-8615. |        .      Hispanic |
+8614. |        .         White |
+8615. |        .         Black |
       |------------------------|
 8616. |        .         White |
-8617. |        .         White |
-8618. |        .         White |
+8617. |        .         Black |
+8618. |        .         Black |
 8619. |        .      Hispanic |
-8620. |        .         Black |
+8620. |        .      Hispanic |
       |------------------------|
 8621. |        .         White |
 8622. |        .      Hispanic |
 8623. |        .         White |
-8624. |        .         Black |
-8625. |        .         White |
+8624. |        .         White |
+8625. |        .         Black |
       |------------------------|
-8626. |        .      Hispanic |
+8626. |        .         White |
 8627. |        .      Hispanic |
-8628. |        .      Hispanic |
-8629. |        .         White |
-8630. |        .         Black |
+8628. |        .         White |
+8629. |        .         Black |
+8630. |        .         White |
       |------------------------|
-8631. |        .         White |
-8632. |        .      Hispanic |
-8633. |        .         White |
-8634. |        .         White |
-8635. |        .      Hispanic |
+8631. |        .      Hispanic |
+8632. |        .         White |
+8633. |        .         Black |
+8634. |        .         Black |
+8635. |        .         Black |
       |------------------------|
-8636. |        .         White |
+8636. |        .      Hispanic |
 8637. |        .      Hispanic |
-8638. |        .      Hispanic |
+8638. |        .         White |
 8639. |        .      Hispanic |
 8640. |        .      Hispanic |
       |------------------------|
-8641. |        .         White |
-8642. |        .         White |
+8641. |        .      Hispanic |
+8642. |        .   Other/mixed |
 8643. |        .      Hispanic |
 8644. |        .      Hispanic |
-8645. |        .         White |
+8645. |        .      Hispanic |
       |------------------------|
-8646. |        .         Black |
+8646. |        .      Hispanic |
 8647. |        .         White |
-8648. |        .   Other/mixed |
-8649. |        .         White |
-8650. |        .         White |
+8648. |        .         White |
+8649. |        .         Black |
+8650. |        .      Hispanic |
       |------------------------|
-8651. |        .      Hispanic |
+8651. |        .         Black |
 8652. |        .         White |
-8653. |        .      Hispanic |
-8654. |        .         White |
+8653. |        .         Black |
+8654. |        .      Hispanic |
 8655. |        .         Black |
       |------------------------|
-8656. |        .   Other/mixed |
+8656. |        .      Hispanic |
 8657. |        .      Hispanic |
 8658. |        .         White |
 8659. |        .         White |
 8660. |        .      Hispanic |
       |------------------------|
-8661. |        .         White |
-8662. |        .      Hispanic |
-8663. |        .   Other/mixed |
-8664. |        .      Hispanic |
-8665. |        .         Black |
+8661. |        .         Black |
+8662. |        .   Other/mixed |
+8663. |        .         Black |
+8664. |        .         White |
+8665. |        .      Hispanic |
       |------------------------|
-8666. |        .         White |
+8666. |        .      Hispanic |
 8667. |        .         White |
 8668. |        .      Hispanic |
       +------------------------+
@@ -11201,14 +11201,11 @@ CIHI for other
 >                 scheme(reportcool)
 
 .         
-.         
-. graph export  "/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/co
+. /*      
+> graph export  "/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/co
 > vid_knowledge_news/figures/pp_race.jpg", ///
 >         as(jpg) name("Graph") quality(100) replace
-(file /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_knowled
-> ge_news/figures/pp_race.jpg written in JPG format)
-
-. 
+> */
 . ***-----------------------------***
 . // # NO INTERACTIONS - MARGINS of INCOME and CORRECT ANSWERS
 . ***-----------------------------***
@@ -11510,14 +11507,11 @@ Less than ..  |   .4706561   .0183221    25.69   0.000     .4347403    .5065719
 
   Variables that uniquely identify margins: dG_finc _filenumber
 
-. 
-.         graph export "/Users/mollymking/Documents/SocResearch/COVID_Knowledge_
+. /*
+>         graph export "/Users/mollymking/Documents/SocResearch/COVID_Knowledge_
 > News/covid_knowledge_news/figures/pp_inc.jpg", ///
 >         as(jpg) name("Graph") quality(100) replace
-(file /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_knowled
-> ge_news/figures/pp_inc.jpg written in JPG format)
-
-.         
+> */      
 . 
 . ***-----------------------------***
 . // # NO INTERACTIONS - MARGINS of EDUCATION and CORRECT ANSWERS
@@ -11824,21 +11818,18 @@ some college  |   .5648693   .0138483    40.79   0.000     .5377233    .5920153
   Variables that uniquely identify margins: dG_edu _filenumber
 
 . 
-. 
-.         graph export "/Users/mollymking/Documents/SocResearch/COVID_Knowledge_
+. /*
+>         graph export "/Users/mollymking/Documents/SocResearch/COVID_Knowledge_
 > News/covid_knowledge_news/figures/pp_edu.jpg", ///
 >         as(jpg) name("Graph") quality(100) replace
-(file /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_knowled
-> ge_news/figures/pp_edu.jpg written in JPG format)
-
-.         
+> */      
 . 
 . ***--------------------------***
 . 
 . log close ckn`category'`dataset'
       name:  ckn08_prob01_PewJune2020
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
-> knowledge_news/stata/ckn08_prob01_PewJune2020.log
+       log:  /Users/mmking/Documents/SocResearch/COVID_Knowledge_News/covid_know
+> ledge_news/stata/ckn08_prob01_PewJune2020.log
   log type:  text
- closed on:  30 Jun 2021, 17:11:23
+ closed on:  20 Mar 2023, 13:43:31
 --------------------------------------------------------------------------------

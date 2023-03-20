@@ -1,9 +1,9 @@
 --------------------------------------------------------------------------------
       name:  ckn01_impe01_PewJune2020
-       log:  /Users/mmking/Documents/SocResearch/COVID_Knowledge_News/covid_know
-> ledge_news/stata/ckn01_impe01_PewJune2020.log
+       log:  /Users/mmking/Documents/SocResearch/COVID_Knowledge_News/stata/ckn0
+> 1_impe01_PewJune2020.log
   log type:  text
- opened on:  20 Mar 2023, 13:13:55
+ opened on:   6 Mar 2023, 15:48:33
 
 . ***-----------------------------***
 . 
@@ -20,7 +20,7 @@
 . //  author:     Molly King
 . 
 . display "$S_DATE  $S_TIME"
-20 Mar 2023  13:13:55
+ 6 Mar 2023  15:48:33
 
 . 
 . ***--------------------------***
@@ -81,6 +81,8 @@
 
 . 
 . save $deriv/ckn`category'`dataset'.dta, replace
+(note: file /Users/mmking/Documents/SocResearch/COVID_Knowledge_News/data/data_d
+> erv/ckn01_impe01_PewJune2020.dta not found)
 file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn01_impe01_Pe
 > wJune2020.dta saved
 
@@ -89,8 +91,8 @@ file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn01_impe01_Pe
 . 
 . log close ckn`category'`dataset'
       name:  ckn01_impe01_PewJune2020
-       log:  /Users/mmking/Documents/SocResearch/COVID_Knowledge_News/covid_know
-> ledge_news/stata/ckn01_impe01_PewJune2020.log
+       log:  /Users/mmking/Documents/SocResearch/COVID_Knowledge_News/stata/ckn0
+> 1_impe01_PewJune2020.log
   log type:  text
- closed on:  20 Mar 2023, 13:13:55
+ closed on:   6 Mar 2023, 15:48:34
 --------------------------------------------------------------------------------

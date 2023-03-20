@@ -31,7 +31,8 @@ set more off
 ***-----------------------------***
 
 cd $source/
-import spss using "Pathways June 2020 (ATP W68).sav", case(lower)
+import spss using "ATP W68.sav", case(lower)
+*import spss using "Pathways June 2020 (ATP W68).sav", case(lower)
 
 ***--------------------------***
 // # WEIGHTING

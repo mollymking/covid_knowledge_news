@@ -44,13 +44,12 @@ global docs 	"~/Documents/SocResearch/COVID_Knowledge_News/documentation"	// doc
 
 global results	"~/Documents/SocResearch/COVID_Knowledge_News/results"  		// tables and figures added to main project folder
 
-/*
+
 ***--------------------------***
 // 01 IMPORT AND EXTRACTION 
 ***--------------------------***
 
 do $stata/ckn01_impe01_PewJune2020.do 				// Import "Pathways June 2020 (ATP W68).sav"
-do $stata/ckn01_impe03_asec.do						// Import CPS ASEC 2019-2020 data
 
 ***--------------------------***
 // 02 DEMOGRAPHIC VARIABLE CREATION 

@@ -206,10 +206,10 @@ twoway (bar race_pp knowrace if dG_race==1) ///
        legend(on order(1 "Non-Hispanic White" 2 "Black" 3 "Asian" 4 "Hispanic") nostack rows(1) size(small) color(black) margin(small) nobox region(fcolor(white) lcolor(white))) ///
 		scheme(reportcool)
 	
-	
+/*	
 graph export  "/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/figures/pp_race.jpg", ///
 	as(jpg) name("Graph") quality(100) replace
-
+*/
 ***-----------------------------***
 // # NO INTERACTIONS - MARGINS of INCOME and CORRECT ANSWERS
 ***-----------------------------***
@@ -245,10 +245,10 @@ combomarginsplot ///
 	ylabel(.4(.1).9, gmax labcolor("`DkGrey'") tlcolor("`DkGrey'") tlwidth(medium) glcolor(white) glwidth(medium)) yscale(lcolor("`DkGrey'")) /// y-ticks: label(scale, max line, label color, tick color; tick width; grid color; grid width); axis color
 	title("") ///  
 		scheme(reportcool)
-
+/*
 	graph export "/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/figures/pp_inc.jpg", ///
 	as(jpg) name("Graph") quality(100) replace
-	
+*/	
 
 ***-----------------------------***
 // # NO INTERACTIONS - MARGINS of EDUCATION and CORRECT ANSWERS
@@ -290,10 +290,10 @@ combomarginsplot ///
 	title("") ///  
 		scheme(reportcool)
 
-
+/*
 	graph export "/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/figures/pp_edu.jpg", ///
 	as(jpg) name("Graph") quality(100) replace
-	
+*/	
 
 ***--------------------------***
 

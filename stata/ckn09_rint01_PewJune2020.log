@@ -1,9 +1,9 @@
 --------------------------------------------------------------------------------
       name:  ckn09_rint01_PewJune2020
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
-> knowledge_news/stata/ckn09_rint01_PewJune2020.log
+       log:  /Users/mmking/Documents/SocResearch/COVID_Knowledge_News/covid_know
+> ledge_news/stata/ckn09_rint01_PewJune2020.log
   log type:  text
- opened on:   3 Aug 2021, 16:55:34
+ opened on:  20 Mar 2023, 13:43:42
 
 . ***-----------------------------***
 . 
@@ -20,7 +20,7 @@
 . //  author:     Molly King
 . 
 . display "$S_DATE  $S_TIME"
- 3 Aug 2021  16:55:34
+20 Mar 2023  13:43:42
 
 . 
 . ***-----------------------------***
@@ -50,7 +50,7 @@ file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn09_rint01_Pe
 
 . 
 . cd $deriv
-/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/data/data_derv
+/Users/mmking/Documents/SocResearch/COVID_Knowledge_News/data/data_derv
 
 . 
 . *Details on generating LaTeX tables using est and esttab thanks to the followi
@@ -253,10 +253,9 @@ Number of PSUs     =     9,271                  Population size   = 9,100.2041
         _cons |   4.142253   .3648282    16.14   0.000     3.485438    4.922841
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(329 missing values generated)
-(329 missing values generated)
-F-adjusted test statistic = 6.989e-13
-p-value                   = 1
+   Number of observations =                            9271
+F-adjusted test statistic = F(4,9267) =               0.000
+                 Prob > F =                           1.000
 Running model B for  fauci with BIPOC race variable
 (running logit on estimation sample)
 
@@ -292,10 +291,9 @@ some college  |   2.613026   .5336611     4.70   0.000     1.750966    3.899506
         _cons |   .6718528   .1459108    -1.83   0.067      .438922    1.028397
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(873 missing values generated)
-(873 missing values generated)
-F-adjusted test statistic = .37050669
-p-value                   = .94950841
+   Number of observations =                            8727
+F-adjusted test statistic = F(9,8718) =               0.371
+                 Prob > F =                           0.950
 Running model C for  fauci with BIPOC race variable
 (running logit on estimation sample)
 
@@ -358,10 +356,9 @@ some college  |   3.176562   .7320653     5.02   0.000     2.021916    4.990585
         _cons |   .6576862   .1966728    -1.40   0.161     .3659668    1.181941
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(995 missing values generated)
-(995 missing values generated)
-F-adjusted test statistic = 1.3382157
-p-value                   = .21104069
+   Number of observations =                            8605
+F-adjusted test statistic = F(9,8596) =               1.338
+                 Prob > F =                           0.211
 Running model on fauci for interaction of news and BIPOC status
 (running logit on estimation sample)
 
@@ -437,10 +434,9 @@ some college  |    3.16093   .7156373     5.08   0.000     2.028033    4.926685
         _cons |   .7566911   .2286989    -0.92   0.356     .4184264    1.368416
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(995 missing values generated)
-(995 missing values generated)
-F-adjusted test statistic = 1.8831785
-p-value                   = .04968284
+   Number of observations =                            8605
+F-adjusted test statistic = F(9,8596) =               1.883
+                 Prob > F =                           0.050
 Running model on fauci for interaction of news and income
 (running logit on estimation sample)
 
@@ -546,10 +542,9 @@ Less than ..  |          1  (base)
         _cons |   .5462305   .1753247    -1.88   0.060     .2911559     1.02477
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(995 missing values generated)
-(995 missing values generated)
-F-adjusted test statistic = 1.3635922
-p-value                   = .19858859
+   Number of observations =                            8605
+F-adjusted test statistic = F(9,8596) =               1.364
+                 Prob > F =                           0.199
 Running model on fauci for interaction of news and education
 (running logit on estimation sample)
 
@@ -647,10 +642,9 @@ some college #|
         _cons |    .439557    .214111    -1.69   0.092      .169173    1.142087
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(995 missing values generated)
-(995 missing values generated)
-F-adjusted test statistic = 1.103773
-p-value                   = .3559967
+   Number of observations =                            8605
+F-adjusted test statistic = F(9,8596) =               1.104
+                 Prob > F =                           0.356
 Running model on fauci for interaction of news and gender
 (running logit on estimation sample)
 
@@ -726,10 +720,9 @@ some college  |   3.083986   .7006299     4.96   0.000     1.975634    4.814136
         _cons |   .5350096   .1613789    -2.07   0.038     .2961906    .9663888
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(995 missing values generated)
-(995 missing values generated)
-F-adjusted test statistic = 1.3442001
-p-value                   = .20804976
+   Number of observations =                            8605
+F-adjusted test statistic = F(9,8596) =               1.309
+                 Prob > F =                           0.226
 (0 observations deleted)
 (0 observations deleted)
 (0 observations deleted)
@@ -758,10 +751,9 @@ Number of PSUs     =     9,271                  Population size   = 9,100.2041
         _cons |   2.071773   .1363814    11.07   0.000     1.820965    2.357125
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(329 missing values generated)
-(329 missing values generated)
-F-adjusted test statistic = 1.737e-13
-p-value                   = 1
+   Number of observations =                            9271
+F-adjusted test statistic = F(4,9267) =               0.000
+                 Prob > F =                           1.000
 Running model B for  antibody with BIPOC race variable
 (running logit on estimation sample)
 
@@ -797,10 +789,9 @@ some college  |   1.709982   .3721595     2.47   0.014      1.11612    2.619825
         _cons |   .5560441    .122788    -2.66   0.008      .360676    .8572376
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(873 missing values generated)
-(873 missing values generated)
-F-adjusted test statistic = 2.2757823
-p-value                   = .01524333
+   Number of observations =                            8727
+F-adjusted test statistic = F(9,8718) =               2.276
+                 Prob > F =                           0.015
 Running model C for  antibody with BIPOC race variable
 (running logit on estimation sample)
 
@@ -863,10 +854,9 @@ some college  |   1.806894   .4176229     2.56   0.010       1.1486    2.842473
         _cons |   .7762565   .2118077    -0.93   0.353     .4546901    1.325241
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(995 missing values generated)
-(995 missing values generated)
-F-adjusted test statistic = .35522747
-p-value                   = .95593564
+   Number of observations =                            8605
+F-adjusted test statistic = F(9,8596) =               0.355
+                 Prob > F =                           0.956
 Running model on antibody for interaction of news and BIPOC status
 (running logit on estimation sample)
 
@@ -942,10 +932,9 @@ some college  |   1.830269    .418205     2.65   0.008     1.169481    2.864419
         _cons |    .757989   .2088676    -1.01   0.315     .4416489    1.300914
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(995 missing values generated)
-(995 missing values generated)
-F-adjusted test statistic = .5464308
-p-value                   = .8413565
+   Number of observations =                            8605
+F-adjusted test statistic = F(9,8596) =               0.546
+                 Prob > F =                           0.841
 Running model on antibody for interaction of news and income
 (running logit on estimation sample)
 
@@ -1051,10 +1040,9 @@ Less than ..  |          1  (base)
         _cons |   .7124525   .2026995    -1.19   0.233     .4078937    1.244414
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(995 missing values generated)
-(995 missing values generated)
-F-adjusted test statistic = 1.0975357
-p-value                   = .3606028
+   Number of observations =                            8605
+F-adjusted test statistic = F(9,8596) =               1.098
+                 Prob > F =                           0.361
 Running model on antibody for interaction of news and education
 (running logit on estimation sample)
 
@@ -1152,10 +1140,9 @@ some college #|
         _cons |   .5536704   .2470171    -1.33   0.185     .2309079    1.327589
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(995 missing values generated)
-(995 missing values generated)
-F-adjusted test statistic = .17683131
-p-value                   = .99640513
+   Number of observations =                            8605
+F-adjusted test statistic = F(9,8596) =               0.177
+                 Prob > F =                           0.996
 Running model on antibody for interaction of news and gender
 (running logit on estimation sample)
 
@@ -1231,10 +1218,9 @@ some college  |   1.764581   .4081208     2.46   0.014     1.121357    2.776766
         _cons |   .7964667   .2214975    -0.82   0.413     .4617587     1.37379
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(995 missing values generated)
-(995 missing values generated)
-F-adjusted test statistic = .48584281
-p-value                   = .88517541
+   Number of observations =                            8605
+F-adjusted test statistic = F(9,8596) =               0.486
+                 Prob > F =                           0.885
 (0 observations deleted)
 (0 observations deleted)
 (0 observations deleted)
@@ -1263,10 +1249,9 @@ Number of PSUs     =     9,271                  Population size   = 9,100.2041
         _cons |   1.513269    .089354     7.02   0.000     1.347872    1.698962
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(329 missing values generated)
-(329 missing values generated)
-F-adjusted test statistic = 2.674e-13
-p-value                   = 1
+   Number of observations =                            9271
+F-adjusted test statistic = F(5,9266) =               0.000
+                 Prob > F =                           1.000
 Running model B for  stater with BIPOC race variable
 (running logit on estimation sample)
 
@@ -1302,10 +1287,9 @@ some college  |   2.253927   .4586707     3.99   0.000     1.512508    3.358784
         _cons |   .4894912   .1009713    -3.46   0.001     .3266904     .733421
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(873 missing values generated)
-(873 missing values generated)
-F-adjusted test statistic = 1.8849154
-p-value                   = .04943239
+   Number of observations =                            8727
+F-adjusted test statistic = F(9,8718) =               1.885
+                 Prob > F =                           0.049
 Running model C for  stater with BIPOC race variable
 (running logit on estimation sample)
 
@@ -1368,10 +1352,9 @@ some college  |   2.244217   .4630071     3.92   0.000      1.49771    3.362807
         _cons |   .5133972   .1267548    -2.70   0.007     .3164224    .8329899
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(995 missing values generated)
-(995 missing values generated)
-F-adjusted test statistic = 1.3205419
-p-value                   = .22007233
+   Number of observations =                            8605
+F-adjusted test statistic = F(9,8596) =               1.321
+                 Prob > F =                           0.220
 Running model on stater for interaction of news and BIPOC status
 (running logit on estimation sample)
 
@@ -1447,10 +1430,9 @@ some college  |   2.256735   .4612439     3.98   0.000      1.51176    3.368824
         _cons |   .5391058   .1325566    -2.51   0.012     .3329271    .8729692
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(995 missing values generated)
-(995 missing values generated)
-F-adjusted test statistic = 2.2552274
-p-value                   = .01625316
+   Number of observations =                            8605
+F-adjusted test statistic = F(9,8596) =               2.255
+                 Prob > F =                           0.016
 Running model on stater for interaction of news and income
 (running logit on estimation sample)
 
@@ -1556,10 +1538,9 @@ Less than ..  |          1  (base)
         _cons |   .5288874   .1439295    -2.34   0.019     .3102328    .9016515
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(995 missing values generated)
-(995 missing values generated)
-F-adjusted test statistic = .98189083
-p-value                   = .45254172
+   Number of observations =                            8605
+F-adjusted test statistic = F(9,8596) =               0.982
+                 Prob > F =                           0.453
 Running model on stater for interaction of news and education
 (running logit on estimation sample)
 
@@ -1657,10 +1638,9 @@ some college #|
         _cons |   .5318232   .2347428    -1.43   0.153     .2238723    1.263381
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(995 missing values generated)
-(995 missing values generated)
-F-adjusted test statistic = 1.1584425
-p-value                   = .31726939
+   Number of observations =                            8605
+F-adjusted test statistic = F(9,8596) =               1.158
+                 Prob > F =                           0.317
 Running model on stater for interaction of news and gender
 (running logit on estimation sample)
 
@@ -1736,10 +1716,9 @@ some college  |   2.232403   .4614575     3.89   0.000     1.488665    3.347713
         _cons |   .5123398   .1295818    -2.64   0.008     .3120617    .8411543
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-(995 missing values generated)
-(995 missing values generated)
-F-adjusted test statistic = 1.5250027
-p-value                   = .13265271
+   Number of observations =                            8605
+F-adjusted test statistic = F(9,8596) =               1.525
+                 Prob > F =                           0.133
 
 . 
 . *Output results for BIPOC Interactions
@@ -1753,8 +1732,8 @@ p-value                   = .13265271
 >                 eform /// odds ratios
 >                 level(95) symbol(***, **, *) alpha(0.001, 0.01, 0.05) ///
 >                 replace
-~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/results/tableA
-> 3_all_interactions.doc
+~/Documents/SocResearch/COVID_Knowledge_News/results/tableA3_all_interactions.do
+> c
 dir : seeout
 
 . 
@@ -1762,8 +1741,8 @@ dir : seeout
 . 
 . log close ckn`category'`dataset'
       name:  ckn09_rint01_PewJune2020
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
-> knowledge_news/stata/ckn09_rint01_PewJune2020.log
+       log:  /Users/mmking/Documents/SocResearch/COVID_Knowledge_News/covid_know
+> ledge_news/stata/ckn09_rint01_PewJune2020.log
   log type:  text
- closed on:   3 Aug 2021, 16:56:01
+ closed on:  20 Mar 2023, 13:44:10
 --------------------------------------------------------------------------------

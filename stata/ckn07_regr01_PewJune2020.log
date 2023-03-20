@@ -1,9 +1,9 @@
 --------------------------------------------------------------------------------
       name:  ckn07_regr01_PewJune2020
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
-> knowledge_news/stata/ckn07_regr01_PewJune2020.log
+       log:  /Users/mmking/Documents/SocResearch/COVID_Knowledge_News/covid_know
+> ledge_news/stata/ckn07_regr01_PewJune2020.log
   log type:  text
- opened on:   3 Aug 2021, 15:19:26
+ opened on:  20 Mar 2023, 13:14:07
 
 . ***-----------------------------***
 . 
@@ -19,7 +19,7 @@
 . //  author:     Molly King
 . 
 . display "$S_DATE  $S_TIME"
- 3 Aug 2021  15:19:26
+20 Mar 2023  13:14:07
 
 . 
 . ***-----------------------------***
@@ -45,7 +45,7 @@ file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn07_regr01_Pe
 
 . 
 . cd $deriv
-/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/data/data_derv
+/Users/mmking/Documents/SocResearch/COVID_Knowledge_News/data/data_derv
 
 . 
 . ***-----------------------------***
@@ -181,8 +181,9 @@ Number of PSUs     =     8,668                  Population size   = 8,450.6293
         _cons |    2.03589    .174117     8.31   0.000     1.721655    2.407479
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-F-adjusted test statistic = 3.657e-13
-p-value                   = 1
+   Number of observations =                            8668
+F-adjusted test statistic = F(4,8664) =               0.000
+                 Prob > F =                           1.000
 Running model B for  antibody
 (running logit on estimation sample)
 
@@ -230,8 +231,9 @@ some college  |   1.791546   .3936233     2.65   0.008     1.164617     2.75596
         _cons |   .7560917    .178412    -1.18   0.236     .4760929    1.200763
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-F-adjusted test statistic = 1.9780776
-p-value                   = .03766968
+   Number of observations =                            8668
+F-adjusted test statistic = F(9,8659) =               1.978
+                 Prob > F =                           0.038
 Running model C for  antibody
 (running logit on estimation sample)
 
@@ -299,8 +301,9 @@ Nonreligious  |   1.355987   .1515399     2.72   0.006     1.089219    1.688091
         _cons |   .2646018   .0836607    -4.21   0.000     .1423724    .4917675
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-F-adjusted test statistic = 1.1914605
-p-value                   = .29533027
+   Number of observations =                            8668
+F-adjusted test statistic = F(9,8659) =               1.191
+                 Prob > F =                           0.295
 Running model A for  fauci 
 (running logit on estimation sample)
 
@@ -326,8 +329,9 @@ Number of PSUs     =     8,668                  Population size   = 8,450.6293
         _cons |   2.503318   .2362437     9.72   0.000     2.080535    3.012014
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-F-adjusted test statistic = 5.640e-13
-p-value                   = 1
+   Number of observations =                            8668
+F-adjusted test statistic = F(4,8664) =               0.000
+                 Prob > F =                           1.000
 Running model B for  fauci
 (running logit on estimation sample)
 
@@ -375,8 +379,9 @@ some college  |   2.488598   .5160983     4.40   0.000     1.657309    3.736852
         _cons |   .5499927   .1278651    -2.57   0.010     .3486886    .8675133
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-F-adjusted test statistic = .92277908
-p-value                   = .50378633
+   Number of observations =                            8668
+F-adjusted test statistic = F(9,8659) =               0.923
+                 Prob > F =                           0.504
 Running model C for  fauci
 (running logit on estimation sample)
 
@@ -444,8 +449,9 @@ Nonreligious  |   1.549073   .2033092     3.33   0.001     1.197677    2.003567
         _cons |   .1224466   .0390054    -6.59   0.000      .065578     .228631
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-F-adjusted test statistic = 1.1133691
-p-value                   = .34898354
+   Number of observations =                            8668
+F-adjusted test statistic = F(9,8659) =               1.113
+                 Prob > F =                           0.349
 Running model A for  stater 
 (running logit on estimation sample)
 
@@ -471,8 +477,9 @@ Number of PSUs     =     8,668                  Population size   = 8,450.6293
         _cons |   1.323378   .1018533     3.64   0.000     1.138052    1.538882
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-F-adjusted test statistic = 9.391e-14
-p-value                   = 1
+   Number of observations =                            8668
+F-adjusted test statistic = F(4,8664) =               0.000
+                 Prob > F =                           1.000
 Running model B for  stater
 (running logit on estimation sample)
 
@@ -520,8 +527,9 @@ some college  |   2.336641   .4713167     4.21   0.000     1.573529    3.469838
         _cons |   .4438165    .094234    -3.83   0.000     .2927154    .6729167
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-F-adjusted test statistic = .67549629
-p-value                   = .73190681
+   Number of observations =                            8668
+F-adjusted test statistic = F(9,8659) =               0.675
+                 Prob > F =                           0.732
 Running model C for  stater
 (running logit on estimation sample)
 
@@ -589,8 +597,9 @@ Nonreligious  |   1.005335   .1026286     0.05   0.958     .8230096    1.228053
         _cons |   .3000272   .0802385    -4.50   0.000     .1776175    .5067987
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-F-adjusted test statistic = .58077338
-p-value                   = .81404306
+   Number of observations =                            8668
+F-adjusted test statistic = F(9,8659) =               0.581
+                 Prob > F =                           0.814
 
 . 
 . 
@@ -609,8 +618,7 @@ p-value                   = .81404306
 >                 eform /// odds ratios
 >                 level(95) symbol(***, **, *) alpha(0.001, 0.01, 0.05) ///
 >                 replace
-~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/results/allvar
-> s_models_ORs.doc
+~/Documents/SocResearch/COVID_Knowledge_News/results/allvars_models_ORs.doc
 dir : seeout
 
 .         
@@ -1144,8 +1152,7 @@ Note: _cons estimates baseline odds.
 >                 eform /// odds ratios
 >                 level(95) symbol(***, **, *) alpha(0.001, 0.01, 0.05) ///
 >                 replace
-~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/results/tableA
-> 1_extended.doc
+~/Documents/SocResearch/COVID_Knowledge_News/results/tableA1_extended.doc
 dir : seeout
 
 .         
@@ -1251,8 +1258,9 @@ Nonreligious  |   1.361302      .1713     2.45   0.014     1.063718    1.742137
         _cons |   .3113235   .1150485    -3.16   0.002     .1508706    .6424199
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-F-adjusted test statistic = 1.4532438
-p-value                   = .15928116
+   Number of observations =                            7829
+F-adjusted test statistic = F(9,7820) =               1.453
+                 Prob > F =                           0.159
 Running model including political party for  fauci
 (running logit on estimation sample)
 
@@ -1325,8 +1333,9 @@ Nonreligious  |   1.580761   .2405426     3.01   0.003     1.173059    2.130162
         _cons |   .1252191   .0471976    -5.51   0.000     .0598116    .2621533
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-F-adjusted test statistic = .67349897
-p-value                   = .73371205
+   Number of observations =                            7829
+F-adjusted test statistic = F(9,7820) =               0.673
+                 Prob > F =                           0.734
 Running model including political party for  stater
 (running logit on estimation sample)
 
@@ -1399,8 +1408,9 @@ Nonreligious  |   1.041336   .1181668     0.36   0.721     .8336524    1.300759
         _cons |   .3185184   .0971127    -3.75   0.000     .1752155     .579024
 -------------------------------------------------------------------------------
 Note: _cons estimates baseline odds.
-F-adjusted test statistic = .28577431
-p-value                   = .97886407
+   Number of observations =                            7829
+F-adjusted test statistic = F(9,7820) =               0.286
+                 Prob > F =                           0.979
 
 . 
 . 
@@ -1414,8 +1424,7 @@ p-value                   = .97886407
 >                 eform /// odds ratios
 >                 level(95) symbol(***, **, *) alpha(0.001, 0.01, 0.05) ///
 >                 replace
-~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/results/tableA
-> 2_politics.doc
+~/Documents/SocResearch/COVID_Knowledge_News/results/tableA2_politics.doc
 dir : seeout
 
 .         
@@ -1423,8 +1432,8 @@ dir : seeout
 . 
 . log close ckn`category'`dataset'
       name:  ckn07_regr01_PewJune2020
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
-> knowledge_news/stata/ckn07_regr01_PewJune2020.log
+       log:  /Users/mmking/Documents/SocResearch/COVID_Knowledge_News/covid_know
+> ledge_news/stata/ckn07_regr01_PewJune2020.log
   log type:  text
- closed on:   3 Aug 2021, 15:19:42
+ closed on:  20 Mar 2023, 13:14:26
 --------------------------------------------------------------------------------

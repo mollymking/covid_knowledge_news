@@ -1,9 +1,9 @@
 --------------------------------------------------------------------------------
       name:  ckn03_know01_PewJune2020
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
-> knowledge_news/stata/ckn03_know01_PewJune2020.log
+       log:  /Users/mmking/Documents/SocResearch/COVID_Knowledge_News/covid_know
+> ledge_news/stata/ckn03_know01_PewJune2020.log
   log type:  text
- opened on:  29 Jun 2021, 11:03:00
+ opened on:  20 Mar 2023, 13:13:56
 
 . ***-----------------------------***
 . 
@@ -19,7 +19,7 @@
 . //  author:     Molly King
 . 
 . display "$S_DATE  $S_TIME"
-29 Jun 2021  11:03:00
+20 Mar 2023  13:13:56
 
 . 
 . ***--------------------------***
@@ -1918,7 +1918,7 @@ note: label truncated to 80 characters
   (0 bytes saved)
 
 . datasignature set, reset
-  9654:140(61019):1102315550:2561050502       (data signature reset)
+  9654:189(34114):2215939867:1041790129       (data signature reset)
 
 . save $deriv/ckn`category'`dataset'.dta, replace
 file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn03_know01_Pe
@@ -1929,8 +1929,8 @@ file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn03_know01_Pe
 . 
 . log close ckn`category'`dataset'
       name:  ckn03_know01_PewJune2020
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
-> knowledge_news/stata/ckn03_know01_PewJune2020.log
+       log:  /Users/mmking/Documents/SocResearch/COVID_Knowledge_News/covid_know
+> ledge_news/stata/ckn03_know01_PewJune2020.log
   log type:  text
- closed on:  29 Jun 2021, 11:03:01
+ closed on:  20 Mar 2023, 13:13:56
 --------------------------------------------------------------------------------

@@ -1,9 +1,9 @@
--------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
       name:  ckn06_desc01_PewJune2020
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_n
-> ews/stata/ckn06_desc01_PewJune2020.log
+       log:  /Users/mmking/Documents/SocResearch/COVID_Knowledge_News/covid_know
+> ledge_news/stata/ckn06_desc01_PewJune2020.log
   log type:  text
- opened on:  30 Jun 2021, 17:14:16
+ opened on:  20 Mar 2023, 13:13:56
 
 . ***-----------------------------***
 . 
@@ -19,7 +19,7 @@
 . //  author:     Molly King
 . 
 . display "$S_DATE  $S_TIME"
-30 Jun 2021  17:14:16
+20 Mar 2023  13:13:56
 
 . 
 . ***--------------------------***
@@ -129,7 +129,7 @@ file ~/Documents/SocResearch/COVID_Knowledge_News/data/data_derv/ckn06_desc01_Pe
 .
 
 Descriptive statistics table has been saved in the folder:
-/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/data/data_derv
+/Users/mmking/Documents/SocResearch/COVID_Knowledge_News/data/data_sorc
 
 . 
 . foreach dem_var of local demographics {
@@ -619,7 +619,7 @@ Number of PSUs   =   8,668        Population size = 8,450.6293
 >                           
 . //percentage of people within each demographic who got question correct:
 . cd $temp/
-/Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/data/data_temp
+/Users/mmking/Documents/SocResearch/COVID_Knowledge_News/data/data_temp
 
 . 
 . foreach covid_v in   stateresponse_c  antibody_c fauci_c  { // 
@@ -1759,8 +1759,8 @@ Now we are merging tables together across all knowledge variables
 
 .         
 . save $results/ckn`category'`dataset'.dta, replace
-file ~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/stata/res
-> ults/ckn06_desc01_PewJune2020.dta saved
+file ~/Documents/SocResearch/COVID_Knowledge_News/results/ckn06_desc01_PewJune20
+> 20.dta saved
 
 .         
 .         
@@ -1769,8 +1769,8 @@ file ~/Documents/SocResearch/COVID_Knowledge_News/covid_knowledge_news/stata/res
 . 
 . log close ckn`category'`dataset'
       name:  ckn06_desc01_PewJune2020
-       log:  /Users/mollymking/Documents/SocResearch/COVID_Knowledge_News/covid_
-> knowledge_news/stata/ckn06_desc01_PewJune2020.log
+       log:  /Users/mmking/Documents/SocResearch/COVID_Knowledge_News/covid_know
+> ledge_news/stata/ckn06_desc01_PewJune2020.log
   log type:  text
- closed on:  30 Jun 2021, 17:14:31
+ closed on:  20 Mar 2023, 13:14:07
 --------------------------------------------------------------------------------
